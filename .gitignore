@@ -145,7 +145,8 @@ pnpm-lock.yaml
 
 test.*************
 
-# Deploy script (contains VPS IP)
+# Internal files
+AGENTS.md
 scripts/deploy.sh
 
 # Lavalink (large jar + plugins)
