@@ -1,0 +1,26 @@
+### Setup handler!
+setup_queuemsg: 'Bergabunglah ke voice channel dan putar lagu menggunakan nama atau URL di sini!'
+setup_playembed_author: 'Tidak Ada Lagu Yang Sedang Diputar'
+
+### Update handler!
+setup_author: 'Memutar'
+setup_author_icon: 'https://cdn.discordapp.com/emojis/741605543046807626.gif'
+setup_desc: '**%{title}** `[%{duration}]` • %{request}'
+setup_footer: 'Volume • %{volume}% | Total Durasi • %{duration}'
+setup_content: '**__Antrian:__**'
+setup_content_queue: '`%{index}.` **%{title}** `[%{duration}]` • %{request}'
+setup_content_empty: 'Bergabunglah ke voice channel dan putar lagu menggunakan nama atau URL di sini!'
+
+### Perintah Status!
+status_create: '**`📊` | Saluran Status Dibuat!**'
+status_delete: '**`📊` | Saluran Status Dihapus!**'
+status_enable: '`⚠️` | Saluran Status sudah ada!'
+status_null: '`⚠️` | Saluran Status tidak ditemukan!'
+
+# Play!
+play_track: '`💾` | **%{title}** `%{duration}` Dimasukkan ke Antrian • %{request}'
+play_playlist: '`💾` | **%{title}** `%{duration}` Dimasukkan ke Antrian • (**%{songs} Lagu**) • %{request}'
+play_result: '`💾` | **%{title}** `%{duration}` Dimasukkan ke Antrian • %{request}'
+play_arg: '`⚠️` | Mohon berikan nama lagu atau URL yang valid!'
+play_match: '`⚠️` | Lagu tidak ditemukan!'
+play_emoji: '`⚠️` | Kamu tidak bisa memutar lagu menggunakan emoji!'

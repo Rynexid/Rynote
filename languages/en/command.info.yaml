@@ -1,0 +1,110 @@
+### Developer command!
+dev_title: 'RainyXeon'
+dev_desc: "I'm just an incognito developer. And an official creator of Rynote and RainyProduction!"
+dev_foot: 'Consider joining my server or inviting my bots :) This would help me a lot!'
+
+### Invite command!
+inv_title: '✉️ %{username}'
+inv_desc: 'Thanks for Inviting me in advance!'
+
+### Ping command!
+ping_title: '🏓 '
+ping_desc: "**Ping:** `%{ping}ms`\n**Response Time:** `%{response}ms`"
+
+### Uptime command!
+uptime_title: '🕒 '
+uptime_desc: '**Uptime:** `%{uptime}`'
+
+### Buttons & menus!
+menu_not_for_you: 'This menu is not for you!'
+menu_list: 'Command List'
+menu_home: 'Home'
+menu_prev: 'Prev'
+menu_next: 'Next'
+page_label: '> Page %{page} / %{total}'
+btn_support_server: 'Support Server'
+btn_invite: 'Invite'
+btn_invite_me: 'Invite Me'
+btn_support: 'Support'
+btn_github: 'Github (Rynote)'
+
+### Info command!
+info_title: '# %{username} Information'
+info_codename: '**Codename:**'
+info_version: '**Version:**'
+info_node: '**Node.js:**'
+info_discordjs: '**Discord.js:**'
+info_rainlink: '**Rainlink:**'
+info_guilds: '**Guilds:**'
+info_users: '**Users:**'
+info_commands: '**Commands:**'
+info_footer: '> Click **%{menu} Command List** below to view all commands with their aliases and descriptions.'
+
+### Help command!
+help_menu_btn: 'Help Menu'
+help_welcome: '## %{emoji} Welcome to %{username}!'
+help_welcome_desc: '> Thanks for using the bot. %{username} is a high-quality music & utility bot.'
+help_total: '**Total Commands:**'
+help_cats: '**Categories:**'
+help_owner: '**Owner:**'
+help_footer: '> Click **Help Menu** below to browse all commands, or use `/help <command>` for details.'
+cmd_not_public: 'This command is not available for public view.'
+
+### Developer command!
+dev_team_title: 'Development Team'
+dev_lead: '**Lead Developer:**'
+dev_base: '**Original Base:**'
+dev_botname: '**Bot Name:**'
+dev_spec: '**Specialization:**'
+dev_spec_val: 'Music & Multipurpose Bot'
+dev_status: '**Status:**'
+dev_status_val: 'Active Development'
+dev_note: "*We're constantly working hard to improve your experience!*"
+
+### Tos command!
+tos_title: 'Terms of Service'
+tos_header: '> **Terms of Service** — Page %{page}/%{total}'
+tos_page1: "### 1. Acceptance & Account\nBy inviting or using **%{bot}** (\"the Bot\"), you agree to these Terms of Service (\"ToS\"). If you do not agree, do not use the Bot.\n\n- These terms apply to all servers, users, and interactions with the Bot.\n- We may update these terms at any time; continued use means acceptance.\n- You must comply with Discord's Terms of Service and Community Guidelines."
+tos_page2: "### 2. Data & Privacy\nWe collect and store only the minimum data needed to operate:\n\n- **Guild data:** server ID, configured settings, and prefixes.\n- **Playlists:** saved tracks linked to your user or server.\n- **No private messages** are read or stored.\n\nData is not sold or shared with third parties except as required to provide the service."
+tos_page3: "### 3. Usage, Liability & Premium\n- **Usage:** Do not use the Bot for spam, abuse, or any illegal activity.\n- **Availability:** Features may change, break, or be removed at any time without notice.\n- **Liability:** The Bot is provided \"as is\" with no warranty of uptime or accuracy.\n- **Premium:** Purchases are final and non-refundable unless required by law.\n\n*Continued use of %{bot} constitutes acceptance of these terms.*"
+
+### Support command!
+support_title: 'Support & Help'
+support_heading: '### Need help with %{username}?'
+support_items: "- Music playback issues\n- Command usage and setup\n- Bot permissions and configuration\n- Feature requests and suggestions\n- Bug reports and technical issues\n- Premium features and subscriptions"
+support_note: '*Join our support server for fast assistance!*'
+
+### BotInfo command!
+botinfo_prefix: '**Bot Prefix:**'
+botinfo_type: '**Type:**'
+botinfo_type_val: 'Music & Utility Bot'
+botinfo_lib: '**Library:**'
+botinfo_autofix: '**Autofix:**'
+botinfo_powered: '**Powered by:**'
+botinfo_partnered: '**Partnered with:**'
+botinfo_stats: '### Statistics'
+botinfo_uptime: '**Uptime:**'
+botinfo_channels: '**Channels:**'
+botinfo_memory: '**Memory Usage:**'
+
+### Invite command!
+invite_field_name: 'Rynote'
+invite_field_value: 'https://github.com/Rynexid'
+
+### Help command!
+ce_finder_name: '**Command:**'
+ce_finder_des: '**Description:**'
+ce_finder_usage: '**Usage:**'
+ce_finder_access: '**Accessible by:**'
+ce_finder_aliases: '**Aliases:**'
+ce_finder_slash: '**Slash:**'
+ce_finder_des_no: 'No Description'
+ce_finder_usage_no: 'No Usage'
+ce_finder_aliases_prefix: ' [Prefix only]'
+ce_finder_aliases_no: 'No Aliases'
+ce_finder_slash_enable: 'Enabled'
+ce_finder_slash_disable: 'Disabled'
+ce_finder_invalid: 'Invalid Command'
+ce_finder_example: '`⚠️` | Please provide a valid **Command Name**!'
+ce_name: 'Help Command'
+ce_total: 'Total Commands: '

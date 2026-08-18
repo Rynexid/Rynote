@@ -1,0 +1,6 @@
+# Mode
+enable: 'Enabled'
+disable: 'Disabled'
+
+# Misc
+is_thinking: '**%{username}** is thinking...'

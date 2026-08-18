@@ -1,0 +1,38 @@
+queue_author: '💾 %{guild}'
+queue_description: "`📀` | Sedang Diputar:\n**%{track}** `[%{duration}]` • %{requester}\n\n`💤` | Sisa Antrian:**%{list_song}**"
+queue_footer: 'Halaman • %{page}/%{pages} | Lagu • %{queue_lang} | Total Durasi • %{total_duration}'
+# Pause
+pause_msg: '`⏸️` | **Player** Dijeda!'
+resume_msg: '`▶️` | **Player** Dilanjutkan!'
+# Skip
+skip_msg: '`⏭️` | **Lagu** Dilewati!'
+skip_notfound: '`⚠️` | Tidak ada lagu yang bisa dilewati!'
+# Stop
+stop_msg: '`⏹️` | **Player** Dihentikan!'
+# Volume
+volup_msg: '`🔊` | Volume Diubah ke **%{volume}%**'
+voldown_msg: '`🔉` | Volume Diubah ke **%{volume}%**'
+volume_invalid: '`⚠️` | Volume Tidak Valid. Gunakan angka antara **1** dan **100**!'
+volume_max: '`⚠️` | Player sudah di volume maksimal!'
+volume_min: '`⚠️` | Player sudah di volume minimal!'
+# Clear
+clear_msg: '`🗑️` | Antrian Telah **Dibersihkan**!'
+# Loop
+loop_current: '`🔁` | Mengulang **Lagu** Saat Ini!'
+loop_all: '`🔁` | Mengulang **Antrian**!'
+unloop_all: '`❌` | Loop Sekarang **Dinonaktifkan**!'
+loop_invalid: '`⚠️` | Mode Loop Tidak Valid. Gunakan %{mode}!'
+loop_already: '`⚠️` | Mode Loop sudah **%{mode}**!'
+# Previous
+previous_msg: '`⏮️` | Kembali ke **Lagu** Sebelumnya!'
+previous_notfound: '`⚠️` | Tidak ada lagu sebelumnya yang ditemukan!'
+# Shuffle
+shuffle_msg: '🔀 Antrian Diacak'
+
+### Semua perintah filter!
+filter_on: '`✅` | Filter %{name} sekarang **aktif**!'
+filter_already: '`⚠️` | Filter %{name} sudah **aktif**!'
+
+### Perintah Reset!
+reset_on: '`❌` | Filter Telah **Direset**!'
+reset_already: '`⚠️` | Filter sudah **direset**!'

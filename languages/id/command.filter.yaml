@@ -1,0 +1,41 @@
+### Semua perintah filter!
+filter_on: '`✅` | Filter %{name} sekarang **aktif**!'
+filter_already: '`⚠️` | Filter %{name} sudah **aktif**!'
+filter_number: '`⚠️` | Mohon masukkan angka yang valid!'
+filter_greater: '`⚠️` | Angka harus lebih besar dari **0**!'
+filter_less: '`⚠️` | Angka harus lebih kecil dari **10**!'
+filter_avaliable: "### `❌` | Kamu harus mengetik nama filter yang benar. Ini semua filter yang tersedia [%{amount}]\n`%{list}`"
+
+### Perintah Bassboost!
+bassboost_set: '`🎚️` | Bassboost telah disetel ke **%{amount}dB**!'
+bassboost_limit: '`⚠️` | Gunakan angka antara **-10** dan **10**!'
+
+### Perintah Equalizer!
+eq_author: 'Equalizer'
+eq_icon: 'https://i.pinimg.com/originals/cb/17/b8/cb17b80a942d7c317a35ff1324fae12f.gif'
+eq_desc: '`🎚️` | Ada **14 Band** yang bisa disetel dari **-10** sampai **10**. Tidak wajib mengisi semuanya!'
+eq_field_title: 'Contoh:'
+eq_field_value: '%{prefix}eq 2 3 0 8 0 5 0 -5 0 0'
+eq_footer: 'Reset Equalizer • %{prefix}eq reset'
+eq_on: '`🎚️` | Equalizer telah disetel ke **%{bands}**!'
+eq_number: '`⚠️` | Mohon masukkan angka yang valid!'
+eq_greater: '`⚠️` | Angka harus lebih besar dari **-10**!'
+eq_than: '`⚠️` | Angka harus lebih kecil dari **10**!'
+
+### Perintah Pitch!
+pitch_on: '`🎚️` | Pitch telah disetel ke **%{amount}**!'
+
+### Perintah Rate!
+rate_on: '`🎚️` | Rate telah disetel ke **%{amount}x**!'
+
+### Perintah Speed!
+speed_on: '`🎚️` | Kecepatan telah disetel ke **%{amount}x**!'
+
+### Perintah Reset!
+reset_on: '`❌` | Filter Telah **Direset**!'
+reset_already: '`⚠️` | Filter sudah **direset**!'
+
+### Menu pilih filter!
+filter_placeholder: 'Pilih filter untuk pengalaman audio yang lebih baik'
+filter_desc: 'filter untuk pengalaman audio yang lebih baik!'
+filter_reset: 'Reset semua filter saat ini'

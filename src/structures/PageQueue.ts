@@ -1,0 +1,481 @@
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonInteraction,
+  ButtonStyle,
+  CommandInteraction,
+  ComponentType,
+  Message,
+  MessageFlags,
+} from 'discord.js'
+import { Manager } from '../manager.js'
+
+export class PageQueue {
+  client: Manager
+  pages: any[][]
+  timeout: number
+  queueLength: number
+  language: string
+
+  constructor(
+    client: Manager,
+    pages: any[][],
+    timeout: number,
+    queueLength: number,
+    language: string
+  ) {
+    this.client = client
+    this.pages = pages
+    this.timeout = timeout
+    this.queueLength = queueLength
+    this.language = language
+  }
+
+  async slashPage(interaction: CommandInteraction, queueDuration: string) {
+    if (!interaction && !(interaction as CommandInteraction).channel)
+      throw new Error('Channel is inaccessible.')
+    if (!this.pages) throw new Error('Pages are not given.')
+
+    const row1 = new ButtonBuilder()
+      .setCustomId('back')
+      .setLabel('◀')
+      .setStyle(ButtonStyle.Secondary)
+    const row2 = new ButtonBuilder()
+      .setCustomId('next')
+      .setLabel('▶')
+      .setStyle(ButtonStyle.Secondary)
+    const navRow = new ActionRowBuilder<ButtonBuilder>().addComponents(row1, row2)
+
+    let page = 0
+
+    const getFooterText = (p: number) =>
+      this.client.i18n.get(this.language, 'command.music', 'queue_footer', {
+        page: String(p + 1),
+        pages: String(this.pages.length),
+        queue_lang: String(this.queueLength),
+        duration: String(queueDuration),
+      })
+
+    const buildComponents = (p: number) => [
+      ...this.pages[p],
+      { type: 10, content: getFooterText(p) },
+      navRow.toJSON(),
+    ]
+
+    const curPage = await interaction.editReply({
+      flags: 32768,
+      components: buildComponents(page),
+    })
+    if (this.pages.length == 0) return
+
+    const collector = curPage.createMessageComponentCollector({
+      filter: (m) => m.user.id === interaction.user.id,
+      time: this.timeout,
+      componentType: ComponentType.Button,
+    })
+
+    collector.on('collect', async (interaction) => {
+      if (!interaction.deferred) await interaction.deferUpdate()
+
+      if (interaction.customId === 'back') {
+        page = page > 0 ? --page : this.pages.length - 1
+      } else if (interaction.customId === 'next') {
+        page = page + 1 < this.pages.length ? ++page : 0
+      }
+      curPage
+        .edit({
+          flags: 32768,
+          components: buildComponents(page),
+        })
+        .catch(() => null)
+    })
+
+    collector.on('end', () => {
+      const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setCustomId('back')
+          .setLabel('◀')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true),
+        new ButtonBuilder()
+          .setCustomId('next')
+          .setLabel('▶')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true)
+      )
+      curPage
+        .edit({
+          flags: 32768,
+          components: [
+            ...this.pages[page],
+            { type: 10, content: getFooterText(page) },
+            disabledRow.toJSON(),
+          ],
+        })
+        .catch(() => null)
+      // @ts-ignore
+      collector.removeAllListeners()
+    })
+
+    return curPage
+  }
+
+  async slashPlaylistPage(interaction: CommandInteraction) {
+    if (!interaction && !(interaction as CommandInteraction).channel)
+      throw new Error('Channel is inaccessible.')
+    if (!this.pages) throw new Error('Pages are not given.')
+
+    const row1 = new ButtonBuilder()
+      .setCustomId('back')
+      .setLabel('◀')
+      .setStyle(ButtonStyle.Secondary)
+    const row2 = new ButtonBuilder()
+      .setCustomId('next')
+      .setLabel('▶')
+      .setStyle(ButtonStyle.Secondary)
+    const navRow = new ActionRowBuilder<ButtonBuilder>().addComponents(row1, row2)
+
+    let page = 0
+
+    const getFooterText = (p: number) =>
+      this.client.i18n.get(this.language, 'command.playlist', 'view_embed_footer', {
+        page: String(p + 1),
+        pages: String(this.pages.length),
+        songs: String(this.queueLength),
+      })
+
+    const buildComponents = (p: number) => [
+      ...this.pages[p],
+      { type: 10, content: getFooterText(p) },
+      navRow.toJSON(),
+    ]
+
+    const curPage = await interaction.editReply({
+      flags: 32768,
+      components: buildComponents(page),
+    })
+    if (this.pages.length == 0) return
+
+    const collector = curPage.createMessageComponentCollector({
+      filter: (m) => m.user.id === interaction.user.id,
+      time: this.timeout,
+      componentType: ComponentType.Button,
+    })
+
+    collector.on('collect', async (interaction) => {
+      if (!interaction.deferred) await interaction.deferUpdate()
+      if (interaction.customId === 'back') {
+        page = page > 0 ? --page : this.pages.length - 1
+      } else if (interaction.customId === 'next') {
+        page = page + 1 < this.pages.length ? ++page : 0
+      }
+      curPage
+        .edit({
+          flags: 32768,
+          components: buildComponents(page),
+        })
+        .catch(() => null)
+    })
+    collector.on('end', () => {
+      const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setCustomId('back')
+          .setLabel('◀')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true),
+        new ButtonBuilder()
+          .setCustomId('next')
+          .setLabel('▶')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true)
+      )
+      curPage
+        .edit({
+          flags: 32768,
+          components: [
+            ...this.pages[page],
+            { type: 10, content: getFooterText(page) },
+            disabledRow.toJSON(),
+          ],
+        })
+        .catch(() => null)
+      // @ts-ignore
+      collector.removeAllListeners()
+    })
+    return curPage
+  }
+
+  async prefixPage(message: Message, queueDuration: string) {
+    if (!message && !(message as Message).channel) throw new Error('Channel is inaccessible.')
+    if (!this.pages) throw new Error('Pages are not given.')
+
+    const row1 = new ButtonBuilder()
+      .setCustomId('back')
+      .setLabel('◀')
+      .setStyle(ButtonStyle.Secondary)
+    const row2 = new ButtonBuilder()
+      .setCustomId('next')
+      .setLabel('▶')
+      .setStyle(ButtonStyle.Secondary)
+    const navRow = new ActionRowBuilder<ButtonBuilder>().addComponents(row1, row2)
+
+    let page = 0
+
+    const getFooterText = (p: number) =>
+      this.client.i18n.get(this.language, 'command.music', 'queue_footer', {
+        page: String(p + 1),
+        pages: String(this.pages.length),
+        queue_lang: String(this.queueLength),
+        duration: String(queueDuration),
+      })
+
+    const buildComponents = (p: number) => [
+      ...this.pages[p],
+      { type: 10, content: getFooterText(p) },
+      navRow.toJSON(),
+    ]
+
+    const curPage = await message.reply({
+      flags: 32768,
+      components: buildComponents(page),
+      allowedMentions: { repliedUser: false },
+    })
+    if (this.pages.length == 0) return
+
+    const collector = curPage.createMessageComponentCollector({
+      filter: (interaction) =>
+        interaction.user.id === message.author.id ? true : false && interaction.deferUpdate(),
+      time: this.timeout,
+      componentType: ComponentType.Button,
+    })
+
+    collector.on('collect', async (interaction) => {
+      if (!interaction.deferred) await interaction.deferUpdate()
+      if (interaction.customId === 'back') {
+        page = page > 0 ? --page : this.pages.length - 1
+      } else if (interaction.customId === 'next') {
+        page = page + 1 < this.pages.length ? ++page : 0
+      }
+      const route = `/channels/${curPage.channel.id}/messages/${curPage.id}` as `/${string}`
+      this.client.rest
+        .patch(route, {
+          body: {
+            flags: 32768,
+            components: buildComponents(page),
+          },
+        })
+        .catch(() => null)
+    })
+    collector.on('end', () => {
+      const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setCustomId('back')
+          .setLabel('◀')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true),
+        new ButtonBuilder()
+          .setCustomId('next')
+          .setLabel('▶')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true)
+      )
+      const route = `/channels/${curPage.channel.id}/messages/${curPage.id}` as `/${string}`
+      this.client.rest
+        .patch(route, {
+          body: {
+            flags: 32768,
+            components: [
+              ...this.pages[page],
+              { type: 10, content: getFooterText(page) },
+              disabledRow.toJSON(),
+            ],
+          },
+        })
+        .catch(() => null)
+      // @ts-ignore
+      collector.removeAllListeners()
+    })
+    return curPage
+  }
+
+  async prefixPlaylistPage(message: Message) {
+    if (!message && !(message as Message).channel) throw new Error('Channel is inaccessible.')
+    if (!this.pages) throw new Error('Pages are not given.')
+
+    const row1 = new ButtonBuilder()
+      .setCustomId('back')
+      .setLabel('◀')
+      .setStyle(ButtonStyle.Secondary)
+    const row2 = new ButtonBuilder()
+      .setCustomId('next')
+      .setLabel('▶')
+      .setStyle(ButtonStyle.Secondary)
+    const navRow = new ActionRowBuilder<ButtonBuilder>().addComponents(row1, row2)
+
+    let page = 0
+
+    const getFooterText = (p: number) =>
+      this.client.i18n.get(this.language, 'command.playlist', 'view_embed_footer', {
+        page: String(p + 1),
+        pages: String(this.pages.length),
+        songs: String(this.queueLength),
+      })
+
+    const buildComponents = (p: number) => [
+      ...this.pages[p],
+      { type: 10, content: getFooterText(p) },
+      navRow.toJSON(),
+    ]
+
+    const curPage = await message.reply({
+      flags: 32768,
+      components: buildComponents(page),
+      allowedMentions: { repliedUser: false },
+    })
+    if (this.pages.length == 0) return
+
+    const collector = curPage.createMessageComponentCollector({
+      filter: (interaction) =>
+        interaction.user.id === message.author.id ? true : false && interaction.deferUpdate(),
+      time: this.timeout,
+      componentType: ComponentType.Button,
+    })
+
+    collector.on('collect', async (interaction) => {
+      if (!interaction.deferred) await interaction.deferUpdate()
+      if (interaction.customId === 'back') {
+        page = page > 0 ? --page : this.pages.length - 1
+      } else if (interaction.customId === 'next') {
+        page = page + 1 < this.pages.length ? ++page : 0
+      }
+      const route = `/channels/${curPage.channel.id}/messages/${curPage.id}` as `/${string}`
+      this.client.rest
+        .patch(route, {
+          body: {
+            flags: 32768,
+            components: buildComponents(page),
+          },
+        })
+        .catch(() => null)
+    })
+    collector.on('end', () => {
+      const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setCustomId('back')
+          .setLabel('◀')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true),
+        new ButtonBuilder()
+          .setCustomId('next')
+          .setLabel('▶')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true)
+      )
+      const route = `/channels/${curPage.channel.id}/messages/${curPage.id}` as `/${string}`
+      this.client.rest
+        .patch(route, {
+          body: {
+            flags: 32768,
+            components: [
+              ...this.pages[page],
+              { type: 10, content: getFooterText(page) },
+              disabledRow.toJSON(),
+            ],
+          },
+        })
+        .catch(() => null)
+      // @ts-ignore
+      collector.removeAllListeners()
+    })
+    return curPage
+  }
+
+  async buttonPage(interaction: ButtonInteraction, queueDuration: string) {
+    if (!interaction && !(interaction as unknown as CommandInteraction).channel)
+      throw new Error('Channel is inaccessible.')
+    if (!this.pages) throw new Error('Pages are not given.')
+
+    const row1 = new ButtonBuilder()
+      .setCustomId('back')
+      .setLabel('◀')
+      .setStyle(ButtonStyle.Secondary)
+    const row2 = new ButtonBuilder()
+      .setCustomId('next')
+      .setLabel('▶')
+      .setStyle(ButtonStyle.Secondary)
+    const navRow = new ActionRowBuilder<ButtonBuilder>().addComponents(row1, row2)
+
+    let page = 0
+
+    const getFooterText = (p: number) =>
+      this.client.i18n.get(this.language, 'command.music', 'queue_footer', {
+        page: String(p + 1),
+        pages: String(this.pages.length),
+        queue_lang: String(this.queueLength),
+        duration: String(queueDuration),
+      })
+
+    const buildComponents = (p: number) => [
+      ...this.pages[p],
+      { type: 10, content: getFooterText(p) },
+      navRow.toJSON(),
+    ]
+
+    const curPage = await interaction.followUp({
+      flags: MessageFlags.Ephemeral | 32768,
+      components: buildComponents(page),
+    })
+    if (this.pages.length == 0) return
+
+    const collector = curPage.createMessageComponentCollector({
+      filter: (m) => m.user.id === interaction.user.id,
+      time: this.timeout,
+      componentType: ComponentType.Button,
+    })
+
+    collector.on('collect', async (interaction) => {
+      if (!interaction.deferred) await interaction.deferUpdate()
+
+      if (interaction.customId === 'back') {
+        page = page > 0 ? --page : this.pages.length - 1
+      } else if (interaction.customId === 'next') {
+        page = page + 1 < this.pages.length ? ++page : 0
+      }
+      curPage
+        .edit({
+          flags: 32768,
+          components: buildComponents(page),
+        })
+        .catch(() => null)
+    })
+
+    collector.on('end', () => {
+      const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setCustomId('back')
+          .setLabel('◀')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true),
+        new ButtonBuilder()
+          .setCustomId('next')
+          .setLabel('▶')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true)
+      )
+      curPage
+        .edit({
+          flags: 32768,
+          components: [
+            ...this.pages[page],
+            { type: 10, content: getFooterText(page) },
+            disabledRow.toJSON(),
+          ],
+        })
+        .catch(() => null)
+      // @ts-ignore
+      collector.removeAllListeners()
+    })
+
+    return curPage
+  }
+}

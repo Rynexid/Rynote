@@ -1,0 +1,96 @@
+### Perintah Create!
+create_created: '`💿` | **%{playlist}** Dibuat • `%{id}`'
+create_toolong: '`⚠️` | Nama Playlist tidak boleh lebih dari **16 Karakter**!'
+des_toolong: '`⚠️` | Deskripsi Playlist tidak boleh lebih dari **1000 Karakter**!'
+create_limit_playlist: '`⚠️` | Kamu tidak bisa membuat lebih dari **%{limit} Playlist**!'
+
+### Perintah Add!
+add_track: '`🔍` | **%{title}** `%{duration}` Dicari • %{user}'
+add_playlist: '`🔍` | **%{title}** `%{duration}` Dicari • (**%{track} Lagu**) • %{user}'
+add_search: '`🔍` | **%{title}** `%{duration}` Dicari • %{user}'
+add_added: '`➕` | **%{count} Lagu** Ditambahkan ke `%{playlist}`'
+add_match: '`⚠️` | Mohon berikan nama lagu atau URL yang valid!'
+add_owner: '`⚠️` | Kamu bukan **Pemilik Playlist**!'
+add_limit_track: '`⚠️` | Kamu tidak bisa menambahkan lebih dari **%{limit} Lagu**!'
+
+### Perintah Delete!
+delete_confirm: '`❓` | Apakah kamu ingin menghapus `%{playlist_id}`'
+delete_deleted: '`❌` | `%{name}` Dihapus'
+delete_notfound: '`⚠️` | Mohon berikan ID Playlist yang valid!'
+delete_no: '`⚠️` | **Penghapusan** Dibatalkan!'
+delete_owner: '`⚠️` | Kamu bukan **Pemilik Playlist**!'
+
+### Perintah Detail!
+detail_private: '`🔒` | Playlist bersifat **Privat**!'
+detail_embed_title: '%{name}'
+detail_embed_footer: 'Halaman %{page}/%{pages} | %{songs} lagu | %{duration}'
+detail_track: '%{num}. **%{title}** `[%{duration}]` • %{author}'
+detail_notfound: '`⚠️` | Mohon berikan ID Playlist yang valid!'
+detail_notnumber: '`⚠️` | Mohon berikan nomor halaman yang valid!'
+detail_page_notfound: '`⚠️` | Hanya ada **%{page} Halaman**!'
+
+### Perintah Import!
+import_private: '`🔒` | Playlist bersifat **Privat**!'
+import_imported: '`💿` | **%{name}** Diimpor • `[%{duration}]` • (**%{tracks} Lagu**) • %{user}'
+import_voice: '`⚠️` | Kamu harus berada di voice channel untuk menggunakan perintah ini!'
+import_empty: '`⚠️` | Playlist **Kosong**!'
+
+### Perintah All!
+view_embed_title: '%{user}'
+view_embed_footer: 'Halaman %{page}/%{pages} | Playlist: %{songs}'
+view_embed_playlist: '%{num}. **%{name}** • %{tracks} lagu • %{create}'
+view_notnumber: '`⚠️` | Mohon berikan nomor halaman yang valid!'
+view_page_notfound: '`⚠️` | Hanya ada **%{page} Halaman**!'
+
+### Perintah Remove!
+remove_removed: '`➖` | **Nomor %{position}** dihapus dari `%{name}`'
+remove_notfound: '`⚠️` | Mohon berikan ID Playlist yang valid!'
+remove_song_notfound: '`⚠️` | Lagu tidak ditemukan!'
+remove_owner: '`⚠️` | Kamu bukan **Pemilik Playlist**!'
+
+### Perintah SaveQueue!
+savequeue_saved: '`✅` | **%{tracks} Lagu** Disimpan ke `%{name}`'
+savequeue_notfound: '`⚠️` | Mohon berikan ID Playlist yang valid!'
+savequeue_owner: '`⚠️` | Kamu bukan **Pemilik Playlist**!'
+savequeue_no_new_saved: '`⚠️` | Lagu sudah ada di `%{name}`'
+savequeue_no_tracks: '`⚠️` | Tidak ada lagu yang sedang diputar!'
+
+### Perintah Info!
+info_id: '`🆔` | ID:'
+info_total: '`🎵` | Total Lagu:'
+info_created: '`📅` | Dibuat:'
+info_private: '`👀` | Visibilitas:'
+info_owner: '`👑` | Pemilik:'
+info_des: '`💬` | Deskripsi:'
+no_des: 'Tidak ada deskripsi yang disediakan!'
+public: 'Publik'
+private: 'Privat'
+invalid: '`⚠️` | Mohon berikan ID Playlist yang valid!'
+
+### Perintah Editor!
+edit_playlist_id_label: 'Masukkan **ID Playlist Baru**! `[a-z, A-Z, 0-9]`'
+edit_playlist_name_label: 'Masukkan **Nama Playlist Baru**!'
+edit_playlist_des_label: 'Masukkan **Deskripsi Playlist Baru**!'
+edit_playlist_private_label: 'Masukkan **Visibilitas Playlist Baru**! `[public/private]`'
+edit_success: '`✅` | Info `%{playlistId}` berhasil diedit!'
+edit_arg: '`⚠️` | Mohon berikan ID Playlist yang valid!'
+edit_notfound: '`⚠️` | Mohon berikan ID Playlist yang valid!'
+edit_playlist_owner: '`⚠️` | Kamu bukan **Pemilik Playlist**!'
+edit_invalid_id: '`⚠️` | Masukkan ID Playlist yang valid dan belum ada!'
+edit_invalid_mode: '`⚠️` | Mode Visibilitas tidak valid. Gunakan **public** atau **private**!'
+
+### Interaksi Editor!
+editor_title: 'Editor Playlist'
+ineraction_edit_playlist_id_label: 'ID Playlist Baru'
+ineraction_edit_playlist_name_label: 'Nama Playlist Baru'
+ineraction_edit_playlist_des_label: 'Deskripsi Playlist Baru'
+ineraction_edit_playlist_private_label: 'Visibilitas Playlist Baru'
+ineraction_edit_playlist_id_placeholder: 'Masukkan ID Playlist Baru! [a-z, A-Z, 0-9]'
+ineraction_edit_playlist_name_placeholder: 'Masukkan Nama Playlist Baru!'
+ineraction_edit_playlist_des_placeholder: 'Masukkan Deskripsi Playlist Baru!'
+ineraction_edit_playlist_private_placeholder: 'Masukkan Visibilitas Playlist Baru! [public/private]'
+ineraction_edit_success: '`✅` | Info `%{playlistId}` berhasil diedit!'
+ineraction_edit_playlist_error: '`⚠️` | Terjadi kesalahan. Silakan coba lagi!'
+ineraction_edit_notfound: '`⚠️` | Mohon berikan ID Playlist yang valid!'
+ineraction_edit_playlist_owner: '`⚠️` | Kamu bukan **Pemilik Playlist**!'
+ineraction_edit_invalid_id: '`⚠️` | Masukkan ID Playlist yang valid dan belum ada!'

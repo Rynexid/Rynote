@@ -1,0 +1,110 @@
+### Perintah Developer!
+dev_title: 'RainyXeon'
+dev_desc: "Saya hanya seorang developer misterius. Dan pembuat resmi Rynote dan RainyProduction!"
+dev_foot: 'Pertimbangkan untuk bergabung ke server saya atau mengundang bot saya :) Ini akan sangat membantu saya!'
+
+### Perintah Invite!
+inv_title: '✉️ %{username}'
+inv_desc: 'Terima kasih sudah mengundang saya sebelumnya!'
+
+### Perintah Ping!
+ping_title: '🏓 '
+ping_desc: "**Ping:** `%{ping}ms`\n**Waktu Respon:** `%{response}ms`"
+
+### Perintah Uptime!
+uptime_title: '🕒 '
+uptime_desc: '**Uptime:** `%{uptime}`'
+
+### Tombol & menu!
+menu_not_for_you: 'Menu ini bukan untukmu!'
+menu_list: 'Daftar Perintah'
+menu_home: 'Beranda'
+menu_prev: 'Sebelumnya'
+menu_next: 'Berikutnya'
+page_label: '> Halaman %{page} / %{total}'
+btn_support_server: 'Server Dukungan'
+btn_invite: 'Undang'
+btn_invite_me: 'Undang Saya'
+btn_support: 'Dukungan'
+btn_github: 'Github (Rynote)'
+
+### Perintah Info!
+info_title: '# Informasi %{username}'
+info_codename: '**Nama Kode:**'
+info_version: '**Versi:**'
+info_node: '**Node.js:**'
+info_discordjs: '**Discord.js:**'
+info_rainlink: '**Rainlink:**'
+info_guilds: '**Guild:**'
+info_users: '**Pengguna:**'
+info_commands: '**Perintah:**'
+info_footer: '> Klik **%{menu} Daftar Perintah** di bawah untuk melihat semua perintah beserta alias dan deskripsinya.'
+
+### Perintah Help!
+help_menu_btn: 'Menu Bantuan'
+help_welcome: '## %{emoji} Selamat datang di %{username}!'
+help_welcome_desc: '> Terima kasih telah menggunakan bot ini. %{username} adalah bot musik & utilitas berkualitas tinggi.'
+help_total: '**Total Perintah:**'
+help_cats: '**Kategori:**'
+help_owner: '**Pemilik:**'
+help_footer: '> Klik **Menu Bantuan** di bawah untuk menjelajahi semua perintah, atau gunakan `/help <perintah>` untuk detail.'
+cmd_not_public: 'Perintah ini tidak tersedia untuk tampilan publik.'
+
+### Perintah Developer!
+dev_team_title: 'Tim Pengembangan'
+dev_lead: '**Developer Utama:**'
+dev_base: '**Basis Asli:**'
+dev_botname: '**Nama Bot:**'
+dev_spec: '**Spesialisasi:**'
+dev_spec_val: 'Bot Musik & Serbaguna'
+dev_status: '**Status:**'
+dev_status_val: 'Pengembangan Aktif'
+dev_note: '*Kami terus bekerja keras untuk meningkatkan pengalamanmu!*'
+
+### Perintah Tos!
+tos_title: 'Ketentuan Layanan'
+tos_header: '> **Ketentuan Layanan** — Halaman %{page}/%{total}'
+tos_page1: "### 1. Penerimaan & Akun\nDengan mengundang atau menggunakan **%{bot}** (\"Bot\"), kamu menyetujui Ketentuan Layanan (\"ToS\") ini. Jika kamu tidak setuju, jangan gunakan Bot.\n\n- Ketentuan ini berlaku untuk semua server, pengguna, dan interaksi dengan Bot.\n- Kami dapat memperbarui ketentuan ini kapan saja; penggunaan yang berlanjut berarti penerimaan.\n- Kamu harus mematuhi Ketentuan Layanan dan Pedoman Komunitas Discord."
+tos_page2: "### 2. Data & Privasi\nKami hanya mengumpulkan dan menyimpan data minimum yang dibutuhkan untuk beroperasi:\n\n- **Data Guild:** ID server, pengaturan, dan prefix.\n- **Playlist:** lagu yang disimpan terkait dengan pengguna atau server kamu.\n- **Tidak ada pesan pribadi** yang dibaca atau disimpan.\n\nData tidak dijual atau dibagikan ke pihak ketiga kecuali diperlukan untuk menyediakan layanan."
+tos_page3: "### 3. Penggunaan, Tanggung Jawab & Premium\n- **Penggunaan:** Jangan gunakan Bot untuk spam, penyalahgunaan, atau aktivitas ilegal apa pun.\n- **Ketersediaan:** Fitur dapat berubah, rusak, atau dihapus kapan saja tanpa pemberitahuan.\n- **Tanggung Jawab:** Bot disediakan \"apa adanya\" tanpa jaminan uptime atau akurasi.\n- **Premium:** Pembelian bersifat final dan tidak dapat dikembalikan kecuali diwajibkan oleh hukum.\n\n*Penggunaan %{bot} secara berkelanjutan berarti kamu menerima ketentuan ini.*"
+
+### Perintah Support!
+support_title: 'Dukungan & Bantuan'
+support_heading: '### Butuh bantuan dengan %{username}?'
+support_items: "- Masalah pemutaran musik\n- Penggunaan perintah dan pengaturan\n- Izin dan konfigurasi bot\n- Permintaan fitur dan saran\n- Laporan bug dan masalah teknis\n- Fitur premium dan langganan"
+support_note: '*Bergabunglah ke server dukungan kami untuk bantuan cepat!*'
+
+### Perintah BotInfo!
+botinfo_prefix: '**Prefix Bot:**'
+botinfo_type: '**Tipe:**'
+botinfo_type_val: 'Bot Musik & Utilitas'
+botinfo_lib: '**Library:**'
+botinfo_autofix: '**Autofix:**'
+botinfo_powered: '**Ditenagai oleh:**'
+botinfo_partnered: '**Bermitra dengan:**'
+botinfo_stats: '### Statistik'
+botinfo_uptime: '**Uptime:**'
+botinfo_channels: '**Channel:**'
+botinfo_memory: '**Penggunaan Memori:**'
+
+### Perintah Invite!
+invite_field_name: 'Rynote'
+invite_field_value: 'https://github.com/Rynexid'
+
+### Perintah Help!
+ce_finder_name: '**Perintah:**'
+ce_finder_des: '**Deskripsi:**'
+ce_finder_usage: '**Penggunaan:**'
+ce_finder_access: '**Dapat diakses oleh:**'
+ce_finder_aliases: '**Alias:**'
+ce_finder_slash: '**Slash:**'
+ce_finder_des_no: 'Tidak Ada Deskripsi'
+ce_finder_usage_no: 'Tidak Ada Penggunaan'
+ce_finder_aliases_prefix: ' [Khusus prefix]'
+ce_finder_aliases_no: 'Tidak Ada Alias'
+ce_finder_slash_enable: 'Aktif'
+ce_finder_slash_disable: 'Nonaktif'
+ce_finder_invalid: 'Perintah Tidak Valid'
+ce_finder_example: '`⚠️` | Mohon berikan **Nama Perintah** yang valid!'
+ce_name: 'Perintah Bantuan'
+ce_total: 'Total Perintah: '

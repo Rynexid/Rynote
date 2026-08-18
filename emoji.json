@@ -1,0 +1,47 @@
+{
+  "player": {
+    "play": "<:play:1528702960656191630>",
+    "pause": "<:pause:1528702954318725120>",
+    "previous": "<:previous:1528702967434186754>",
+    "skip": "<:next:1528702939462373387>",
+    "stop": "<:stop:1528743687935496327>",
+    "loop": "<:loop:1528702918943838288>",
+    "shuffle": "<:shuffle:1528702988053385277>",
+    "voldown": "<:voldown:1528743552698421261>",
+    "volup": "<:volup:1528743732059574414>",
+    "queue": "<:queue:1528702974304714882>",
+    "delete": "<:delete:1528702900396753076>"
+  },
+  "global": {
+    "arrow_next": "<:arrow_next:1528702879723032587>",
+    "arrow_previous": "<:arrow_previous:1528702886144643113>",
+    "home": "<:Home:1528769445294506086>",
+    "menu": "<:play:1528702960656191630>"
+  },
+  "category": {
+    "Music": "<:Sound:1528763989104787576>",
+    "Playlist": "<:Playlist:1528763961472974988>",
+    "Info": "<a:Information:1528766185921970330>",
+    "Filter": "<:DrawingMicrophone:1528763933345845418>",
+    "Image": "<:Image:1528766123137568951>",
+    "Premium": "<:Booster:1173237350562803772>",
+    "Utils": "<a:Utils:1528766150132105247>",
+    "Owner": "<:Owner:1173236898127433748>",
+    "Ticket": "<:Ticket:1173237350562803772>"
+  },
+  "user": {
+    "Owner": "<:Owner:1173236898127433748>",
+    "Premium": "<:Booster:1173237350562803772>",
+    "Dev": "<:PrManager:1173237120719138826>"
+  },
+  "brand": {
+    "spotify": "<:spotify:1528703009452986489>",
+    "apple_music": "<:apple_music:1528743714934231082>",
+    "soundcloud": "<:soundcloud:1528703001403850894>",
+    "youtube": "<:youtube:1528743748828135614>",
+    "youtube_music": "<:youtube_music:1528743757367873596>",
+    "tidal": "<:tidal:1528743695908864001>",
+    "deezer": "<:deezer:1528702893903839262>"
+  },
+  "banner": "https://cdn.discordapp.com/attachments/1188698410652540978/1528782487944171680/Rynote.png?ex=6a7fd9e4&is=6a7e8864&hm=e0a1003c48892708905567d5dad60e10735e334cccbdb60ea4cb70eaac56e881&"
+}

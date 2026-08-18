@@ -1,0 +1,51 @@
+# Angka Tidak Valid
+number_invalid: '`⚠️` | Mohon berikan angka yang valid!'
+
+# Dieksekusi saat tidak valid
+no_node: '`⚠️` | Tidak ada server Lavalink yang ditemukan. Silakan coba lagi setelah **5 Menit**!'
+
+# Tidak ada lagu yang sedang diputar!
+no_player: '`⚠️` | Tidak ada lagu yang sedang diputar!'
+
+# Perlu bergabung ke voice & voice yang sama untuk menggunakan perintah!
+no_in_voice: '`⚠️` | Kamu tidak berada di voice channel!'
+no_same_voice: '`⚠️` | Kamu tidak berada di voice channel yang sama dengan saya!'
+
+# Tidak ada izin!
+user_no_perms: '`⚠️` | Kamu tidak memiliki izin **%{perm}** untuk menjalankan perintah ini!'
+no_perms: '`⚠️` | Saya tidak memiliki izin **%{perm}** untuk menjalankan perintah ini!'
+no_perms_channel: '`⚠️` | Saya tidak memiliki izin **%{perm}** di <#%{channel}> untuk menjalankan perintah ini!'
+
+# Terjadi kesalahan!
+unexpected_error: '`⚠️` | Terjadi kesalahan. Silakan coba lagi nanti!'
+
+# Pemilik client!
+owner_only: '`⚠️` | Kamu bukan **Pemilik** saya!'
+
+# Event premium!
+no_premium_author: 'Premium'
+no_premium_desc: '`⚠️` | Kamu bukan pengguna Premium!'
+no_guild_premium_desc: '`⚠️` | Kamu tidak berada di guild premium!'
+
+# Rate limit!
+ratelimit: '`⚠️` | Kamu melakukan aksi terlalu cepat. Mohon tunggu **%{time} Detik**!'
+
+# Argumen hilang
+arg_error: '`⚠️` | Argumen tidak valid. Gunakan %{text}'
+
+# Error perintah gambar
+no_guild: '`⚠️` | Perintah ini hanya bisa digunakan di dalam server!'
+no_banner: '`⚠️` | **%{user}** tidak memiliki banner!'
+no_icon: '`⚠️` | **%{guild}** tidak memiliki ikon server!'
+no_query: '`⚠️` | Mohon berikan kata kunci untuk mencari! Contoh: `%{example}`'
+
+# Error Top.gg
+topgg_error_author: '❌ | Error Top.gg'
+topgg_error_desc: 'Terjadi pengecualian saat memeriksa vote kamu di top.gg, ini mungkin karena Top.gg sedang down. Silakan coba lagi setelah 5-10 menit.'
+topgg_vote_author: "❌ | Kamu belum vote"
+topgg_vote_desc: 'Untuk menggunakan perintah ini, kamu harus vote bot ini!'
+topgg_vote_button: 'Klik di sini untuk vote!'
+
+# Error Blacklist
+bl_user: '`❌` | Kamu telah diblokir oleh <@%{bot}>, mohon hubungi owner untuk menyelesaikannya'
+bl_guild: '`❌` | Server ini telah diblokir oleh <@%{bot}>, mohon hubungi owner untuk menyelesaikannya atau gunakan server lain'

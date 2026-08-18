@@ -1,0 +1,6 @@
+# Mode
+enable: 'Aktif'
+disable: 'Nonaktif'
+
+# Lain-lain
+is_thinking: '**%{username}** sedang berpikir...'

@@ -1,0 +1,45 @@
+### Perintah Generate!
+gen_author: 'Generate Kode Premium'
+gen_desc: "`🔑` | **Kode Berhasil Dibuat** `[%{codes_length}]`\n```%{codes}```\n`💰` | **Paket:** ***%{plan}***\n`📅` | **Kedaluwarsa Pada:** %{expires}"
+gen_footer: 'Gunakan • %{prefix}redeem <code> untuk mengaktifkan premium'
+gen_success: '`🔑` | Berhasil membuat kode redeem, mohon cek DM kamu'
+gen_failed: '`❌` | Gagal membuat kode redeem, mohon cek apakah DM kamu terbuka'
+
+### Perintah Profile!
+profile_author: 'Profil Premium'
+profile_error_desc: '`⚠️` | **%{user}** bukan anggota premium!'
+profile_desc: "`👤` | **User:** `%{user}`\n`💰` | **Paket:** `%{plan}`\n`📅` | **Kedaluwarsa Pada:** %{expires}"
+
+### Perintah Guild Profile!
+guild_profile_author: 'Profil Premium Server'
+guild_profile_desc: "`👤` | **Server:** `%{guild}`\n`💰` | **Paket:** `%{plan}`\n`📅` | **Kedaluwarsa Pada:** %{expires}"
+
+### Perintah Redeem!
+redeem_title: 'Redeem Premium'
+redeem_desc: "`💰` | **Paket:** `%{plan}`\n`📅` | **Kedaluwarsa Pada:** %{expires}"
+redeem_already: '`⚠️` | Kamu sudah menjadi **pengguna Premium**!'
+redeem_invalid: '`⚠️` | Kode tidak valid. Silakan coba lagi atau gunakan kode yang valid!'
+redeem_invalid_mode: '`⚠️` | Tipe aktivasi premium tidak valid. Gunakan `guild` atau `user` saja!'
+redeem_already_guild: '`⚠️` | Server ini sudah memiliki **Premium**!'
+
+### Perintah Remove!
+remove_desc: '`✅` | Berhasil menghapus premium dari %{user}!'
+remove_already: '`⚠️` | %{user} sudah tanpa premium!'
+remove_no_params: "`⚠️` | Mohon sebutkan **nama user** atau **ID user** untuk menghapus premium!"
+remove_404: '`⚠️` | %{userid} bukan **anggota premium**!'
+
+### Perintah Guild Remove!
+guild_remove_desc: '`✅` | Berhasil menghapus premium dari server %{user}!'
+guild_remove_already: "`⚠️` | Server %{user} sudah tanpa premium!"
+guild_remove_no_params: '`⚠️` | Mohon sebutkan **ID server** untuk menghapus premium!'
+guild_remove_404: '`⚠️` | Server %{userid} bukan **server premium**!'
+
+### Perintah Guild List!
+guild_list_title: '💫 Daftar Server Premium!'
+guild_list_notnumber: '`⚠️` | Hanya angka yang diperbolehkan untuk halaman!'
+guild_list_page_notfound: '`⚠️` | Hanya ada **%{page} halaman**!'
+
+### Perintah User List!
+list_title: '💫 Daftar Pengguna Premium'
+list_notnumber: '`⚠️` | Hanya angka yang diperbolehkan untuk halaman!'
+list_page_notfound: '`⚠️` | Hanya ada **%{page} halaman**!'

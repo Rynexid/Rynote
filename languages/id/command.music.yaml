@@ -1,0 +1,122 @@
+### Perintah Autoplay!
+autoplay_on: '`✅` | Autoplay sekarang **Aktif**!'
+autoplay_off: '`❌` | Autoplay sekarang **Nonaktif**!'
+autoplay_already: '`⚠️` | Autoplay sudah **%{mode}**!'
+
+### Perintah ClearQueue!
+clearqueue_msg: '`🗑️` | Antrian Telah **Dibersihkan**!'
+
+### Perintah Forward!
+forward_msg: '`⏩` | Dimajukan ke `%{duration}`'
+forward_beyond: '`⚠️` | Lagu akan segera berakhir. Kamu tidak bisa memajukan melewatinya!'
+
+### Perintah Join!
+join_msg: '`🔊` | Bergabung ke %{channel}'
+join_voice: '`⚠️` | Kamu harus berada di voice channel untuk menggunakan perintah ini!'
+join_already: '`⚠️` | Saya sudah berada di %{channel}'
+
+### Perintah Stop!
+stop_msg: '`⏹️` | **Player** Dihentikan!'
+
+### Perintah Loop!
+loop_current: '`🔁` | Mengulang **Lagu** Saat Ini!'
+loop_all: '`🔁` | Mengulang **Antrian**!'
+unloop_all: '`❌` | Loop Sekarang **Dinonaktifkan**!'
+loop_invalid: '`⚠️` | Mode Loop Tidak Valid. Gunakan %{mode}!'
+loop_already: '`⚠️` | Mode Loop sudah **%{mode}**!'
+
+### Perintah Lyrics!
+lyrics_title: '📜 %{song}'
+lyrics_notfound: '`⚠️` | Lirik tidak ditemukan!'
+lyrics_toolong: '`⚠️` | Lirik terlalu panjang untuk ditampilkan!'
+lyrics_source: Sumber
+lyrics_author: Penulis
+lyrics_duration: Durasi
+lyrics_requester: Peminta
+
+### Perintah Nowplaying!
+np_icon: 'https://cdn.discordapp.com/emojis/741605543046807626.gif'
+np_title: 'Sedang Diputar'
+np_current_duration: '`⏰` | Durasi Saat Ini: `[%{current_duration} / %{total_duration}]`'
+
+### Perintah Pause!
+pause_msg: '`⏸️` | **Player** Dijeda!'
+
+### Perintah Play!
+play_track: '`💾` | **%{title}** `%{duration}` Dimasukkan ke Antrian • %{source} • %{request}'
+play_playlist: '`💾` | **%{title}** `%{duration}` Dimasukkan ke Antrian • (**%{songs} Lagu**) • %{request}'
+play_result: '`💾` | **%{title}** `%{duration}` Dimasukkan ke Antrian • %{source} • %{request}'
+play_search: '`🔍` | **%{title}** `%{duration}` Ditemukan • %{source} • %{request}'
+play_arg: '`⚠️` | Mohon berikan nama lagu atau URL yang valid!'
+play_match: '`⚠️` | Lagu tidak ditemukan!'
+play_emoji: '`⚠️` | Kamu tidak bisa memutar lagu menggunakan emoji!'
+
+### Perintah File!
+file_notfound: '`⚠️` | Mohon berikan File yang valid!'
+play_invalid_file: '`⚠️` | Tipe File tidak valid. Gunakan **mp3** atau **ogg**!'
+play_warning_file: '`⚠️` | Saya tidak bisa mendeteksi tipe File. Gunakan **mp3** atau **ogg**!'
+
+### Perintah Previous!
+previous_msg: '`⏮️` | Kembali ke **Lagu** Sebelumnya!'
+previous_notfound: '`⚠️` | Tidak ada lagu sebelumnya yang ditemukan!'
+
+### Perintah Queue!
+queue_author: '💾 %{guild}'
+queue_description: "`📀` | Sedang Diputar:\n**%{title}** `[%{duration}]` • %{request}\n\n`💤` | Sisa Antrian:**%{rest}**"
+queue_footer: 'Halaman • %{page}/%{pages} | Lagu • %{queue_lang} | Total Durasi • %{duration}'
+queue_notnumber: '`⚠️` | Mohon berikan nomor halaman yang valid!'
+queue_page_notfound: '`⚠️` | Hanya ada **%{page} Halaman**!'
+
+### Perintah Replay!
+replay_msg: '`🔄` | **Lagu** Diulang!'
+
+### Perintah Resume!
+resume_msg: '`▶️` | **Player** Dilanjutkan!'
+
+### Perintah Rewind!
+rewind_msg: '`⏪` | Dimundurkan ke `%{duration}`'
+rewind_beyond: '`⚠️` | Lagu baru saja dimulai. Kamu tidak bisa memundurkannya!'
+
+### Perintah RemoveTrack!
+removetrack_desc: '`🗑️` | **%{name}** `%{duration}` Dihapus • %{request}'
+removetrack_already: '`⚠️` | Saya tidak bisa menghapus lagu yang sedang diputar!'
+removetrack_notfound: '`⚠️` | Lagu tidak ditemukan!'
+
+### Perintah Seek!
+seek_msg: '`➿` | Dipindah ke `%{duration}`'
+seek_beyond: '`⚠️` | Kamu tidak bisa memindah melewati durasi lagu!'
+seek_invalid: '`⚠️` | Durasi Seek tidak valid. Gunakan timestamp yang valid. Contoh: **1:30**!'
+
+### Perintah Shuffle!
+shuffle_msg: '🔀 Antrian Diacak'
+
+### Perintah Unshuffle!
+unshuffle_msg: '🔀 Antrian Dikembalikan'
+
+### Perintah Skip!
+skip_msg: '`⏭️` | **Lagu** Dilewati!'
+skip_notfound: '`⚠️` | Tidak ada lagu yang bisa dilewati!'
+
+### Perintah Volume!
+volume_msg: '`🔊` | Volume telah disetel ke **%{volume}%**'
+volume_invalid: '`⚠️` | Volume Tidak Valid. Gunakan angka antara **1** dan **100**!'
+
+### Perintah Insert!
+insert_desc: '`➕` | **%{name}** `%{duration}` Dimasukkan • %{request}'
+insert_already: '`⚠️` | Saya tidak bisa memasukkan lagu yang sedang diputar!'
+insert_notfound: '`⚠️` | Lagu tidak ditemukan!'
+
+### Perintah Radio!
+radio_list_author: 'Daftar semua radio yang tersedia di %{host}'
+radio_list_placeholder: 'Pilih provider / negara untuk mendapatkan daftar id radio'
+radio_list_move: '`✅` | Pindah ke **%{providerName}**'
+radio_accept: '`✅` | Sedang memutar radio nomor **%{radio_no} [%{radio_name}](%{radio_link})**'
+
+### Lain-lain!
+nothing: 'Tidak Ada'
+unknown: 'Tidak Diketahui'
+unknown_track_name: 'Nama track tidak diketahui'
+no_node: 'Tidak ada node yang tersedia'
+live: 'Langsung'
+synced_lyrics: "⏱️ Lirik sinkron\n\n"
+playlist_name: 'Playlist: %{name} [%{count}]'

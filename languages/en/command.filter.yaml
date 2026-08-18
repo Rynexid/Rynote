@@ -1,0 +1,41 @@
+### All filter command!
+filter_on: '`✅` | %{name} filter is now **enable**!'
+filter_already: '`⚠️` | %{name} filter is already **enabled**!'
+filter_number: '`⚠️` | Please provide a valid number!'
+filter_greater: '`⚠️` | Number must be greater than **0**!'
+filter_less: '`⚠️` | Number must be lesser than **10**!'
+filter_avaliable: "### `❌` | You must type in the correct filter name. Here's all avaliable filter [%{amount}]\n`%{list}`"
+
+### Bassboost command!
+bassboost_set: '`🎚️` | Bassboost has been set to **%{amount}dB**!'
+bassboost_limit: '`⚠️` | Please use a number between **-10** and **10**!'
+
+### Equalizer command!
+eq_author: 'Equalizer'
+eq_icon: 'https://i.pinimg.com/originals/cb/17/b8/cb17b80a942d7c317a35ff1324fae12f.gif'
+eq_desc: '`🎚️` | There are **14 Bands** that can be set from **-10** to **10**. It is not mandatory to set all of them!'
+eq_field_title: 'Example:'
+eq_field_value: '%{prefix}eq 2 3 0 8 0 5 0 -5 0 0'
+eq_footer: 'Reset Equalizer • %{prefix}eq reset'
+eq_on: '`🎚️` | Equalizer has been set to **%{bands}**!'
+eq_number: '`⚠️` | Please provide a valid number!'
+eq_greater: '`⚠️` | Number must be greater than **-10**!'
+eq_than: '`⚠️` | Number must be lesser than **10**!'
+
+### Pitch command!
+pitch_on: '`🎚️` | Pitch has been set to **%{amount}**!'
+
+### Rate command!
+rate_on: '`🎚️` | Rate has been set to **%{amount}x**!'
+
+### Speed command!
+speed_on: '`🎚️` | Speed has been set to **%{amount}x**!'
+
+### Reset command!
+reset_on: '`❌` | Filter has been **Reset**!'
+reset_already: '`⚠️` | Filter has already been **Reset**!'
+
+### Filter select menu!
+filter_placeholder: 'Choose a filter for better audio experience'
+filter_desc: 'filter for better audio experience!'
+filter_reset: 'Reset all current filter'

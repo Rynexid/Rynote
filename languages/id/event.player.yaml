@@ -1,0 +1,30 @@
+### Memutar lagu!
+track_title: 'Mulai Diputar'
+track_icon: 'https://cdn.discordapp.com/emojis/741605543046807626.gif'
+author_title: '`✒️` | Penulis:'
+request_title: '`👤` | Peminta:'
+volume_title: '`🔊` | Volume:'
+queue_title: '`💾` | Panjang Antrian:'
+duration_title: '`🕒` | Durasi Lagu:'
+total_duration_title: '`🕰️` | Durasi Antrian:'
+download_title: '`⬇️` | Unduh:'
+source_title: '`🔗` | Sumber:'
+
+### Voice yang sama!
+join_voice: '`⚠️` | Kamu tidak berada di voice channel yang sama dengan saya!'
+
+### Event QueueEnd!
+queue_end_desc: '`🔚` | Lagu Telah **Berakhir**!'
+
+### Error lagu!
+error_desc: '`⚠️` | Lagu mengalami error. **Lagu** Dilewati!'
+error_retry_desc: '`🔄` | Terjadi error saat memutar **%{title}**. Mencoba lagi...'
+error_fail_desc: '`⚠️` | **%{title}** gagal diputar. Silakan coba lagi sebentar lagi.'
+
+### Fungsi otomatis!
+player_end: '`🛑` | Saya keluar dari <#%{leave}> karena tidak ada orang di voice channel!'
+leave_pause: '`⏸️` | Lagu Dijeda karena saya ditinggal sendirian!'
+leave_resume: '`▶️` | Lagu Dilanjutkan karena seseorang bergabung!'
+
+### Autoplay!
+autoplay_disabled: '⚠️ Autoplay dimatikan: tidak ada lagu terkait yang bisa dimuat (source YouTube sedang bermasalah). Coba aktifkan kembali nanti.'

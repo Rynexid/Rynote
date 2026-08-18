@@ -1,0 +1,41 @@
+### Perintah Language!
+lang_set: '`📙` | Bahasa telah disetel ke **%{language}**!'
+lang_change: '`📙` | Bahasa telah diubah ke **%{language}**!'
+lang_perm: '`⚠️` | Kamu tidak memiliki izin untuk menggunakan perintah ini!'
+provide_lang: "`⚠️` | Bahasa Tidak Valid. Gunakan:\n`%{languages}`"
+
+### Perintah Shutdown!
+restart_msg: '`🔌` | **Mematikan**...'
+
+### Perintah Prefix!
+prefix_set: '`㊙️` | Prefix telah disetel ke **%{prefix}**'
+prefix_change: '`㊙️` | Prefix telah diubah ke **%{prefix}**'
+prefix_arg: '`⚠️` | Mohon berikan Prefix yang valid!'
+prefix_length: '`⚠️` | Prefix tidak boleh lebih dari **10 Karakter**!'
+
+### Perintah SongNoti!
+songnoti_set: '`🔔` | Notifikasi Lagu telah disetel ke **%{toggle}**!'
+songnoti_already: '`⚠️` | Notifikasi Lagu sudah **%{mode}**!'
+
+### Perintah 24/7!
+247_on: '`✅` | Mode 24/7 sekarang **Aktif**!'
+247_off: '`❌` | Mode 24/7 sekarang **Nonaktif**!'
+247_already: '`⚠️` | Mode 24/7 sudah **%{mode}**!'
+
+### Perintah Setup!
+setup_msg: "**`⚙️` | Sistem Musik Dibuat** %{channel}\n```Catatan: Jangan hapus pesan apa pun yang saya kirim agar Sistem Musik berfungsi dengan baik!```"
+setup_deleted: '**`⚙️` | Sistem Musik Dihapus!**'
+setup_topic: "⏹ **Berhenti**\n⏮️ **Sebelumnya**\n⏯ **Jeda/Lanjut**\n⏭️ **Lewati**\n🔁 **Loop/Unloop**"
+setup_enable: '`⚠️` | Sistem Musik sudah ada!'
+setup_null: '`⚠️` | Sistem Musik tidak ditemukan!'
+
+## Perintah Blacklist!
+bl_invalid_mode: '`❌` | Tipe mode tidak valid, gunakan add / remove saja'
+bl_invalid_type: '`❌` | Tipe tidak valid, gunakan guild / user saja'
+bl_add: '`✅` | Berhasil memblacklist id `%{id}`!'
+bl_remove: '`✅` | Berhasil menghapus blacklist id `%{id}`!'
+
+## Max length
+ml_invalid: '`⚠️` | Waktu tidak valid. Gunakan timestamp yang valid. Contoh: **1:30**!'
+ml_set: '`✅` | Berhasil mengatur panjang maksimal lagu menjadi `%{time}`'
+ml_remove: '`✅` | Berhasil menghapus panjang maksimal lagu'
