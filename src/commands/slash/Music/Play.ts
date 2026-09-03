@@ -18,6 +18,7 @@ import {
 import { buildV2 } from '../../../utilities/V2.js'
 import { getTitle } from '../../../utilities/GetTitle.js'
 import { getSourceName } from '../../../utilities/SourceName.js'
+import { getArtwork } from '../../../utilities/GetArtwork.js'
 
 export default class implements Command {
   public name = ['play']
@@ -212,8 +213,7 @@ export default class implements Command {
   ): any {
     const position = player.playing ? player.position : 0
     const duration = track.duration > 0 ? track.duration : 1
-    const Thumbnail =
-      track.artworkUrl ?? `https://img.youtube.com/vi/${track.identifier}/maxresdefault.jpg`
+    const Thumbnail = getArtwork(track)
     const part = Math.max(0, Math.min(30, Math.floor((position / duration) * 30)))
 
     const info =
@@ -228,14 +228,15 @@ export default class implements Command {
       })}**\n` +
       `\`\`\`🔴 | ${'─'.repeat(part) + '🎶' + '─'.repeat(30 - part)}\`\`\``
 
+    const mediaItems = Thumbnail
+      ? [{ type: 12, items: [{ media: { url: Thumbnail, size: 4 }, description: track.title }] }]
+      : []
+
     return {
       type: 17,
       accent_color: client.color,
       components: [
-        {
-          type: 12,
-          items: [{ media: { url: Thumbnail, size: 4 }, description: track.title }],
-        },
+        ...mediaItems,
         {
           type: 10,
           content: `## ${client.i18n.get(handler.language, 'command.music', 'np_title')}`,

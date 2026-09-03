@@ -6,6 +6,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { RainlinkPlayer, RainlinkTrack } from 'rainlink'
 import { getTitle } from '../../../utilities/GetTitle.js'
+import { getArtwork } from '../../../utilities/GetArtwork.js'
 
 // Main code
 export default class implements Command {
@@ -73,8 +74,6 @@ export default class implements Command {
       } as any)
 
     const qduration = `${formatDuration(song.duration + player.queue.duration)}`
-    const thumbnail =
-      song?.artworkUrl ?? `https://img.youtube.com/vi/${song!.identifier}/maxresdefault.jpg`
 
     let pagesNum = Math.ceil(player.queue.length / 10)
     if (pagesNum === 0) pagesNum = 1
@@ -88,10 +87,23 @@ export default class implements Command {
     }
 
     const npTitle = getTitle(client, song!, handler.language)
-    const npThumb =
-      song!.artworkUrl ?? `https://img.youtube.com/vi/${song!.identifier}/maxresdefault.jpg`
+    const npThumb = getArtwork(song!)
     const pos = formatDuration(player.position)
     const tot = formatDuration(song!.duration)
+
+    const mediaItems = npThumb
+      ? [
+          {
+            type: 12,
+            items: [
+              {
+                media: { url: npThumb, size: 4 },
+                description: client.i18n.get(handler.language, 'command.music', 'np_title'),
+              },
+            ],
+          },
+        ]
+      : []
 
     const pages: any[][] = []
     for (let i = 0; i < pagesNum; i++) {
@@ -103,15 +115,7 @@ export default class implements Command {
           type: 17,
           accent_color: accentColor,
           components: [
-            {
-              type: 12,
-              items: [
-                {
-                  media: { url: npThumb, size: 4 },
-                  description: client.i18n.get(handler.language, 'command.music', 'np_title'),
-                },
-              ],
-            },
+            ...mediaItems,
             {
               type: 10,
               content: `## ${client.i18n.get(handler.language, 'command.music', 'queue_author', {

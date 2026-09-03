@@ -10,6 +10,7 @@ import { Manager } from '../manager.js'
 import { formatDuration } from '../utilities/FormatDuration.js'
 import { RainlinkPlayer } from 'rainlink'
 import { getTitle } from '../utilities/GetTitle.js'
+import { getArtwork } from '../utilities/GetArtwork.js'
 
 export default class implements PlayerButton {
   name = 'queue'
@@ -26,8 +27,7 @@ export default class implements PlayerButton {
     }
     const song = player.queue.current
     const qduration = `${formatDuration(song!.duration + player.queue.duration)}`
-    const thumbnail =
-      song?.artworkUrl ?? `https://img.youtube.com/vi/${song!.identifier}/maxresdefault.jpg`
+    const thumbnail = getArtwork(song!)
 
     let pagesNum = Math.ceil(player.queue.length / 10)
     if (pagesNum === 0) pagesNum = 1
@@ -44,6 +44,10 @@ export default class implements PlayerButton {
     for (let i = 0; i < pagesNum; i++) {
       const str = songStrings.slice(i * 10, i * 10 + 10).join('\n')
 
+      const mediaItems = thumbnail
+          ? [{ type: 12, items: [{ media: { url: thumbnail }, description: 'queue' }] }]
+          : []
+
       const container = {
         type: 17,
         accent_color: client.color,
@@ -52,10 +56,7 @@ export default class implements PlayerButton {
             type: 10,
             content: `## ${client.i18n.get(language, 'button.music', 'queue_author', { guild: message.guild!.name })}`,
           },
-          {
-            type: 12,
-            items: [{ media: { url: thumbnail }, description: 'queue' }],
-          },
+          ...mediaItems,
           { type: 14, divider: true, spacing: 1 },
           {
             type: 10,

@@ -7,6 +7,7 @@ import { SongNotiEnum } from '../../database/schema/SongNoti.js'
 import { RainlinkFilterMode, RainlinkPlayer, RainlinkTrack } from 'rainlink'
 import { getTitle } from '../../utilities/GetTitle.js'
 import { getSourceName } from '../../utilities/SourceName.js'
+import { getArtwork } from '../../utilities/GetArtwork.js'
 
 export default class {
   async execute(client: Manager, player: RainlinkPlayer, track: RainlinkTrack) {
@@ -85,18 +86,18 @@ export default class {
 
     if (SongNoti == SongNotiEnum.Disable) return
 
-    const artworkUrl =
-      track.artworkUrl ?? `https://img.youtube.com/vi/${track.identifier}/maxresdefault.jpg`
+    const artworkUrl = getArtwork(track)
+
+    const mediaItems = artworkUrl
+      ? [{ type: 12, items: [{ media: { url: artworkUrl, size: 4 }, description: getTitle(client, track, language) }] }]
+      : []
 
     const componentsV2 = [
       {
         type: 17,
         accent_color: client.color,
         components: [
-          {
-            type: 12,
-            items: [{ media: { url: artworkUrl, size: 4 }, description: getTitle(client, track, language) }],
-          },
+          ...mediaItems,
           {
             type: 10,
             content: `## ${client.i18n.get(language, 'event.player', 'track_title')}\n### ${getTitle(client, track, language)}`,

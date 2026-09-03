@@ -5,6 +5,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { RainlinkPlayer } from 'rainlink'
 import { getTitle } from '../../../utilities/GetTitle.js'
+import { getArtwork } from '../../../utilities/GetArtwork.js'
 import { buildV2 } from '../../../utilities/V2.js'
 
 export default class implements Command {
@@ -31,8 +32,7 @@ export default class implements Command {
     totalDuration: string
   ): any {
     const song = player.queue.current
-    const Thumbnail =
-      song?.artworkUrl ?? `https://img.youtube.com/vi/${song!.identifier}/maxresdefault.jpg`
+    const Thumbnail = getArtwork(song!)
 
     const info =
       `### ${getTitle(client, song!, handler.language)}\n` +
@@ -45,11 +45,15 @@ export default class implements Command {
       `- **${client.i18n.get(handler.language, 'command.music', 'np_current_duration', { current_duration: currentDuration, total_duration: totalDuration })}**\n` +
       `\`\`\`🔴 | ${'─'.repeat(part) + '🎶' + '─'.repeat(30 - part)}\`\`\``
 
+    const mediaItems = Thumbnail
+      ? [{ type: 12, items: [{ media: { url: Thumbnail }, description: song!.title }] }]
+      : []
+
     return {
       type: 17,
       accent_color: client.color,
       components: [
-        { type: 12, items: [{ media: { url: Thumbnail }, description: song!.title }] },
+        ...mediaItems,
         { type: 14, divider: true, spacing: 1 },
         { type: 10, content: info },
       ],
