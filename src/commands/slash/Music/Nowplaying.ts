@@ -5,6 +5,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { RainlinkPlayer } from 'rainlink'
 import { getTitle } from '../../../utilities/GetTitle.js'
+import { buildV2 } from '../../../utilities/V2.js'
 
 export default class implements Command {
   public name = ['nowplaying']
@@ -61,6 +62,15 @@ export default class implements Command {
     const realtime = client.config.player.NP_REALTIME
     const player = client.rainlink.players.get(handler.guild!.id) as RainlinkPlayer
     const song = player.queue.current
+
+    if (!song)
+      return handler.replyV2(
+        buildV2({
+          description: `${client.i18n.get(handler.language, 'error', 'no_player')}`,
+          color: client.color,
+        })
+      )
+
     const position = player.position
     const CurrentDuration = formatDuration(position)
     const TotalDuration = formatDuration(song!.duration)

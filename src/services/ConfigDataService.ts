@@ -100,6 +100,7 @@ export class ConfigDataService {
         DEBUG_MODE: false,
         ADMIN: [],
         SUPPORT: 'https://discord.gg/CJJ7KEJMbg',
+        INVITE: '',
       },
       player: {
         SPOTIFY: {

@@ -63,6 +63,8 @@ previous_notfound: '`⚠️` | Tidak ada lagu sebelumnya yang ditemukan!'
 ### Perintah Queue!
 queue_author: '💾 %{guild}'
 queue_description: "`📀` | Sedang Diputar:\n**%{title}** `[%{duration}]` • %{request}\n\n`💤` | Sisa Antrian:**%{rest}**"
+queue_np: '**%{title}**\n`🎵` Durasi: `[%{current} / %{total}]`\n`✒️` **%{author}**\n`👤` Diminta oleh: %{request}'
+queue_rest: 'Sisa Antrian:**%{rest}**'
 queue_footer: 'Halaman • %{page}/%{pages} | Lagu • %{queue_lang} | Total Durasi • %{duration}'
 queue_notnumber: '`⚠️` | Mohon berikan nomor halaman yang valid!'
 queue_page_notfound: '`⚠️` | Hanya ada **%{page} Halaman**!'

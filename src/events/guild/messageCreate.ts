@@ -133,7 +133,7 @@ export default class {
                 type: 2,
                 style: 5,
                 label: client.i18n.get(lang, 'command.info', 'btn_invite'),
-                url: `https://discord.com/oauth2/authorize?client_id=${client.user!.id}&permissions=8&scope=bot%20applications.commands`,
+                url: client.config.bot.INVITE || `https://discord.com/oauth2/authorize?client_id=${client.user!.id}&permissions=274877991936&scope=bot%20applications.commands`,
               },
             ],
           },

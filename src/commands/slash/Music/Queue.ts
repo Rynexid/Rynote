@@ -54,7 +54,25 @@ export default class implements Command {
     const player = client.rainlink.players.get(handler.guild!.id) as RainlinkPlayer
 
     const song = player.queue.current
-    const qduration = `${formatDuration(song!.duration + player.queue.duration)}`
+
+    if (!song)
+      return handler.editReply({
+        flags: 32768,
+        components: [
+          {
+            type: 17,
+            accent_color: client.color,
+            components: [
+              {
+                type: 10,
+                content: `${client.i18n.get(handler.language, 'error', 'no_player')}`,
+              },
+            ],
+          },
+        ],
+      } as any)
+
+    const qduration = `${formatDuration(song.duration + player.queue.duration)}`
     const thumbnail =
       song?.artworkUrl ?? `https://img.youtube.com/vi/${song!.identifier}/maxresdefault.jpg`
 
@@ -69,6 +87,12 @@ export default class implements Command {
       )
     }
 
+    const npTitle = getTitle(client, song!, handler.language)
+    const npThumb =
+      song!.artworkUrl ?? `https://img.youtube.com/vi/${song!.identifier}/maxresdefault.jpg`
+    const pos = formatDuration(player.position)
+    const tot = formatDuration(song!.duration)
+
     const pages: any[][] = []
     for (let i = 0; i < pagesNum; i++) {
       const str = songStrings.slice(i * 10, i * 10 + 10).join('\n')
@@ -80,6 +104,15 @@ export default class implements Command {
           accent_color: accentColor,
           components: [
             {
+              type: 12,
+              items: [
+                {
+                  media: { url: npThumb, size: 4 },
+                  description: client.i18n.get(handler.language, 'command.music', 'np_title'),
+                },
+              ],
+            },
+            {
               type: 10,
               content: `## ${client.i18n.get(handler.language, 'command.music', 'queue_author', {
                 guild: handler.guild!.name,
@@ -87,12 +120,20 @@ export default class implements Command {
             },
             {
               type: 10,
-              content: client.i18n.get(handler.language, 'command.music', 'queue_description', {
-                title: getTitle(client, song!, handler.language),
+              content: client.i18n.get(handler.language, 'command.music', 'queue_np', {
+                title: npTitle,
+                duration: tot,
+                current: pos,
+                author: song!.author,
                 request: String(song!.requester),
-                duration: formatDuration(song!.duration),
-                rest: str == '' ? client.i18n.get(handler.language, 'command.music', 'nothing') : '\n' + str,
               }),
+            },
+            { type: 14, divider: true, spacing: 1 },
+            {
+              type: 10,
+              content: `💤 ${client.i18n.get(handler.language, 'command.music', 'queue_rest', {
+                rest: str == '' ? client.i18n.get(handler.language, 'command.music', 'nothing') : '\n' + str,
+              })}`,
             },
           ],
         },

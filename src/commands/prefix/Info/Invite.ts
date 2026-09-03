@@ -37,9 +37,9 @@ export default class implements Command {
         [
           {
             label: `${client.i18n.get(handler.language, 'command.info', 'btn_invite_me')}`,
-            url: `https://discord.com/api/oauth2/authorize?client_id=${
+            url: client.config.bot.INVITE || `https://discord.com/api/oauth2/authorize?client_id=${
               client.user!.id
-            }&permissions=8&scope=bot%20applications.commands`,
+            }&permissions=274877991936&scope=bot%20applications.commands`,
             style: 5,
           },
         ],

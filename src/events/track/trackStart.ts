@@ -83,8 +83,6 @@ export default class {
 
     const language = guildModel
 
-    const song = player.queue.current
-
     if (SongNoti == SongNotiEnum.Disable) return
 
     const artworkUrl =
@@ -107,10 +105,10 @@ export default class {
           {
             type: 10,
             content:
-              `- **${client.i18n.get(language, 'event.player', 'author_title')}:** ${song!.author}\n` +
+              `- **${client.i18n.get(language, 'event.player', 'author_title')}:** ${track.author}\n` +
               `- **${client.i18n.get(language, 'event.player', 'source_title')}:** ${getSourceName(client, track, language)}\n` +
-              `- **${client.i18n.get(language, 'event.player', 'duration_title')}:** ${formatDuration(song!.duration)}\n` +
-              `- **${client.i18n.get(language, 'event.player', 'request_title')}:** ${song!.requester}`,
+              `- **${client.i18n.get(language, 'event.player', 'duration_title')}:** ${formatDuration(track.duration)}\n` +
+              `- **${client.i18n.get(language, 'event.player', 'request_title')}:** ${track.requester}`,
           },
         ],
       },

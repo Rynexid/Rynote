@@ -16,6 +16,7 @@ export interface Bot {
   LANGUAGE: string
   DEBUG_MODE: boolean
   SUPPORT: string
+  INVITE: string
 }
 
 export interface Utilities {

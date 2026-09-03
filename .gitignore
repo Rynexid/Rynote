@@ -158,3 +158,13 @@ dashboard/node_modules/
 
 # Misc
 /opt/lavalink2/
+
+# Deploy artifact (contains secrets from app.yml)
+rynote-deploy.zip
+
+# Zampto node config (contains Genius/Spotify secrets) — never commit/push
+ZamptoConfig.md
+
+# app.yml backups (contain all secrets) — never commit/push
+app.yml.*.bak
+app.yml.*.secret
