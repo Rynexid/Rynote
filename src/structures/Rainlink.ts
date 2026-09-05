@@ -40,8 +40,8 @@ export class RainlinkInit {
 
   get nonAutoConfig(): RainlinkAdditionalOptions {
     return {
-      retryCount: Infinity,
-      retryTimeout: 15000,
+      retryCount: 3,
+      retryTimeout: 30000,
     }
   }
 
