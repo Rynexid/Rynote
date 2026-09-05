@@ -111,12 +111,7 @@ export default class {
           },
           {
             type: 12,
-            items: [
-              {
-                media: { url: RYNOTE_BANNER_URL },
-                description: client.user!.username,
-              },
-            ],
+            items: [{ media: { url: RYNOTE_BANNER_URL }, description: client.user!.username }],
           },
           { type: 14, divider: true, spacing: 1 },
           { type: 10, content: desc },
