@@ -14,6 +14,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { EMOJI } from '../../../utilities/Emoji.js'
+import { RYNOTE_BANNER_FILE, RYNOTE_BANNER_URL } from '../../../utilities/GetRynoteBanner.js'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const CATEGORY_ICONS: Record<string, string> = EMOJI.category
@@ -106,12 +107,7 @@ export default class implements Command {
     ]
   }
 
-  private navComponents(
-    client: Manager,
-    handler: CommandHandler,
-    page: number,
-    total: number
-  ) {
+  private navComponents(client: Manager, handler: CommandHandler, page: number, total: number) {
     return [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
@@ -138,8 +134,6 @@ export default class implements Command {
   private homeContainer(client: Manager, handler: CommandHandler) {
     const total = client.commands.size
     const cats = this.getCategories(client, handler).length
-    const avatar = client.user!.displayAvatarURL({ size: 1024 })
-    const banner = "https://cdn.discordapp.com/attachments/1188698410652540978/1528782487944171680/Rynote.png?ex=6a7fd9e4&is=6a7e8864&hm=e0a1003c48892708905567d5dad60e10735e334cccbdb60ea4cb70eaac56e881&"
     const L = (key: string, args?: Record<string, string>) =>
       client.i18n.get(handler.language, 'command.info', key, args)
     return [
@@ -147,7 +141,10 @@ export default class implements Command {
         type: 17,
         accent_color: client.color,
         components: [
-          { type: 12, items: [{ media: { url: banner }, description: client.user!.username }] },
+          {
+            type: 12,
+            items: [{ media: { url: RYNOTE_BANNER_URL }, description: client.user!.username }],
+          },
           {
             type: 10,
             content:
@@ -212,11 +209,13 @@ export default class implements Command {
       msg = await handler.editReply({
         flags: MessageFlags.IsComponentsV2,
         components,
+        files: [RYNOTE_BANNER_FILE],
       } as any)
     } else {
       msg = await handler.sendMessage({
         flags: MessageFlags.IsComponentsV2,
         components,
+        files: [RYNOTE_BANNER_FILE],
       } as any)
     }
 

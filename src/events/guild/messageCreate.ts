@@ -19,6 +19,7 @@ import { RateLimitManager } from '@sapphire/ratelimits'
 import { TopggServiceEnum } from '../../services/TopggService.js'
 import { AutoReconnectBuilderService } from '../../services/AutoReconnectBuilderService.js'
 import { BlacklistService } from '../../services/BlacklistService.js'
+import { RYNOTE_BANNER_FILE, RYNOTE_BANNER_URL } from '../../utilities/GetRynoteBanner.js'
 const commandRateLimitManager = new RateLimitManager(1000)
 
 export default class {
@@ -112,7 +113,7 @@ export default class {
             type: 12,
             items: [
               {
-                media: { url: 'https://s6.imgcdn.dev/YHjUan.png' },
+                media: { url: RYNOTE_BANNER_URL },
                 description: client.user!.username,
               },
             ],
@@ -133,14 +134,20 @@ export default class {
                 type: 2,
                 style: 5,
                 label: client.i18n.get(lang, 'command.info', 'btn_invite'),
-                url: client.config.bot.INVITE || `https://discord.com/oauth2/authorize?client_id=${client.user!.id}&permissions=274877991936&scope=bot%20applications.commands`,
+                url:
+                  client.config.bot.INVITE ||
+                  `https://discord.com/oauth2/authorize?client_id=${client.user!.id}&permissions=274877991936&scope=bot%20applications.commands`,
               },
             ],
           },
         ],
       }
 
-      await message.reply({ flags: 32768, components: [container] } as any)
+      await message.reply({
+        flags: 32768,
+        components: [container],
+        files: [RYNOTE_BANNER_FILE],
+      } as any)
       return
     }
     const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')

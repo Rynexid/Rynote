@@ -2,8 +2,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js'
-
-const BANNER = 'https://s6.imgcdn.dev/YHjUan.png'
+import { RYNOTE_BANNER_FILE, RYNOTE_BANNER_URL } from '../../../utilities/GetRynoteBanner.js'
 
 export default class implements Command {
   public name = ['botinfo']
@@ -54,7 +53,10 @@ export default class implements Command {
       accent_color: client.color,
       components: [
         { type: 10, content: L('info_title', { username: client.user!.username }) },
-        { type: 12, items: [{ media: { url: BANNER }, description: client.user!.username }] },
+        {
+          type: 12,
+          items: [{ media: { url: RYNOTE_BANNER_URL }, description: client.user!.username }],
+        },
         { type: 14, divider: true, spacing: 1 },
         { type: 10, content: info },
         { type: 14, divider: true, spacing: 1 },
@@ -71,14 +73,16 @@ export default class implements Command {
               type: 2,
               style: 5,
               label: L('btn_invite'),
-              url: client.config.bot.INVITE || `https://discord.com/oauth2/authorize?client_id=${client.user!.id}&permissions=274877991936&scope=bot%20applications.commands`,
+              url:
+                client.config.bot.INVITE ||
+                `https://discord.com/oauth2/authorize?client_id=${client.user!.id}&permissions=274877991936&scope=bot%20applications.commands`,
             },
           ],
         },
       ],
     }
 
-    await handler.replyV2([container] as any)
+    await handler.replyV2([container] as any, { files: [RYNOTE_BANNER_FILE] })
   }
 
   private formatUptime(ms: number): string {

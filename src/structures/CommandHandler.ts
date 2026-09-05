@@ -193,6 +193,7 @@ export class CommandHandler {
         return this.interaction.editReply({
           flags: 32768,
           components: (data as any).components,
+          ...((data as any).files ? { files: (data as any).files } : {}),
         } as any)
       }
       return this.msg.edit(data)
@@ -212,12 +213,12 @@ export class CommandHandler {
     }
   }
 
-  public async replyV2(components: any[]) {
+  public async replyV2(components: any[], extra: BaseMessageOptions = {}) {
     if (this.interaction) {
       await this.deferReply()
-      return this.interaction.editReply({ flags: 32768, components } as any)
+      return this.interaction.editReply({ flags: 32768, components, ...extra } as any)
     }
-    return this.sendMessage({ flags: 32768, components } as any)
+    return this.sendMessage({ flags: 32768, components, ...extra } as any)
   }
 
   public async parseMentions(data: string): Promise<ParseMentionInterface> {
