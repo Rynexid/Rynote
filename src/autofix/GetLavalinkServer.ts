@@ -32,18 +32,34 @@ export class GetLavalinkServer {
 
     // return [...customNodes, ...externalNodes]
 
-    const localNodes = [
+    const customNodes = [
       {
-        host: 'localhost',
-        port: 2333,
-        pass: 'rynote',
-        secure: false,
-        name: 'localhost:2333',
+        host: 'lavalink.jirayu.net',
+        port: 443,
+        pass: 'youshallnotpass',
+        secure: true,
+        name: 'lavalink.jirayu.net:443',
+        online: false,
+      },
+      {
+        host: 'lava-v4.millohost.my.id',
+        port: 443,
+        pass: 'https://discord.gg/mjS5J2K3ep',
+        secure: true,
+        name: 'lava-v4.millohost.my.id:443',
+        online: false,
+      },
+      {
+        host: 'lavalinkv4.serenetia.com',
+        port: 443,
+        pass: 'https://seretia.link/discord',
+        secure: true,
+        name: 'lavalinkv4.serenetia.com:443',
         online: false,
       },
     ]
 
-    return localNodes
+    return customNodes
   }
 
   async fetchWithTimeout(url: string, timeout: number): Promise<string> {
