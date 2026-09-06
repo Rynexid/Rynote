@@ -14,7 +14,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { EMOJI } from '../../../utilities/Emoji.js'
-import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
+import { RYNOTE_BANNER_FILE, RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const CATEGORY_ICONS: Record<string, string> = EMOJI.category
@@ -209,11 +209,13 @@ export default class implements Command {
       msg = await handler.editReply({
         flags: MessageFlags.IsComponentsV2,
         components,
+        files: [RYNOTE_BANNER_FILE],
       } as any)
     } else {
       msg = await handler.sendMessage({
         flags: MessageFlags.IsComponentsV2,
         components,
+        files: [RYNOTE_BANNER_FILE],
       } as any)
     }
 

@@ -2,7 +2,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js'
-import { RYNOTE_INVITE, RYNOTE_SUPPORT, RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
+import { RYNOTE_BANNER_FILE, RYNOTE_BANNER_URL, RYNOTE_INVITE, RYNOTE_SUPPORT } from '../../../utilities/Links.js'
 
 export default class implements Command {
   public name = ['botinfo']
@@ -80,7 +80,7 @@ export default class implements Command {
       ],
     }
 
-    await handler.replyV2([container] as any)
+    await handler.replyV2([container] as any, { files: [RYNOTE_BANNER_FILE] })
   }
 
   private formatUptime(ms: number): string {
