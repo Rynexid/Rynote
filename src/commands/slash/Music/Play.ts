@@ -164,7 +164,10 @@ export default class implements Command {
     player: RainlinkPlayer,
     track: RainlinkTrack
   ) {
-    const msg: GlobalMsg = await handler.replyV2(this.buildPlayContainer(client, handler, player, track))
+    const artworkUrl = await getArtwork(track)
+    const msg: GlobalMsg = await handler.replyV2(
+      this.buildPlayContainer(client, handler, player, track, artworkUrl)
+    )
 
     const guildId = handler.guild!.id
     const currentNP = client.nowPlaying.get(guildId)
@@ -181,7 +184,7 @@ export default class implements Command {
         return
       }
 
-      const updated = this.buildPlayContainer(client, handler, player, track)
+      const updated = this.buildPlayContainer(client, handler, player, track, artworkUrl)
 
       if (handler.interaction) {
         handler.interaction
@@ -209,11 +212,11 @@ export default class implements Command {
     client: Manager,
     handler: CommandHandler,
     player: RainlinkPlayer,
-    track: RainlinkTrack
+    track: RainlinkTrack,
+    Thumbnail: string
   ): any {
     const position = player.playing ? player.position : 0
     const duration = track.duration > 0 ? track.duration : 1
-    const Thumbnail = getArtwork(track)
     const part = Math.max(0, Math.min(30, Math.floor((position / duration) * 30)))
 
     const info =

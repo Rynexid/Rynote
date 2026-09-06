@@ -69,8 +69,6 @@ export default class {
 
     const GuildPrefix = await client.db.prefix.get(`${message.guild!.id}`)
     if (GuildPrefix) PREFIX = GuildPrefix
-    else if (!GuildPrefix)
-      PREFIX = String(await client.db.prefix.set(`${message.guild!.id}`, client.prefix))
 
     const checkBlackklistRes = await blacklistChecker()
 

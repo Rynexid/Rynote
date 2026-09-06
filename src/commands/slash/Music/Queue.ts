@@ -87,7 +87,7 @@ export default class implements Command {
     }
 
     const npTitle = getTitle(client, song!, handler.language)
-    const npThumb = getArtwork(song!)
+    const npThumb = await getArtwork(song!)
     const pos = formatDuration(player.position)
     const tot = formatDuration(song!.duration)
 
@@ -126,7 +126,7 @@ export default class implements Command {
               type: 10,
               content: client.i18n.get(handler.language, 'command.music', 'queue_np', {
                 title: npTitle,
-                duration: tot,
+                total: tot,
                 current: pos,
                 author: song!.author,
                 request: String(song!.requester),

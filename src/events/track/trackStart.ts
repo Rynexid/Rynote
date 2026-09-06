@@ -86,7 +86,7 @@ export default class {
 
     if (SongNoti == SongNotiEnum.Disable) return
 
-    const artworkUrl = getArtwork(track)
+    const artworkUrl = await getArtwork(track)
 
     const mediaItems = artworkUrl
       ? [{ type: 12, items: [{ media: { url: artworkUrl, size: 4 }, description: getTitle(client, track, language) }] }]

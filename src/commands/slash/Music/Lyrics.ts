@@ -4,6 +4,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { buildV2 } from '../../../utilities/V2.js'
 import { formatDuration } from '../../../utilities/FormatDuration.js'
+import { getArtwork } from '../../../utilities/GetArtwork.js'
 import { RainlinkPlayer } from 'rainlink'
 import Genius from 'genius-lyrics'
 
@@ -46,7 +47,7 @@ export default class implements Command {
       if (lavalinkLyrics) {
         const { text, title, synced } = lavalinkLyrics
         return handler.replyV2([
-          this.buildLyricsContainer(client, handler, track, player, title, text, synced),
+          await this.buildLyricsContainer(client, handler, track, player, title, text, synced),
         ])
       }
     }
@@ -127,7 +128,7 @@ export default class implements Command {
       }
 
       return handler.replyV2([
-        this.buildLyricsContainer(client, handler, track, player, song.title, description, false),
+        await this.buildLyricsContainer(client, handler, track, player, song.title, description, false),
       ])
     } catch (err) {
       client.logger.error('Lyrics', err)
@@ -140,7 +141,7 @@ export default class implements Command {
     }
   }
 
-  private buildLyricsContainer(
+  private async buildLyricsContainer(
     client: Manager,
     handler: CommandHandler,
     track: any,
@@ -149,8 +150,7 @@ export default class implements Command {
     lyricsText: string,
     synced: boolean
   ) {
-    const artworkUrl =
-      track.artworkUrl ?? `https://img.youtube.com/vi/${track.identifier}/maxresdefault.jpg`
+    const artworkUrl = await getArtwork(track)
 
     const unknown = client.i18n.get(handler.language, 'command.music', 'unknown')
     const source = track.source ?? track.info?.sourceName ?? unknown

@@ -23,8 +23,6 @@ export default class {
 
     const GuildPrefix = await client.db.prefix.get(`${guild!.id}`)
     if (GuildPrefix) PREFIX = GuildPrefix
-    else if (!GuildPrefix)
-      PREFIX = String(await client.db.prefix.set(`${guild!.id}`, client.prefix))
 
     const userDm = await owner.createDM(true).catch(() => null)
     const dmEmbed = new EmbedBuilder()

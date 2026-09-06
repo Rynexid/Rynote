@@ -29,10 +29,10 @@ export default class implements Command {
     player: RainlinkPlayer,
     currentDuration: string,
     part: number,
-    totalDuration: string
+    totalDuration: string,
+    thumbnail: string
   ): any {
     const song = player.queue.current
-    const Thumbnail = getArtwork(song!)
 
     const info =
       `### ${getTitle(client, song!, handler.language)}\n` +
@@ -45,8 +45,8 @@ export default class implements Command {
       `- **${client.i18n.get(handler.language, 'command.music', 'np_current_duration', { current_duration: currentDuration, total_duration: totalDuration })}**\n` +
       `\`\`\`🔴 | ${'─'.repeat(part) + '🎶' + '─'.repeat(30 - part)}\`\`\``
 
-    const mediaItems = Thumbnail
-      ? [{ type: 12, items: [{ media: { url: Thumbnail }, description: song!.title }] }]
+    const mediaItems = thumbnail
+      ? [{ type: 12, items: [{ media: { url: thumbnail }, description: song!.title }] }]
       : []
 
     return {
@@ -80,13 +80,16 @@ export default class implements Command {
     const TotalDuration = formatDuration(song!.duration)
     const Part = Math.floor((position / song!.duration!) * 30)
 
+    const thumbnail = await getArtwork(song!)
+
     const container = this.buildNPContainer(
       client,
       handler,
       player,
       CurrentDuration,
       Part,
-      TotalDuration
+      TotalDuration,
+      thumbnail
     )
 
     const NEmbed = await handler.editReply({ flags: 32768, components: [container] } as any)
@@ -118,7 +121,8 @@ export default class implements Command {
           player,
           curDur,
           part,
-          TotalDuration
+          TotalDuration,
+          thumbnail
         )
 
         try {

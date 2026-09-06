@@ -27,7 +27,7 @@ export default class implements PlayerButton {
     }
     const song = player.queue.current
     const qduration = `${formatDuration(song!.duration + player.queue.duration)}`
-    const thumbnail = getArtwork(song!)
+    const thumbnail = await getArtwork(song!)
 
     let pagesNum = Math.ceil(player.queue.length / 10)
     if (pagesNum === 0) pagesNum = 1

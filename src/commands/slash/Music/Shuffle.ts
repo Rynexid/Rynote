@@ -6,6 +6,7 @@ import { formatDuration } from '../../../utilities/FormatDuration.js'
 import { PageQueue } from '../../../structures/PageQueue.js'
 import { RainlinkPlayer } from 'rainlink'
 import { getTitle } from '../../../utilities/GetTitle.js'
+import { getArtwork } from '../../../utilities/GetArtwork.js'
 
 // Main code
 export default class implements Command {
@@ -32,8 +33,7 @@ export default class implements Command {
     const song = newQueue.current
 
     const qduration = `${formatDuration(song!.duration + player.queue.duration)}`
-    const thumbnail =
-      song!.artworkUrl ?? `https://img.youtube.com/vi/${song!.identifier}/maxresdefault.jpg`
+    const thumbnail = await getArtwork(song!)
 
     let pagesNum = Math.ceil(newQueue.length / 10)
     if (pagesNum === 0) pagesNum = 1
