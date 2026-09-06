@@ -232,7 +232,7 @@ export default class implements Command {
       `\`\`\`🔴 | ${'─'.repeat(part) + '🎶' + '─'.repeat(30 - part)}\`\`\``
 
     const mediaItems = Thumbnail
-      ? [{ type: 12, items: [{ media: { url: Thumbnail, size: 4 }, description: track.title }] }]
+      ? [{ type: 12, items: [{ media: { url: Thumbnail }, description: track.title }] }]
       : []
 
     return {

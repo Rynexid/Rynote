@@ -2,7 +2,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js'
-import { RYNOTE_BANNER_FILE, RYNOTE_BANNER_URL } from '../../../utilities/GetRynoteBanner.js'
+import { RYNOTE_INVITE, RYNOTE_SUPPORT, RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
 
 export default class implements Command {
   public name = ['botinfo']
@@ -67,22 +67,20 @@ export default class implements Command {
               type: 2,
               style: 5,
               label: L('btn_support_server'),
-              url: client.config.bot.SUPPORT ?? 'https://discord.gg/CJJ7KEJMbg',
+              url: client.config.bot.SUPPORT ?? RYNOTE_SUPPORT,
             },
             {
               type: 2,
               style: 5,
               label: L('btn_invite'),
-              url:
-                client.config.bot.INVITE ||
-                `https://discord.com/oauth2/authorize?client_id=${client.user!.id}&permissions=274877991936&scope=bot%20applications.commands`,
+              url: client.config.bot.INVITE || RYNOTE_INVITE,
             },
           ],
         },
       ],
     }
 
-    await handler.replyV2([container] as any, { files: [RYNOTE_BANNER_FILE] })
+    await handler.replyV2([container] as any)
   }
 
   private formatUptime(ms: number): string {

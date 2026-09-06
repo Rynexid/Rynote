@@ -2,6 +2,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { buildV2 } from '../../../utilities/V2.js'
+import { RYNOTE_INVITE } from '../../../utilities/Links.js'
 
 export default class implements Command {
   public name = ['invite']
@@ -37,9 +38,7 @@ export default class implements Command {
         [
           {
             label: `${client.i18n.get(handler.language, 'command.info', 'btn_invite_me')}`,
-            url: client.config.bot.INVITE || `https://discord.com/api/oauth2/authorize?client_id=${
-              client.user!.id
-            }&permissions=274877991936&scope=bot%20applications.commands`,
+            url: client.config.bot.INVITE || RYNOTE_INVITE,
             style: 5,
           },
         ],

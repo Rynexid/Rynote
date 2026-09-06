@@ -97,7 +97,7 @@ export default class implements Command {
             type: 12,
             items: [
               {
-                media: { url: npThumb, size: 4 },
+                media: { url: npThumb },
                 description: client.i18n.get(handler.language, 'command.music', 'np_title'),
               },
             ],

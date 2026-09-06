@@ -11,5 +11,4 @@ export const EMOJI = JSON.parse(raw) as {
   category: Record<string, string>
   user: Record<string, string>
   brand: Record<string, string>
-  banner: string
 }

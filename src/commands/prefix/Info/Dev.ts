@@ -1,6 +1,7 @@
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
+import { RYNOTE_GITHUB, RYNOTE_SUPPORT } from '../../../utilities/Links.js'
 
 export default class implements Command {
   public name = ['developer']
@@ -44,13 +45,13 @@ export default class implements Command {
               type: 2,
               style: 5,
               label: L('btn_github'),
-              url: 'https://github.com/Rynexid',
+              url: RYNOTE_GITHUB,
             },
             {
               type: 2,
               style: 5,
               label: L('btn_support_server'),
-              url: 'https://discord.gg/CJJ7KEJMbg',
+              url: RYNOTE_SUPPORT,
             },
           ],
         },

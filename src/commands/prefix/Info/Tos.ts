@@ -2,6 +2,7 @@ import { ComponentType, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'dis
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
+import { RYNOTE_SUPPORT } from '../../../utilities/Links.js'
 
 const PREV_BTN = 'tos_prev'
 const SUPPORT_BTN = 'tos_support'
@@ -43,7 +44,7 @@ export default class implements Command {
     const support = new ButtonBuilder()
       .setLabel(client.i18n.get(handler.language, 'command.info', 'btn_support'))
       .setStyle(ButtonStyle.Link)
-      .setURL('https://discord.gg/CJJ7KEJMbg')
+      .setURL(RYNOTE_SUPPORT)
 
     const next = new ButtonBuilder()
       .setCustomId(NEXT_BTN)

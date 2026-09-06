@@ -89,7 +89,7 @@ export default class {
     const artworkUrl = await getArtwork(track)
 
     const mediaItems = artworkUrl
-      ? [{ type: 12, items: [{ media: { url: artworkUrl, size: 4 }, description: getTitle(client, track, language) }] }]
+      ? [{ type: 12, items: [{ media: { url: artworkUrl }, description: getTitle(client, track, language) }] }]
       : []
 
     const componentsV2 = [

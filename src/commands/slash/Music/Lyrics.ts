@@ -187,7 +187,7 @@ export default class implements Command {
     const components: any[] = [
       {
         type: 12,
-        items: [{ media: { url: artworkUrl, size: 4 }, description: title }],
+        items: [{ media: { url: artworkUrl }, description: title }],
       },
       { type: 14, divider: true, spacing: 1 },
       {
