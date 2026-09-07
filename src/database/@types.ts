@@ -6,6 +6,8 @@ import { Setup } from './schema/Setup.js'
 import { Language } from './schema/Language.js'
 import { Prefix } from './schema/Prefix.js'
 import { SongNoti } from './schema/SongNoti.js'
+import { SpotifyUser } from './schema/SpotifyUser.js'
+import { History } from './schema/History.js'
 import { QuickDatabasePlus } from '../structures/QuickDatabasePlus.js'
 import { GuildPremium } from './schema/GuildPremium.js'
 import Blacklist from '../commands/slash/Owner/Blacklist.js'
@@ -23,4 +25,6 @@ export interface DatabaseTable {
   songNoti: QuickDatabasePlus<SongNoti>
   blacklist: QuickDatabasePlus<Blacklist>
   maxlength: QuickDatabasePlus<MaxLength>
+  spotifyUser: QuickDatabasePlus<SpotifyUser>
+  history: QuickDatabasePlus<History>
 }

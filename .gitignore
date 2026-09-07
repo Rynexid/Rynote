@@ -152,10 +152,6 @@ scripts/deploy.sh
 # Lavalink (large jar + plugins)
 Lavalink/
 
-# Dashboard build output
-dashboard/dist/
-dashboard/node_modules/
-
 # Misc
 /opt/lavalink2/
 

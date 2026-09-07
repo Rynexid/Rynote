@@ -8,6 +8,9 @@ import { RainlinkFilterMode, RainlinkPlayer, RainlinkTrack } from 'rainlink'
 import { getTitle } from '../../utilities/GetTitle.js'
 import { getSourceName } from '../../utilities/SourceName.js'
 import { getArtwork } from '../../utilities/GetArtwork.js'
+import { History, HistoryEntry } from '../../database/schema/History.js'
+
+const MAX_HISTORY = 30
 
 export default class {
   async execute(client: Manager, player: RainlinkPlayer, track: RainlinkTrack) {
@@ -21,6 +24,26 @@ export default class {
     client.logger.info('TrackStart', `Track Started in @ ${guild!.name} / ${player.guildId}`)
 
     player.data.set('retrying', false)
+
+    /////////// Record history ///////////
+    const requester = track.requester as { id?: string } | null | undefined
+    if (requester?.id && requester.id !== client.user?.id) {
+      try {
+        const history = (await client.db.history.get(requester.id)) ?? []
+        const entry: HistoryEntry = {
+          title: track.title,
+          author: track.author ?? null,
+          artwork: track.artworkUrl ?? null,
+          uri: track.uri ?? null,
+          playedAt: Date.now(),
+        }
+        const next: History = [entry, ...history].slice(0, MAX_HISTORY)
+        await client.db.history.set(requester.id, next)
+      } catch (err) {
+        client.logger.error('HistoryService', `Failed to record history: ${(err as Error).message}`)
+      }
+    }
+    /////////// Record history ///////////
 
     let SongNoti = await client.db.songNoti.get(`${player.guildId}`)
     if (!SongNoti) SongNoti = await client.db.songNoti.set(`${player.guildId}`, SongNotiEnum.Enable)
@@ -89,7 +112,12 @@ export default class {
     const artworkUrl = await getArtwork(track)
 
     const mediaItems = artworkUrl
-      ? [{ type: 12, items: [{ media: { url: artworkUrl }, description: getTitle(client, track, language) }] }]
+      ? [
+          {
+            type: 12,
+            items: [{ media: { url: artworkUrl }, description: getTitle(client, track, language) }],
+          },
+        ]
       : []
 
     const componentsV2 = [

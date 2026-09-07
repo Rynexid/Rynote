@@ -136,7 +136,10 @@ export default class implements Command {
             {
               type: 10,
               content: `💤 ${client.i18n.get(handler.language, 'command.music', 'queue_rest', {
-                rest: str == '' ? client.i18n.get(handler.language, 'command.music', 'nothing') : '\n' + str,
+                rest:
+                  str == ''
+                    ? client.i18n.get(handler.language, 'command.music', 'nothing')
+                    : '\n' + str,
               })}`,
             },
           ],
@@ -145,29 +148,17 @@ export default class implements Command {
     }
 
     if (!value) {
-      if (pages.length == pagesNum && player.queue.length > 10) {
-        if (handler.message) {
-          await new PageQueue(
-            client,
-            pages,
-            60000,
-            player.queue.length,
-            handler.language
-          ).prefixPage(handler.message, qduration)
-        } else if (handler.interaction) {
-          await new PageQueue(
-            client,
-            pages,
-            60000,
-            player.queue.length,
-            handler.language
-          ).slashPage(handler.interaction, qduration)
-        } else return
-      } else
-        return handler.editReply({
-          flags: 32768,
-          components: pages[0],
-        } as any)
+      if (handler.message) {
+        await new PageQueue(client, pages, 60000, player.queue.length, handler.language, {
+          clearable: true,
+          player,
+        }).prefixPage(handler.message, qduration)
+      } else if (handler.interaction) {
+        await new PageQueue(client, pages, 60000, player.queue.length, handler.language, {
+          clearable: true,
+          player,
+        }).slashPage(handler.interaction, qduration)
+      } else return
     } else {
       if (isNaN(+value))
         return handler.editReply({

@@ -19,7 +19,11 @@ import { RateLimitManager } from '@sapphire/ratelimits'
 import { TopggServiceEnum } from '../../services/TopggService.js'
 import { AutoReconnectBuilderService } from '../../services/AutoReconnectBuilderService.js'
 import { BlacklistService } from '../../services/BlacklistService.js'
-import { RYNOTE_BANNER_FILE, RYNOTE_BANNER_URL, RYNOTE_INVITE, RYNOTE_SUPPORT } from '../../utilities/Links.js'
+import {
+  RYNOTE_BANNER_URL,
+  RYNOTE_INVITE,
+  RYNOTE_SUPPORT,
+} from '../../utilities/Links.js'
 const commandRateLimitManager = new RateLimitManager(1000)
 
 export default class {
@@ -137,7 +141,6 @@ export default class {
       await message.reply({
         flags: 32768,
         components: [container],
-        files: [RYNOTE_BANNER_FILE],
       } as any)
       return
     }

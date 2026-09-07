@@ -10,6 +10,8 @@ import { Setup } from './schema/Setup.js'
 import { Language } from './schema/Language.js'
 import { Prefix } from './schema/Prefix.js'
 import { SongNoti } from './schema/SongNoti.js'
+import { SpotifyUser } from './schema/SpotifyUser.js'
+import { History } from './schema/History.js'
 import { QuickDatabasePlus } from '../structures/QuickDatabasePlus.js'
 import Blacklist from '../commands/slash/Owner/Blacklist.js'
 import MaxLength from '../commands/slash/Utils/MaxLength.js'
@@ -51,6 +53,8 @@ export class TableSetup {
       preGuild: await baseDB.table<Premium>('preGuild'),
       blacklist: await baseDB.table<Blacklist>('blacklist'),
       maxlength: await baseDB.table<MaxLength>('maxlength'),
+      spotifyUser: await baseDB.table<SpotifyUser>('spotifyUser'),
+      history: await baseDB.table<History>('history'),
     }
 
     this.client.isDatabaseConnected = true
