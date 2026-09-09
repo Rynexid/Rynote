@@ -159,7 +159,9 @@ export class WebServer {
       })
     })
 
-    const port = this.client.config.utilities.WEB_SERVER.port
+    const port =
+      (process.env.SERVER_PORT && Number(process.env.SERVER_PORT)) ||
+      this.client.config.utilities.WEB_SERVER.port
 
     this.app.ready(() => {
       this.server.listen({ port, host: '0.0.0.0' })
