@@ -9,7 +9,7 @@ export function createAuth(client: Manager) {
   const config = client.config.utilities.WEB_SERVER
   const oauth = config.oauth
   const authDatabase = client.config.utilities.AUTH_DATABASE
-  
+
   if (!oauth.enable) throw new Error('OAuth is not enabled in app.yml')
   if (!oauth.discord.clientId || !oauth.discord.clientSecret)
     throw new Error('Discord OAuth credentials are missing in app.yml')

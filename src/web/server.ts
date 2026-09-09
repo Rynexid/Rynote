@@ -33,8 +33,7 @@ export class WebServer {
     const corsConfig = this.client.config.utilities.WEB_SERVER.cors
 
     const corsOrigins = corsConfig?.origin ?? ['http://localhost:5173']
-    const corsMethods =
-      corsConfig?.methods ?? ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+    const corsMethods = corsConfig?.methods ?? ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
 
     this.app.register(CorsPlugin, {
       origin: corsOrigins,
