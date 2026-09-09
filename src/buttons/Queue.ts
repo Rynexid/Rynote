@@ -45,8 +45,8 @@ export default class implements PlayerButton {
       const str = songStrings.slice(i * 10, i * 10 + 10).join('\n')
 
       const mediaItems = thumbnail
-          ? [{ type: 12, items: [{ media: { url: thumbnail }, description: 'queue' }] }]
-          : []
+        ? [{ type: 12, items: [{ media: { url: thumbnail }, description: 'queue' }] }]
+        : []
 
       const container = {
         type: 17,
@@ -64,7 +64,8 @@ export default class implements PlayerButton {
               track: getTitle(client, song!, language),
               duration: formatDuration(song?.duration),
               requester: `${song!.requester}`,
-              list_song: str == '' ? client.i18n.get(language, 'command.music', 'nothing') : '\n' + str,
+              list_song:
+                str == '' ? client.i18n.get(language, 'command.music', 'nothing') : '\n' + str,
             }),
           },
           {

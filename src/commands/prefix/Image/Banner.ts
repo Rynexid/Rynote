@@ -41,7 +41,9 @@ export default class implements Command {
         }),
       } as any)
 
-    const target = (getData && getData.type === ParseMentionEnum.USER ? getData.data : handler.user) as User
+    const target = (
+      getData && getData.type === ParseMentionEnum.USER ? getData.data : handler.user
+    ) as User
 
     const url = target.bannerURL({ size: 512 })
     if (!url)

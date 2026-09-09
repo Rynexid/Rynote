@@ -55,7 +55,8 @@ export default class implements Command {
       const str = guildStrings.slice(i * 10, i * 10 + 10).join('\n')
 
       const authorName = `${client.i18n.get(handler.language, 'command.premium', 'guild_list_title')}`
-      const description = str == '' ? client.i18n.get(handler.language, 'command.music', 'nothing') : '\n' + str
+      const description =
+        str == '' ? client.i18n.get(handler.language, 'command.music', 'nothing') : '\n' + str
 
       pages.push([
         {
@@ -82,7 +83,10 @@ export default class implements Command {
           buildV2({
             color: client.color as number,
             title: `${client.i18n.get(handler.language, 'command.premium', 'guild_list_title')}`,
-            description: pageStr == '' ? client.i18n.get(handler.language, 'command.music', 'nothing') : '\n' + pageStr,
+            description:
+              pageStr == ''
+                ? client.i18n.get(handler.language, 'command.music', 'nothing')
+                : '\n' + pageStr,
             footer: `1/${String(pagesNum)}`,
           })
         )
@@ -119,7 +123,10 @@ export default class implements Command {
         buildV2({
           color: client.color as number,
           title: `${client.i18n.get(handler.language, 'command.premium', 'guild_list_title')}`,
-          description: pageStr == '' ? client.i18n.get(handler.language, 'command.music', 'nothing') : '\n' + pageStr,
+          description:
+            pageStr == ''
+              ? client.i18n.get(handler.language, 'command.music', 'nothing')
+              : '\n' + pageStr,
           footer: `${String(pageNum + 1)}/${String(pagesNum)}`,
         })
       )

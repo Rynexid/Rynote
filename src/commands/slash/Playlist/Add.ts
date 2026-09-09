@@ -253,7 +253,8 @@ export default class implements Command {
     for (let i = 0; i < 10; i++) {
       const x = tracks[i]
       choice.push({
-        name: x && x.title ? x.title : client.i18n.get(language, 'command.music', 'unknown_track_name'),
+        name:
+          x && x.title ? x.title : client.i18n.get(language, 'command.music', 'unknown_track_name'),
         value: x && x.uri ? x.uri : url,
       })
     }

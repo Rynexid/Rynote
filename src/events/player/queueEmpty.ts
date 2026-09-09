@@ -31,7 +31,8 @@ export default class {
       const queries: string[] = []
       if (source.toLowerCase() === 'youtube') {
         const identifier = player.data.get('identifier')
-        if (identifier) queries.push(`https://www.youtube.com/watch?v=${identifier}&list=RD${identifier}`)
+        if (identifier)
+          queries.push(`https://www.youtube.com/watch?v=${identifier}&list=RD${identifier}`)
       }
       if (textQuery) queries.push(`directSearch=scsearch:${textQuery}`)
 
@@ -71,9 +72,7 @@ export default class {
             embeds: [
               new EmbedBuilder()
                 .setColor(client.color)
-                .setDescription(
-                  client.i18n.get(language, 'event.player', 'autoplay_disabled')
-                ),
+                .setDescription(client.i18n.get(language, 'event.player', 'autoplay_disabled')),
             ],
           })
           .catch(() => {})

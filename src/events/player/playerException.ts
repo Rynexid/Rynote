@@ -33,18 +33,19 @@ export default class {
       if (channel) {
         let guildModel = await client.db.language.get(`${channel.guild.id}`)
         if (!guildModel)
-          guildModel = await client.db.language.set(`${channel.guild.id}`, client.config.bot.LANGUAGE)
+          guildModel = await client.db.language.set(
+            `${channel.guild.id}`,
+            client.config.bot.LANGUAGE
+          )
 
         await channel
           .send({
             embeds: [
-              new EmbedBuilder()
-                .setColor(client.color)
-                .setDescription(
-                  client.i18n.get(guildModel, 'event.player', 'error_retry_desc', {
-                    title: failedTrack.title,
-                  })
-                ),
+              new EmbedBuilder().setColor(client.color).setDescription(
+                client.i18n.get(guildModel, 'event.player', 'error_retry_desc', {
+                  title: failedTrack.title,
+                })
+              ),
             ],
           })
           .catch(() => {})
@@ -58,14 +59,15 @@ export default class {
       setTimeout(() => {
         const currentPlayer = client.rainlink.players.get(player.guildId)
         if (!currentPlayer || currentPlayer.state === RainlinkPlayerState.DESTROYED) return
-        if (currentPlayer.queue.current && currentPlayer.queue.current.encoded !== failedTrack.encoded)
+        if (
+          currentPlayer.queue.current &&
+          currentPlayer.queue.current.encoded !== failedTrack.encoded
+        )
           return
-        currentPlayer
-          .play(failedTrack)
-          .catch(() => {
-            player.data.set('retrying', false)
-            if (!player.queue.length && !player.sudoDestroy) player.destroy().catch(() => {})
-          })
+        currentPlayer.play(failedTrack).catch(() => {
+          player.data.set('retrying', false)
+          if (!player.queue.length && !player.sudoDestroy) player.destroy().catch(() => {})
+        })
       }, RETRY_DELAY)
       return
     }
@@ -88,14 +90,11 @@ export default class {
 
       await text_channel.send({
         embeds: [
-          new EmbedBuilder()
-            .setColor(client.color)
-            .setDescription(
-              client.i18n.get(guildModel, 'event.player', 'error_fail_desc', {
-                title:
-                  failedTrack?.title ?? client.i18n.get(guildModel, 'command.music', 'unknown'),
-              })
-            ),
+          new EmbedBuilder().setColor(client.color).setDescription(
+            client.i18n.get(guildModel, 'event.player', 'error_fail_desc', {
+              title: failedTrack?.title ?? client.i18n.get(guildModel, 'command.music', 'unknown'),
+            })
+          ),
         ],
       })
     }

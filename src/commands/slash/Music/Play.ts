@@ -187,12 +187,10 @@ export default class implements Command {
       const updated = this.buildPlayContainer(client, handler, player, track, artworkUrl)
 
       if (handler.interaction) {
-        handler.interaction
-          .editReply({ flags: 32768, components: updated } as any)
-          .catch(() => {
-            clearInterval(interval)
-            client.nowPlaying.delete(guildId)
-          })
+        handler.interaction.editReply({ flags: 32768, components: updated } as any).catch(() => {
+          clearInterval(interval)
+          client.nowPlaying.delete(guildId)
+        })
         return
       }
 

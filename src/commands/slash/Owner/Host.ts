@@ -28,8 +28,7 @@ export default class implements Command {
     const heapUsed = process.memoryUsage().heapUsed / 1024 / 1024
     const heapTotal = process.memoryUsage().heapUsed / 1024 / 1024
 
-    const L = (key: string) =>
-      client.i18n.get(handler.language, 'command.owner', key)
+    const L = (key: string) => client.i18n.get(handler.language, 'command.owner', key)
 
     const hostInfo = stripIndents`\`\`\`
     - ${L('host_os')}: ${os.type()} ${os.release()} (${os.arch()})

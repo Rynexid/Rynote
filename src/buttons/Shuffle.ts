@@ -65,7 +65,8 @@ export default class implements PlayerButton {
               track: getTitle(client, song!, language),
               duration: formatDuration(song?.duration),
               requester: `${song!.requester}`,
-              list_song: str == '' ? client.i18n.get(language, 'command.music', 'nothing') : '\n' + str,
+              list_song:
+                str == '' ? client.i18n.get(language, 'command.music', 'nothing') : '\n' + str,
             }),
           },
           {

@@ -66,7 +66,10 @@ export default class implements Command {
                 title: getTitle(client, song!, handler.language),
                 request: String(song!.requester),
                 duration: formatDuration(song!.duration),
-                rest: str == '' ? client.i18n.get(handler.language, 'command.music', 'nothing') : '\n' + str,
+                rest:
+                  str == ''
+                    ? client.i18n.get(handler.language, 'command.music', 'nothing')
+                    : '\n' + str,
               }),
             },
           ],

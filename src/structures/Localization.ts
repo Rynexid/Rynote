@@ -7,11 +7,7 @@ export class Localization extends I18n {
 
   public has(locale: string, section: string, key: string) {
     const str = this.get(locale, section, key)
-    return !(
-      str.startsWith("Locale '") ||
-      str.startsWith("Section '") ||
-      str.startsWith("Key '")
-    )
+    return !(str.startsWith("Locale '") || str.startsWith("Section '") || str.startsWith("Key '"))
   }
 
   public get(locale: string, section: string, key: string, args?: I18nArgs | undefined) {

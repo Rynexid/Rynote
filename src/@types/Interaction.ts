@@ -18,10 +18,7 @@ export type GlobalInteraction =
   | AutocompleteInteraction
 
 export type NoAutoInteraction =
-  | CommandInteraction
-  | AnySelectMenuInteraction
-  | ButtonInteraction
-  | ModalSubmitInteraction
+  CommandInteraction | AnySelectMenuInteraction | ButtonInteraction | ModalSubmitInteraction
 
 export type ReplyOnlyInteraction = CommandInteraction | ButtonInteraction
 

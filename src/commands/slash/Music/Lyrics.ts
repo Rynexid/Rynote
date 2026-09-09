@@ -33,8 +33,7 @@ export default class implements Command {
     await handler.deferReply()
 
     const player = client.rainlink.players.get(String(handler.guild?.id)) as
-      | RainlinkPlayer
-      | undefined
+      RainlinkPlayer | undefined
     const track = player?.queue.current
 
     if (player && track) {
@@ -128,7 +127,15 @@ export default class implements Command {
       }
 
       return handler.replyV2([
-        await this.buildLyricsContainer(client, handler, track, player, song.title, description, false),
+        await this.buildLyricsContainer(
+          client,
+          handler,
+          track,
+          player,
+          song.title,
+          description,
+          false
+        ),
       ])
     } catch (err) {
       client.logger.error('Lyrics', err)
@@ -295,7 +302,11 @@ export default class implements Command {
       const text = syncedText || topText
       if (!text) return null
 
-      const title = data?.name ?? data?.title ?? player.queue.current?.title ?? client.i18n.get(language, 'command.music', 'unknown')
+      const title =
+        data?.name ??
+        data?.title ??
+        player.queue.current?.title ??
+        client.i18n.get(language, 'command.music', 'unknown')
       return { text, title: String(title), synced: hasTime && syncedLines.length > 0 }
     } catch (err) {
       client.logger.error('Lyrics', err)

@@ -7,9 +7,7 @@ export default class {
       if (player.node.options.name == node.options.name) player.destroy().catch(() => {})
     })
 
-    const lavalinkIndex = client.lavalinkUsing.findIndex(
-      (data) => data.name == node.options.name
-    )
+    const lavalinkIndex = client.lavalinkUsing.findIndex((data) => data.name == node.options.name)
     if (lavalinkIndex !== -1) client.lavalinkUsing.splice(lavalinkIndex, 1)
 
     client.logger.debug(

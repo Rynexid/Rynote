@@ -247,10 +247,15 @@ export default class implements Command {
   private categoryContainer(client: Manager, handler: CommandHandler, page: number) {
     const pages = this.buildPages(client, handler)
     const current = pages[page]
-    const content = `## ${current.title}\n${client.i18n.get(handler.language, 'command.info', 'page_label', {
-      page: String(page + 1),
-      total: String(pages.length),
-    })}\n\n${current.lines.join('\n')}`
+    const content = `## ${current.title}\n${client.i18n.get(
+      handler.language,
+      'command.info',
+      'page_label',
+      {
+        page: String(page + 1),
+        total: String(pages.length),
+      }
+    )}\n\n${current.lines.join('\n')}`
 
     return [
       {

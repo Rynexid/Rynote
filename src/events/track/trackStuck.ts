@@ -33,36 +33,41 @@ export default class {
       if (channel) {
         let guildModel = await client.db.language.get(`${channel.guild.id}`)
         if (!guildModel)
-          guildModel = await client.db.language.set(`${channel.guild.id}`, client.config.bot.LANGUAGE)
+          guildModel = await client.db.language.set(
+            `${channel.guild.id}`,
+            client.config.bot.LANGUAGE
+          )
 
         await channel
           .send({
             embeds: [
-              new EmbedBuilder()
-                .setColor(client.color)
-                .setDescription(
-                  client.i18n.get(guildModel, 'event.player', 'error_retry_desc', {
-                    title: failedTrack.title,
-                  })
-                ),
+              new EmbedBuilder().setColor(client.color).setDescription(
+                client.i18n.get(guildModel, 'event.player', 'error_retry_desc', {
+                  title: failedTrack.title,
+                })
+              ),
             ],
           })
           .catch(() => {})
       }
 
-      client.logger.warn('TrackStuck', `Retrying stuck track "${failedTrack.title}" in ${RETRY_DELAY}ms`)
+      client.logger.warn(
+        'TrackStuck',
+        `Retrying stuck track "${failedTrack.title}" in ${RETRY_DELAY}ms`
+      )
 
       setTimeout(() => {
         const currentPlayer = client.rainlink.players.get(player.guildId)
         if (!currentPlayer || currentPlayer.state === RainlinkPlayerState.DESTROYED) return
-        if (currentPlayer.queue.current && currentPlayer.queue.current.encoded !== failedTrack.encoded)
+        if (
+          currentPlayer.queue.current &&
+          currentPlayer.queue.current.encoded !== failedTrack.encoded
+        )
           return
-        currentPlayer
-          .play(failedTrack)
-          .catch(() => {
-            player.data.set('retrying', false)
-            if (!player.queue.length && !player.sudoDestroy) player.destroy().catch(() => {})
-          })
+        currentPlayer.play(failedTrack).catch(() => {
+          player.data.set('retrying', false)
+          if (!player.queue.length && !player.sudoDestroy) player.destroy().catch(() => {})
+        })
       }, RETRY_DELAY)
       return
     }
