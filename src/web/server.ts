@@ -2,6 +2,8 @@ import { Manager } from '../manager.js'
 import Fastify from 'fastify'
 import WebsocketPlugin from '@fastify/websocket'
 import CorsPlugin from '@fastify/cors'
+import { fromNodeHeaders } from 'better-auth/node'
+import { createAuth } from './auth.js'
 import { WebsocketRoute } from './websocket.js'
 import { PlayerRoute } from './player.js'
 import { getSearch } from './route/getSearch.js'
@@ -33,7 +35,58 @@ export class WebServer {
       origin: corsConfig?.origin ?? ['http://localhost:5173'],
       methods: corsConfig?.methods ?? ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
     })
+
+    if (
+      this.client.config.utilities.WEB_SERVER.oauth.enable &&
+      this.client.config.utilities.WEB_SERVER.oauth.discord.clientId &&
+      this.client.config.utilities.WEB_SERVER.oauth.discord.clientSecret
+    ) {
+      const auth = createAuth(this.client)
+
+      this.app.route({
+        method: ['GET', 'POST'],
+        url: '/api/auth/*',
+        handler: async (request, reply) => {
+          try {
+            const url = new URL(request.url, `http://${request.headers.host}`)
+            const headers = fromNodeHeaders(request.headers)
+            const req = new Request(url.toString(), {
+              method: request.method,
+              headers,
+              ...(request.body ? { body: JSON.stringify(request.body) } : {}),
+            })
+            const response = await auth.handler(req)
+            reply.status(response.status)
+            response.headers.forEach((value, key) => reply.header(key, value))
+            return reply.send(response.body ? await response.text() : null)
+          } catch (error) {
+            this.client.logger.error('AuthService', error)
+            reply.code(500)
+            reply.send(JSON.stringify({ error: 'Internal authentication error' }))
+          }
+        },
+      })
+
+      this.app.get('/me', async (request, reply) => {
+        try {
+          const session = await auth.api.getSession({
+            headers: fromNodeHeaders(request.headers),
+          })
+          if (!session) {
+            reply.code(401)
+            reply.send(JSON.stringify({ error: 'Unauthorized' }))
+            return
+          }
+          reply.send(session)
+        } catch (error) {
+          this.client.logger.error('AuthService', error)
+          reply.code(500)
+          reply.send(JSON.stringify({ error: 'Internal authentication error' }))
+        }
+      })
+    }
 
     this.app.register(
       (fastify, _, done) => {

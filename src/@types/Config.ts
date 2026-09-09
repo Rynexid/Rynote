@@ -65,6 +65,17 @@ export interface WebServer {
     origin: string[]
     methods: string[]
   }
+  oauth: OAuth
+}
+
+export interface OAuth {
+  enable: boolean
+  secret: string
+  redirectURI: string
+  discord: {
+    clientId: string
+    clientSecret: string
+  }
 }
 
 export interface Player {

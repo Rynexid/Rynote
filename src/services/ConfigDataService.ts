@@ -153,6 +153,15 @@ export class ConfigDataService {
             origin: ['http://localhost:5173', 'http://localhost:3000'],
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
           },
+          oauth: {
+            enable: true,
+            secret: 'rynote-oauth-secret-change-me',
+            redirectURI: 'http://localhost:8080/api/auth/callback/discord',
+            discord: {
+              clientId: '',
+              clientSecret: '',
+            },
+          },
         },
         PREMIUM_LOG_CHANNEL: '',
         GUILD_LOG_CHANNEL: '',
