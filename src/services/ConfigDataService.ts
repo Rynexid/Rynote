@@ -131,6 +131,10 @@ export class ConfigDataService {
           config: { path: './cylane.database.json' },
           cacheCleanSchedule: '0 */30 * * * *',
         },
+        AUTH_DATABASE: {
+          driver: 'postgres',
+          config: { url: '' },
+        },
         MESSAGE_CONTENT: {
           enable: true,
           commands: {

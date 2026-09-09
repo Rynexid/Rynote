@@ -24,6 +24,7 @@ export interface Utilities {
   AUTO_RESUME: boolean
   DELETE_MSG_TIMEOUT: number
   DATABASE: Database
+  AUTH_DATABASE: AuthDatabase
   TOPGG_TOKEN: string
   MESSAGE_CONTENT: MessageContent
   AUTOFIX_LAVALINK: AutofixLavalink
@@ -43,6 +44,13 @@ export interface Database {
   driver: string
   config: any
   cacheCleanSchedule: string
+}
+
+export interface AuthDatabase {
+  driver: string
+  config: {
+    url: string
+  }
 }
 
 export interface MessageContent {

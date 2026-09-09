@@ -14,6 +14,7 @@ import { getGuildDetail } from './route/getGuildDetail.js'
 import { postPlay } from './route/postPlay.js'
 import { getConfig } from './route/getConfig.js'
 import http from 'node:http'
+import type { FastifyReply } from 'fastify'
 
 export class WebServer {
   app: Fastify.FastifyInstance
@@ -31,12 +32,27 @@ export class WebServer {
 
     const corsConfig = this.client.config.utilities.WEB_SERVER.cors
 
+    const corsOrigins = corsConfig?.origin ?? ['http://localhost:5173']
+    const corsMethods =
+      corsConfig?.methods ?? ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+
     this.app.register(CorsPlugin, {
-      origin: corsConfig?.origin ?? ['http://localhost:5173'],
-      methods: corsConfig?.methods ?? ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      origin: corsOrigins,
+      methods: corsMethods,
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true,
     })
+
+    const isCorsAllowed = (requestOrigin: string | undefined) =>
+      !!requestOrigin && corsOrigins.includes(requestOrigin)
+
+    const applyCorsHeaders = (reply: FastifyReply, requestOrigin?: string) => {
+      if (requestOrigin && isCorsAllowed(requestOrigin)) {
+        reply.header('Access-Control-Allow-Origin', requestOrigin)
+        reply.header('Vary', 'Origin')
+        reply.header('Access-Control-Allow-Credentials', 'true')
+      }
+    }
 
     try {
       if (
@@ -47,9 +63,26 @@ export class WebServer {
         const auth = createAuth(this.client)
 
         this.app.route({
-          method: ['GET', 'POST'],
+          method: ['GET', 'POST', 'OPTIONS'],
           url: '/api/auth/*',
           handler: async (request, reply) => {
+            const requestOrigin = request.headers.origin
+            if (request.method === 'OPTIONS') {
+              if (!isCorsAllowed(requestOrigin)) {
+                reply.code(400)
+                reply.send(JSON.stringify({ error: 'Origin not allowed' }))
+                return
+              }
+              reply.header('Access-Control-Allow-Origin', requestOrigin!)
+              reply.header('Vary', 'Origin')
+              reply.header('Access-Control-Allow-Methods', corsMethods.join(', '))
+              reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+              reply.header('Access-Control-Allow-Credentials', 'true')
+              reply.header('Access-Control-Max-Age', '86400')
+              reply.code(204)
+              reply.send()
+              return
+            }
             try {
               const url = new URL(request.url, `http://${request.headers.host}`)
               const headers = fromNodeHeaders(request.headers)
@@ -59,11 +92,13 @@ export class WebServer {
                 ...(request.body ? { body: JSON.stringify(request.body) } : {}),
               })
               const response = await auth.handler(req)
+              applyCorsHeaders(reply, requestOrigin)
               reply.status(response.status)
               response.headers.forEach((value, key) => reply.header(key, value))
               return reply.send(response.body ? await response.text() : null)
             } catch (error) {
               this.client.logger.error('AuthService', error)
+              applyCorsHeaders(reply, requestOrigin)
               reply.code(500)
               reply.send(JSON.stringify({ error: 'Internal authentication error' }))
             }
