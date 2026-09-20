@@ -11,6 +11,7 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { EMOJI } from '../../../utilities/Emoji.js'
+import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
 
 const CATEGORY_ICONS: Record<string, string> = EMOJI.category
 
@@ -169,17 +170,31 @@ export default class implements Command {
       client.i18n.get(handler.language, 'command.info', key, args)
 
     if (page === 0) {
+      const cats = new Set(
+        client.commands
+          .filter((c) => (handler.interaction ? c.usingInteraction : true))
+          .map((c) => c.category)
+      ).size
+
       const content =
         `${L('help_welcome', { emoji: EMOJI.global.home, username: client.user!.username })}\n` +
         `${L('help_welcome_desc', { username: client.user!.username })}\n\n` +
-        `### 🧭 ${L('menu_list')}\n\n` +
+        `- ${L('help_total')} ${client.commands.size}\n` +
+        `- ${L('help_cats')} ${cats}\n` +
+        `- ${L('help_owner')} <@${client.owner}>\n\n` +
         `${L('help_footer')}`
 
       return [
         {
           type: 17,
           accent_color: client.color,
-          components: [{ type: 10, content }],
+          components: [
+            {
+              type: 12,
+              items: [{ media: { url: RYNOTE_BANNER_URL }, description: client.user!.username }],
+            },
+            { type: 10, content },
+          ],
         },
       ]
     }
