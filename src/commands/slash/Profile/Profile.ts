@@ -177,7 +177,7 @@ export default class implements Command {
         style: 5,
         label: client.i18n.get(handler.language, 'command.profile', 'profile_btn_spotify'),
         url: spotifyData.url,
-        emoji: { name: 'spotify', id: '1528703009452986489', animated: false },
+        emoji: { name: 'spotify', id: '1551323887235637328', animated: false },
       })
       if (handler.user && handler.user.id === fresh.id) {
         actionRow.push({
