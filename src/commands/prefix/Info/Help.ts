@@ -28,9 +28,10 @@ const HOME_PAGES: [string, string][][] = [
   [
     ['Info', 'Info'],
     ['Utils', 'Utils'],
-    ['Profile', 'Profile'],
     ['Premium', 'Premium'],
-    ['Dev', 'Dev'],
+  ],
+  [
+    ['Profile', 'Profile'],
     ['Owner', 'Owner'],
   ],
 ]
@@ -205,11 +206,14 @@ export default class implements Command {
 
     const sections = HOME_PAGES[page - 1]
       .map(([cat, label]) => {
-        if ((cat === 'Owner' || cat === 'Dev') && !this.isOwner(client, handler)) return null
+        const isOwner = this.isOwner(client, handler)
+        if (cat === 'Owner' && !isOwner) return null
+        const mergedCats = cat === 'Owner' ? ['Owner', 'Dev'] : [cat]
         let cmds = client.commands.filter(
-          (c) => c.category === cat && (handler.interaction ? c.usingInteraction : true)
+          (c) =>
+            mergedCats.includes(c.category) && (handler.interaction ? c.usingInteraction : true)
         )
-        if (cat === 'Premium' && !this.isOwner(client, handler)) {
+        if (cat === 'Premium' && !isOwner) {
           cmds = cmds.filter((c) => this.isPremiumVisible(c))
         }
         if (cmds.size === 0) return null
