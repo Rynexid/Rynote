@@ -2,7 +2,7 @@ import { fileURLToPath, pathToFileURL } from 'url'
 import { Manager } from '../manager.js'
 import path from 'path'
 import readdirRecursive from 'recursive-readdir'
-import { ApplicationCommandOptionType, Routes } from 'discord.js'
+import { ApplicationCommandOptionType, ApplicationCommandType, Routes } from 'discord.js'
 import { REST } from '@discordjs/rest'
 import { CommandInterface, UploadCommandInterface } from '../@types/Interaction.js'
 import { join, dirname } from 'path'
@@ -71,8 +71,19 @@ export class DeployService {
         'No interactions loaded. Exiting auto deploy...'
       )
 
+    const existing = (await rest.get(Routes.applicationCommands((client as BotInfoType).id))) as {
+      id: string
+      type: number
+    }[]
+
+    // Discord forbids removing Entry Point commands via bulk update (error 50240),
+    // so keep any already-deployed Entry Point commands in the overwrite payload.
+    const entryPoints = existing.filter(
+      (cmd) => cmd.type === ApplicationCommandType.PrimaryEntryPoint
+    )
+
     await rest.put(Routes.applicationCommands((client as BotInfoType).id), {
-      body: command,
+      body: [...command, ...entryPoints.map((cmd) => ({ id: cmd.id }))],
     })
 
     this.client.logger.info(DeployService.name, `Interactions deployed! Exiting auto deploy...`)
