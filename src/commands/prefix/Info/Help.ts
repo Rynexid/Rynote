@@ -144,13 +144,11 @@ export default class implements Command {
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
           .setCustomId(HOME_BTN)
-          .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_home'))
           .setStyle(ButtonStyle.Secondary)
           .setEmoji(EMOJI.global.home)
           .setDisabled(page <= 0),
         new ButtonBuilder()
           .setCustomId(PREV_BTN)
-          .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_prev'))
           .setStyle(ButtonStyle.Secondary)
           .setEmoji(EMOJI.global.arrow_previous)
           .setDisabled(page <= 0),
@@ -166,7 +164,6 @@ export default class implements Command {
           .setDisabled(true),
         new ButtonBuilder()
           .setCustomId(NEXT_BTN)
-          .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_next'))
           .setStyle(ButtonStyle.Secondary)
           .setEmoji(EMOJI.global.arrow_next)
           .setDisabled(page >= total - 1)
