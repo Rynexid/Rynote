@@ -27,7 +27,7 @@ export default class implements Command {
   public name = ['spotify-login']
   public description = 'Link your Spotify profile to your Discord account'
   public category = 'Profile'
-  public accessableby = [Accessableby.Member]
+  public accessableby = [Accessableby.Premium]
   public usage = '<spotify_profile_url|username>'
   public aliases = ['splogin', 'splink']
   public lavalink = false
