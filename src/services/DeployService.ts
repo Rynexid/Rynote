@@ -74,6 +74,7 @@ export class DeployService {
     const existing = (await rest.get(Routes.applicationCommands((client as BotInfoType).id))) as {
       id: string
       type: number
+      name: string
     }[]
 
     // Discord forbids removing Entry Point commands via bulk update (error 50240),
@@ -83,7 +84,10 @@ export class DeployService {
     )
 
     await rest.put(Routes.applicationCommands((client as BotInfoType).id), {
-      body: [...command, ...entryPoints.map((cmd) => ({ id: cmd.id }))],
+      body: [
+        ...command,
+        ...entryPoints.map((cmd) => ({ id: cmd.id, name: cmd.name, type: cmd.type })),
+      ],
     })
 
     this.client.logger.info(DeployService.name, `Interactions deployed! Exiting auto deploy...`)
