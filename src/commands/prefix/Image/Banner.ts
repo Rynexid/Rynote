@@ -7,7 +7,7 @@ import { buildV2 } from '../../../utilities/V2.js'
 export default class implements Command {
   public name = ['banner']
   public description = "Show your or someone else's banner"
-  public category = 'Image'
+  public category = 'Info'
   public accessableby = [Accessableby.Member]
   public usage = '<mention>'
   public aliases = ['bnr']

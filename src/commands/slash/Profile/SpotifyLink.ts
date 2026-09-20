@@ -24,7 +24,7 @@ const OPEN_BTN = 'spotify_login:open'
 const COLLECTOR_TIME = 60_000
 
 export default class implements Command {
-  public name = ['spotify-link']
+  public name = ['spotifylink']
   public description = 'Link your Spotify profile to your Discord account'
   public category = 'Profile'
   public accessableby = [Accessableby.Premium]

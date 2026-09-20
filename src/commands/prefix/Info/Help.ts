@@ -5,24 +5,22 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ActionRowBuilder,
+  Collection,
 } from 'discord.js'
 import { readdirSync } from 'fs'
-import { stripIndents } from 'common-tags'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { EMOJI } from '../../../utilities/Emoji.js'
-import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const CATEGORY_ICONS: Record<string, string> = EMOJI.category
 
-const HOME_BTN = 'help_home_menu'
-const MENU_BTN = 'help_open_menu'
 const PREV_BTN = 'help_prev'
 const NEXT_BTN = 'help_next'
+const TOTAL_PAGES = 2
 
 export default class implements Command {
   public name = ['help']
@@ -46,8 +44,6 @@ export default class implements Command {
   ]
 
   public async execute(client: Manager, handler: CommandHandler) {
-    if (handler.interaction) await handler.deferReply()
-
     if (handler.args[0]) {
       return this.replyCommandDetail(client, handler)
     }
@@ -95,180 +91,38 @@ export default class implements Command {
     return c.description || client.i18n.get(handler.language, 'command.info', 'ce_finder_des_no')
   }
 
-  private homeComponents(client: Manager, handler: CommandHandler) {
-    return [
-      new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setCustomId(MENU_BTN)
-          .setLabel(client.i18n.get(handler.language, 'command.info', 'help_menu_btn'))
-          .setStyle(ButtonStyle.Primary)
-          .setEmoji(EMOJI.global.menu)
-      ),
-    ]
-  }
-
-  private navComponents(client: Manager, handler: CommandHandler, page: number, total: number) {
-    return [
-      new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setCustomId(HOME_BTN)
-          .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_home'))
-          .setStyle(ButtonStyle.Secondary)
-          .setEmoji(EMOJI.global.home),
-        new ButtonBuilder()
-          .setCustomId(PREV_BTN)
-          .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_prev'))
-          .setStyle(ButtonStyle.Secondary)
-          .setEmoji(EMOJI.global.arrow_previous)
-          .setDisabled(page <= 0),
-        new ButtonBuilder()
-          .setCustomId(NEXT_BTN)
-          .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_next'))
-          .setStyle(ButtonStyle.Secondary)
-          .setEmoji(EMOJI.global.arrow_next)
-          .setDisabled(page >= total - 1)
-      ),
-    ]
-  }
-
-  private homeContainer(client: Manager, handler: CommandHandler) {
-    const total = client.commands.size
-    const cats = this.getCategories(client, handler).length
-    const L = (key: string, args?: Record<string, string>) =>
-      client.i18n.get(handler.language, 'command.info', key, args)
-    return [
-      {
-        type: 17,
-        accent_color: client.color,
-        components: [
-          {
-            type: 12,
-            items: [{ media: { url: RYNOTE_BANNER_URL }, description: client.user!.username }],
-          },
-          {
-            type: 10,
-            content:
-              `${L('help_welcome', { emoji: EMOJI.global.home, username: client.user!.username })}\n` +
-              `${L('help_welcome_desc', { username: client.user!.username })}\n\n` +
-              `- ${L('help_total')} ${total}\n` +
-              `- ${L('help_cats')} ${cats}\n` +
-              `- ${L('help_owner')} <@${client.owner}>\n\n` +
-              `${L('help_footer')}`,
-          },
-        ],
-      },
-    ]
-  }
-
-  private categoryContainer(client: Manager, handler: CommandHandler, page: number) {
-    const categories = this.getCategories(client, handler)
-    const category = categories[page]
-    let cmds = client.commands.filter((c) => c.category === category)
-    const isOwner = this.isOwner(client, handler)
-    if (!isOwner && category === 'Premium') {
-      cmds = cmds.filter((c) => this.isPremiumVisible(c))
-    }
-    if (!isOwner && category === 'Dev') {
-      cmds = cmds.filter(() => false)
-    }
-    const icon = CATEGORY_ICONS[category] ?? '•'
-
-    const list = cmds
-      .filter((c) => (handler.interaction ? c.usingInteraction : true))
-      .map((c) => `**${c.name.join(' ')}**`)
-      .join(', ')
-
-    return [
-      {
-        type: 17,
-        accent_color: client.color,
-        components: [
-          {
-            type: 10,
-            content:
-              `## ${icon} ${category} \`[${cmds.size}]\`\n` +
-              `${client.i18n.get(handler.language, 'command.info', 'page_label', {
-                page: String(page + 1),
-                total: String(categories.length),
-              })}\n\n` +
-              list,
-          },
-        ],
-      },
-    ]
-  }
-
   private async replyHome(client: Manager, handler: CommandHandler) {
     const components = [
-      ...this.homeContainer(client, handler),
-      ...this.homeComponents(client, handler),
+      ...this.homeContainer(client, handler, 0),
+      ...this.navComponents(client, handler, 0),
     ]
-    let msg: any
+    let msg = await handler.replyV2(components)
 
-    if (handler.interaction) {
-      msg = await handler.editReply({
-        flags: MessageFlags.IsComponentsV2,
-        components,
-      } as any)
-    } else {
-      msg = await handler.sendMessage({
-        flags: MessageFlags.IsComponentsV2,
-        components,
-      } as any)
-    }
-
-    let page = -1
+    let page = 0
 
     const collector = msg.createMessageComponentCollector({
       componentType: ComponentType.Button,
       time: 180000,
+      filter: (i: any) =>
+        i.user.id === (handler.interaction?.user.id ?? handler.message?.author.id),
     })
 
     collector.on('collect', async (i: any) => {
       try {
-        if (i.user.id !== (handler.interaction?.user.id ?? handler.message?.author.id)) {
-          if (handler.interaction) {
-            return i.reply({
-              content: client.i18n.get(handler.language, 'command.info', 'menu_not_for_you'),
-              flags: MessageFlags.Ephemeral,
-            })
-          }
-          return
-        }
+        await i.deferUpdate()
 
-        if (!i.deferred) await i.deferUpdate()
+        if (i.customId === NEXT_BTN) page = Math.min(page + 1, TOTAL_PAGES - 1)
+        else if (i.customId === PREV_BTN) page = Math.max(page - 1, 0)
+        else return
 
-        if (i.customId === HOME_BTN) {
-          page = -1
-          msg = await this.updateMenu(client, handler, msg, [
-            ...this.homeContainer(client, handler),
-            ...this.homeComponents(client, handler),
-          ])
-          return
-        }
-
-        if (i.customId === MENU_BTN) {
-          page = 0
-        } else if (i.customId === NEXT_BTN) {
-          const total = this.getCategories(client, handler).length
-          page = Math.min(page + 1, total - 1)
-        } else if (i.customId === PREV_BTN) {
-          page = Math.max(page - 1, 0)
-        } else {
-          return
-        }
-
-        const total = this.getCategories(client, handler).length
         msg = await this.updateMenu(client, handler, msg, [
-          ...this.categoryContainer(client, handler, page),
-          ...this.navComponents(client, handler, page, total),
+          ...this.homeContainer(client, handler, page),
+          ...this.navComponents(client, handler, page),
         ])
       } catch (err) {
         client.logger.error('HelpCollector', err)
       }
     })
-
-    collector.on('end', () => {})
   }
 
   private async updateMenu(
@@ -278,13 +132,85 @@ export default class implements Command {
     components: any[]
   ) {
     if (handler.interaction) {
-      return oldMsg.edit({ flags: 32768, components } as any)
+      return oldMsg.edit({ flags: MessageFlags.IsComponentsV2, components } as any)
     }
     const route = `/channels/${oldMsg.channel.id}/messages/${oldMsg.id}` as any
     await client.rest.patch(route, {
-      body: { components, flags: 32768 },
+      body: { components, flags: MessageFlags.IsComponentsV2 },
     } as any)
     return oldMsg
+  }
+
+  private navComponents(client: Manager, handler: CommandHandler, page: number) {
+    return [
+      new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setCustomId(PREV_BTN)
+          .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_prev'))
+          .setStyle(ButtonStyle.Secondary)
+          .setEmoji(EMOJI.global.arrow_previous)
+          .setDisabled(page <= 0),
+        new ButtonBuilder()
+          .setCustomId('help_page_label')
+          .setLabel(
+            client.i18n.get(handler.language, 'command.info', 'page_label_numbers', {
+              page: String(page + 1),
+              total: String(TOTAL_PAGES),
+            })
+          )
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true),
+        new ButtonBuilder()
+          .setCustomId(NEXT_BTN)
+          .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_next'))
+          .setStyle(ButtonStyle.Secondary)
+          .setEmoji(EMOJI.global.arrow_next)
+          .setDisabled(page >= TOTAL_PAGES - 1)
+      ),
+    ]
+  }
+
+  private homeContainer(client: Manager, handler: CommandHandler, page: number) {
+    const L = (key: string, args?: Record<string, string>) =>
+      client.i18n.get(handler.language, 'command.info', key, args)
+    const isOwner = this.isOwner(client, handler)
+    const sections: string[] = []
+
+    if (page === 0) {
+      const cmds = client.commands.filter(
+        (c) => c.category === 'Music' && (handler.interaction ? c.usingInteraction : true)
+      )
+      sections.push(`### ${CATEGORY_ICONS['Music'] ?? '•'} Music\n${this.namesLine(cmds)}`)
+    } else {
+      for (const cat of this.getCategories(client, handler)) {
+        if (cat === 'Music') continue
+        let cmds = client.commands.filter(
+          (c) => c.category === cat && (handler.interaction ? c.usingInteraction : true)
+        )
+        if (!isOwner && cat === 'Premium') cmds = cmds.filter((c) => this.isPremiumVisible(c))
+        if (!isOwner && cat === 'Dev') cmds = cmds.filter(() => false)
+        if (cmds.size === 0) continue
+        sections.push(`### ${CATEGORY_ICONS[cat] ?? '•'} ${cat}\n${this.namesLine(cmds)}`)
+      }
+    }
+
+    const content =
+      `${L('help_welcome', { emoji: EMOJI.global.home, username: client.user!.username })}\n` +
+      `${L('help_welcome_desc', { username: client.user!.username })}\n\n` +
+      sections.join('\n\n') +
+      `\n\n${L('help_footer')}`
+
+    return [
+      {
+        type: 17,
+        accent_color: client.color,
+        components: [{ type: 10, content }],
+      },
+    ]
+  }
+
+  private namesLine(cmds: Collection<string, Command>): string {
+    return cmds.map((c) => `\`${c.name.join(' ')}\``).join(', ')
   }
 
   private async replyCommandDetail(client: Manager, handler: CommandHandler) {
@@ -302,7 +228,7 @@ export default class implements Command {
               content:
                 `## ${client.i18n.get(handler.language, 'command.info', 'ce_finder_invalid')}\n` +
                 `${client.i18n.get(handler.language, 'command.info', 'ce_finder_example', {
-                  command: `${handler.prefix}${this.name[0]}`,
+                  command: `.${this.name[0]}`,
                 })}`,
             },
           ],
@@ -346,7 +272,51 @@ export default class implements Command {
           } as any)
     }
 
-    const eString = this.transalatedFinder(client, handler)
+    const e = this.transalatedFinder(client, handler)
+    const L = (key: string, args?: Record<string, string>) =>
+      client.i18n.get(handler.language, 'command.info', key, args)
+
+    const icon = CATEGORY_ICONS[command.category] ?? '•'
+    const prefixChar = handler.prefix || '.'
+    const usage = command.usage ? ` ${command.usage}` : ''
+    const desc = this.getDesc(client, handler, command)
+
+    const accessLabels =
+      command.accessableby?.map((a) => this.accessLabel(client, handler, a)).join(', ') ||
+      L('access_member')
+
+    const aliasesLine = command.aliases?.length
+      ? `${e.aliases} \`${command.aliases.join('`, `')}\``
+      : `${e.aliases} ${e.aliasesNone}`
+
+    const optionsBlock = command.options?.length
+      ? command.options
+          .map((o) => {
+            const badge = `${this.optionTypeName(o.type)}${
+              o.required ? ` • ${L('ce_finder_required')}` : ''
+            }`
+            const oDesc = o.description ? ` — ${o.description}` : ''
+            return `• \`${o.name}\` (${badge})${oDesc}`
+          })
+          .join('\n')
+      : L('ce_finder_options_none')
+
+    const content = [
+      `## ${icon} ${command.name.join(' / ')}`,
+      `> ${desc}`,
+      '',
+      e.usage,
+      `• ${L('ce_finder_via_slash')}: \`/${command.name.join(' ')}${usage}\``,
+      `• ${L('ce_finder_via_prefix')}: \`${prefixChar}${command.name.join(' ')}${usage}\``,
+      aliasesLine,
+      '',
+      L('ce_finder_options'),
+      optionsBlock,
+      '',
+      `${L('ce_finder_category')} ${icon} ${command.category} • ${e.access} ${accessLabels} • ${
+        e.slash
+      } \`${command.usingInteraction ? e.slashEnable : e.slashDisable}\``,
+    ].join('\n')
 
     const componentsV2 = [
       {
@@ -355,21 +325,7 @@ export default class implements Command {
         components: [
           {
             type: 10,
-            content:
-              `## ${command.name.join(' / ')}\n` +
-              `> ${this.getDesc(client, handler, command)}\n\n` +
-              `- ${eString.usage} ${
-                command.usage
-                  ? `\`${handler.prefix}${command.name.join(' ')} ${command.usage}\``
-                  : `\`${eString.usageNone}\``
-              }\n` +
-              `- ${eString.access} \`${command.accessableby}\`\n` +
-              `- ${eString.aliases} \`${
-                command.aliases && command.aliases.length !== 0
-                  ? command.aliases.join(', ') + eString.aliasesPrefix
-                  : eString.aliasesNone
-              }\`\n` +
-              `- ${eString.slash} \`${command.usingInteraction ? eString.slashEnable : eString.slashDisable}\``,
+            content,
           },
         ],
       },
@@ -384,6 +340,37 @@ export default class implements Command {
           flags: MessageFlags.IsComponentsV2,
           components: componentsV2,
         } as any)
+  }
+
+  private accessLabel(client: Manager, handler: CommandHandler, access: Accessableby): string {
+    const map: Record<string, string> = {
+      Member: 'access_member',
+      Owner: 'access_owner',
+      Admin: 'access_admin',
+      Dev: 'access_dev',
+      Premium: 'access_premium',
+      GuildPremium: 'access_guild_premium',
+      Voter: 'access_voter',
+      Manager: 'access_manager',
+    }
+    return client.i18n.get(handler.language, 'command.info', map[access] ?? 'access_member')
+  }
+
+  private optionTypeName(type?: ApplicationCommandOptionType): string {
+    return (
+      {
+        [ApplicationCommandOptionType.String]: 'String',
+        [ApplicationCommandOptionType.Integer]: 'Integer',
+        [ApplicationCommandOptionType.Number]: 'Number',
+        [ApplicationCommandOptionType.Boolean]: 'Boolean',
+        [ApplicationCommandOptionType.User]: 'User',
+        [ApplicationCommandOptionType.Channel]: 'Channel',
+        [ApplicationCommandOptionType.Role]: 'Role',
+        [ApplicationCommandOptionType.Mentionable]: 'Mentionable',
+        [ApplicationCommandOptionType.Subcommand]: 'Subcommand',
+        [ApplicationCommandOptionType.SubcommandGroup]: 'Subcommand Group',
+      }[type as number] ?? '-'
+    )
   }
 
   private transalatedFinder(client: Manager, handler: CommandHandler) {

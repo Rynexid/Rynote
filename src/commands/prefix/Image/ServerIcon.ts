@@ -6,7 +6,7 @@ import { buildV2 } from '../../../utilities/V2.js'
 export default class implements Command {
   public name = ['servericon']
   public description = "Show this server's icon"
-  public category = 'Image'
+  public category = 'Info'
   public accessableby = [Accessableby.Member]
   public usage = ''
   public aliases = ['gicon']

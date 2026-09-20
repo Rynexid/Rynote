@@ -170,6 +170,9 @@ export class ConfigDataService {
         PREMIUM_LOG_CHANNEL: '',
         GUILD_LOG_CHANNEL: '',
         LOG_CHANNEL: '',
+        FEEDBACK: {
+          webhook: '',
+        },
       },
       emojis: {
         PLAYER: Object.fromEntries(Object.entries(EMOJI.player).map(([k, v]) => [k, v])) as any,

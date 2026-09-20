@@ -9,7 +9,7 @@ const SIZES = [512, 1024, 1920]
 export default class implements Command {
   public name = ['searchphoto']
   public description = 'Search for a photo from the web by keyword'
-  public category = 'Image'
+  public category = 'Info'
   public accessableby = [Accessableby.Member]
   public usage = '<keyword>'
   public aliases = ['img', 'sp']

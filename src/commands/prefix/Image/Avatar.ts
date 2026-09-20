@@ -7,7 +7,7 @@ import { buildV2 } from '../../../utilities/V2.js'
 export default class implements Command {
   public name = ['avatar']
   public description = "Show your or someone else's profile picture"
-  public category = 'Image'
+  public category = 'Info'
   public accessableby = [Accessableby.Member]
   public usage = '<mention>'
   public aliases = []

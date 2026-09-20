@@ -1,7 +1,7 @@
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
-import { RYNOTE_GITHUB, RYNOTE_SUPPORT } from '../../../utilities/Links.js'
+import { RYNOTE_GITHUB, RYNOTE_SUPPORT, RYNOTE_WEBSITE } from '../../../utilities/Links.js'
 
 export default class implements Command {
   public name = ['developer']
@@ -41,6 +41,12 @@ export default class implements Command {
         {
           type: 1,
           components: [
+            {
+              type: 2,
+              style: 5,
+              label: L('btn_website'),
+              url: RYNOTE_WEBSITE,
+            },
             {
               type: 2,
               style: 5,
