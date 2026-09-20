@@ -9,6 +9,7 @@ import { Manager } from '../../../manager.js'
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler, ParseMentionEnum } from '../../../structures/CommandHandler.js'
 import { buildV2 } from '../../../utilities/V2.js'
+import { EMOJI } from '../../../utilities/Emoji.js'
 import { Premium } from '../../../database/schema/Premium.js'
 import { SpotifyUser } from '../../../database/schema/SpotifyUser.js'
 import { History } from '../../../database/schema/History.js'
@@ -176,6 +177,7 @@ export default class implements Command {
         style: 5,
         label: client.i18n.get(handler.language, 'command.profile', 'profile_btn_spotify'),
         url: spotifyData.url,
+        emoji: { name: 'spotify', id: '1528703009452986489', animated: false },
       })
       if (handler.user && handler.user.id === fresh.id) {
         actionRow.push({
@@ -208,7 +210,7 @@ export default class implements Command {
           content:
             `- **${client.i18n.get(handler.language, 'command.profile', 'profile_fields_username')}:** <@${fresh.id}> (${fresh.id})\n` +
             `- **${client.i18n.get(handler.language, 'command.profile', 'profile_fields_premium')}:** ${premiumStatus}\n` +
-            `- **${client.i18n.get(handler.language, 'command.profile', 'profile_fields_spotify')}:** ${spotifyStatus}`,
+            `- ${EMOJI.brand.spotify} **${client.i18n.get(handler.language, 'command.profile', 'profile_fields_spotify')}:** ${spotifyStatus}`,
         },
         { type: 14, divider: true, spacing: 1 },
         {
