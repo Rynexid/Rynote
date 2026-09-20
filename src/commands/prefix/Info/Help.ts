@@ -28,12 +28,10 @@ const HOME_PAGES: [string, string][][] = [
   [
     ['Info', 'Info'],
     ['Utils', 'Utils'],
-    ['Premium', 'Premium'],
   ],
-  [
-    ['Profile', 'Profile'],
-    ['Owner', 'Owner'],
-  ],
+  [['Premium', 'Premium']],
+  [['Profile', 'Profile']],
+  [['Owner', 'Owner']],
 ]
 
 const TOTAL_PAGES = HOME_PAGES.length + 1
