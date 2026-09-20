@@ -16,6 +16,7 @@ const CATEGORY_ICONS: Record<string, string> = EMOJI.category
 
 const PREV_BTN = 'help_prev'
 const NEXT_BTN = 'help_next'
+const HOME_BTN = 'help_home'
 
 const HOME_PAGES: [string, string][][] = [
   [
@@ -29,7 +30,7 @@ const HOME_PAGES: [string, string][][] = [
   ],
 ]
 
-const TOTAL_PAGES = HOME_PAGES.length
+const TOTAL_PAGES = HOME_PAGES.length + 1
 
 export default class implements Command {
   public name = ['help']
@@ -97,7 +98,8 @@ export default class implements Command {
       try {
         await i.deferUpdate()
 
-        if (i.customId === NEXT_BTN) page = Math.min(page + 1, TOTAL_PAGES - 1)
+        if (i.customId === HOME_BTN) page = 0
+        else if (i.customId === NEXT_BTN) page = Math.min(page + 1, TOTAL_PAGES - 1)
         else if (i.customId === PREV_BTN) page = Math.max(page - 1, 0)
         else return
 
@@ -131,6 +133,12 @@ export default class implements Command {
     return [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
+          .setCustomId(HOME_BTN)
+          .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_home'))
+          .setStyle(ButtonStyle.Secondary)
+          .setEmoji(EMOJI.global.home)
+          .setDisabled(page <= 0),
+        new ButtonBuilder()
           .setCustomId(PREV_BTN)
           .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_prev'))
           .setStyle(ButtonStyle.Secondary)
@@ -160,7 +168,23 @@ export default class implements Command {
     const L = (key: string, args?: Record<string, string>) =>
       client.i18n.get(handler.language, 'command.info', key, args)
 
-    const sections = HOME_PAGES[page]
+    if (page === 0) {
+      const content =
+        `${L('help_welcome', { emoji: EMOJI.global.home, username: client.user!.username })}\n` +
+        `${L('help_welcome_desc', { username: client.user!.username })}\n\n` +
+        `### 🧭 ${L('menu_list')}\n\n` +
+        `${L('help_footer')}`
+
+      return [
+        {
+          type: 17,
+          accent_color: client.color,
+          components: [{ type: 10, content }],
+        },
+      ]
+    }
+
+    const sections = HOME_PAGES[page - 1]
       .map(([cat, label]) => {
         const cmds = client.commands.filter(
           (c) => c.category === cat && (handler.interaction ? c.usingInteraction : true)
@@ -171,11 +195,7 @@ export default class implements Command {
       .filter((s): s is string => s !== null)
       .join('\n\n')
 
-    const content =
-      `${L('help_welcome', { emoji: EMOJI.global.home, username: client.user!.username })}\n` +
-      `${L('help_welcome_desc', { username: client.user!.username })}\n\n` +
-      sections +
-      `\n\n${L('help_footer')}`
+    const content = sections + `\n\n${L('help_footer')}`
 
     return [
       {
