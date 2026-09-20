@@ -23,7 +23,7 @@ spotify_login_notice: 'Masukkan URL profil atau username Spotify kamu untuk mena
 spotify_login_placeholder: 'cth. https://open.spotify.com/user/namakamu'
 spotify_login_input_label: 'URL profil atau username'
 spotify_login_open: 'Masukkan Profil'
-spotify_login_already: '`⚠️` | Kamu sudah menautkan profil Spotify. Gunakan `/spotify-logout` terlebih dahulu!'
+spotify_login_already: '`⚠️` | Kamu sudah menautkan profil Spotify. Gunakan tombol Lepas Tautan di profil kamu!'
 spotify_login_invalid: '`⚠️` | Masukkan URL profil atau username Spotify yang valid!'
 spotify_login_notfound: '`⚠️` | Tidak dapat menemukan profil Spotify tersebut!'
 spotify_login_error: '`⚠️` | Gagal terhubung ke Spotify. Silakan coba lagi sebentar lagi!'

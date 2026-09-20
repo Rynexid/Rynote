@@ -1,4 +1,10 @@
-import { ApplicationCommandOptionType, AttachmentBuilder, MessageFlags, User } from 'discord.js'
+import {
+  ApplicationCommandOptionType,
+  AttachmentBuilder,
+  ComponentType,
+  MessageFlags,
+  User,
+} from 'discord.js'
 import { Manager } from '../../../manager.js'
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler, ParseMentionEnum } from '../../../structures/CommandHandler.js'
@@ -6,6 +12,11 @@ import { buildV2 } from '../../../utilities/V2.js'
 import { Premium } from '../../../database/schema/Premium.js'
 import { SpotifyUser } from '../../../database/schema/SpotifyUser.js'
 import { History } from '../../../database/schema/History.js'
+
+const UNLINK_BTN = 'profile:unlink-spotify'
+const CONFIRM_BTN = 'profile:unlink-confirm'
+const CANCEL_BTN = 'profile:unlink-cancel'
+const COLLECTOR_TIME = 60_000
 
 async function toBuffer(url: string): Promise<Buffer | null> {
   try {
@@ -166,6 +177,14 @@ export default class implements Command {
         label: client.i18n.get(handler.language, 'command.profile', 'profile_btn_spotify'),
         url: spotifyData.url,
       })
+      if (handler.user && handler.user.id === fresh.id) {
+        actionRow.push({
+          type: 2,
+          style: 4,
+          label: client.i18n.get(handler.language, 'command.profile', 'spotify_logout_button'),
+          custom_id: UNLINK_BTN,
+        })
+      }
     }
     actionRow.push({
       type: 2,
@@ -206,11 +225,128 @@ export default class implements Command {
       files,
     }
 
+    let msg: any
     if (handler.interaction) {
-      return handler.editReply(payload as any)
+      msg = await handler.editReply(payload as any)
+    } else {
+      await handler.msg?.delete().catch(() => undefined)
+      msg = await handler.sendMessage(payload as any)
     }
-    await handler.msg?.delete().catch(() => undefined)
-    return handler.sendMessage(payload as any)
+
+    if (spotifyData && handler.user && handler.user.id === fresh.id) {
+      this.attachUnlinkCollector(client, handler, msg)
+    }
+
+    return msg
+  }
+
+  private attachUnlinkCollector(client: Manager, handler: CommandHandler, msg: any) {
+    const first = msg.createMessageComponentCollector({
+      componentType: ComponentType.Button,
+      time: COLLECTOR_TIME,
+      max: 1,
+      filter: (i: any) => i.customId === UNLINK_BTN && i.user.id === handler.user?.id,
+    })
+
+    first.on('collect', async (i: any) => {
+      await i.deferUpdate().catch(() => undefined)
+
+      const confirmRow = {
+        type: 1,
+        components: [
+          {
+            type: 2,
+            style: 4,
+            label: client.i18n.get(handler.language, 'command.profile', 'spotify_logout_confirm'),
+            custom_id: CONFIRM_BTN,
+          },
+          {
+            type: 2,
+            style: 2,
+            label: client.i18n.get(handler.language, 'command.profile', 'spotify_logout_cancel'),
+            custom_id: CANCEL_BTN,
+          },
+        ],
+      }
+
+      const container = {
+        type: 17,
+        accent_color: typeof client.color === 'number' ? client.color : undefined,
+        components: [
+          {
+            type: 10,
+            content: `# ${client.i18n.get(handler.language, 'command.profile', 'spotify_logout_title')}`,
+          },
+          { type: 14, divider: true, spacing: 1 },
+          {
+            type: 10,
+            content: client.i18n.get(
+              handler.language,
+              'command.profile',
+              'spotify_logout_confirm_desc'
+            ),
+          },
+          { type: 14, divider: true, spacing: 1 },
+          confirmRow,
+        ],
+      }
+
+      await msg.edit({ flags: MessageFlags.IsComponentsV2, components: [container] } as any)
+
+      const second = msg.createMessageComponentCollector({
+        componentType: ComponentType.Button,
+        time: COLLECTOR_TIME,
+        max: 1,
+        filter: (c: any) => c.user.id === handler.user?.id,
+      })
+
+      second.on('collect', async (c: any) => {
+        await c.deferUpdate().catch(() => undefined)
+
+        if (c.customId === CONFIRM_BTN) {
+          const removed = await client.db.spotifyUser.delete(handler.user!.id)
+          return msg.edit({
+            flags: MessageFlags.IsComponentsV2,
+            components: buildV2({
+              color: client.color,
+              description: client.i18n.get(
+                handler.language,
+                'command.profile',
+                removed ? 'spotify_logout_success' : 'spotify_logout_failed'
+              ),
+            }),
+          } as any)
+        }
+
+        await msg.edit({
+          flags: MessageFlags.IsComponentsV2,
+          components: buildV2({
+            color: client.color,
+            description: client.i18n.get(
+              handler.language,
+              'command.profile',
+              'spotify_logout_cancelled'
+            ),
+          }),
+        } as any)
+      })
+
+      second.on('end', () => {
+        msg
+          .edit({
+            flags: MessageFlags.IsComponentsV2,
+            components: buildV2({
+              color: client.color,
+              description: client.i18n.get(
+                handler.language,
+                'command.profile',
+                'spotify_logout_timeout'
+              ),
+            }),
+          } as any)
+          .catch(() => undefined)
+      })
+    })
   }
 
   private formatPremium(client: Manager, handler: CommandHandler, premium: Premium | null): string {

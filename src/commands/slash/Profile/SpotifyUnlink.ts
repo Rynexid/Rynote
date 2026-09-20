@@ -15,12 +15,12 @@ const CANCEL_BTN = 'spotify_logout:cancel'
 const COLLECTOR_TIME = 60_000
 
 export default class implements Command {
-  public name = ['spotify-logout']
+  public name = ['spotify-unlink']
   public description = 'Unlink your Spotify profile from your Discord account'
   public category = 'Profile'
   public accessableby = [Accessableby.Member]
   public usage = ''
-  public aliases = ['splogout', 'spunlink']
+  public aliases = ['spunlink']
   public lavalink = false
   public usingInteraction = true
   public playerCheck = false

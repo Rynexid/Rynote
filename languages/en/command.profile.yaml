@@ -23,7 +23,7 @@ spotify_login_notice: 'Enter your Spotify profile URL or username to link it to 
 spotify_login_placeholder: 'e.g. https://open.spotify.com/user/yourname'
 spotify_login_input_label: 'Profile URL or username'
 spotify_login_open: 'Enter Profile'
-spotify_login_already: '`⚠️` | You already have a Spotify profile linked. Use `/spotify-logout` first!'
+spotify_login_already: '`⚠️` | You already have a Spotify profile linked. Use the Unlink button in your profile!'
 spotify_login_invalid: '`⚠️` | Enter a valid Spotify profile URL or username!'
 spotify_login_notfound: '`⚠️` | Could not find that Spotify profile!'
 spotify_login_error: '`⚠️` | Failed to reach Spotify. Please try again shortly!'
