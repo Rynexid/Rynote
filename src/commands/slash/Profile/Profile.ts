@@ -23,7 +23,7 @@ export default class implements Command {
   public category = 'Profile'
   public accessableby = [Accessableby.Member]
   public usage = '<mention>'
-  public aliases = ['p', 'me']
+  public aliases = ['me']
   public lavalink = false
   public usingInteraction = true
   public playerCheck = false
