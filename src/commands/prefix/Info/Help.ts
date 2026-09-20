@@ -7,20 +7,29 @@ import {
   ActionRowBuilder,
   Collection,
 } from 'discord.js'
-import { readdirSync } from 'fs'
-import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { EMOJI } from '../../../utilities/Emoji.js'
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const CATEGORY_ICONS: Record<string, string> = EMOJI.category
 
 const PREV_BTN = 'help_prev'
 const NEXT_BTN = 'help_next'
-const TOTAL_PAGES = 2
+
+const HOME_PAGES: [string, string][][] = [
+  [
+    ['Music', 'Musik'],
+    ['Filter', 'Filter'],
+    ['Playlist', 'Playlists'],
+  ],
+  [
+    ['Info', 'Info'],
+    ['Utils', 'Utils'],
+  ],
+]
+
+const TOTAL_PAGES = HOME_PAGES.length
 
 export default class implements Command {
   public name = ['help']
@@ -49,29 +58,6 @@ export default class implements Command {
     }
 
     return this.replyHome(client, handler)
-  }
-
-  private getCategories(client: Manager, handler?: CommandHandler) {
-    const base = join(__dirname, '..', '..', '..', 'commands')
-    const cats = new Set<string>()
-    for (const mode of ['slash', 'prefix']) {
-      const modePath = join(base, mode)
-      try {
-        for (const cat of readdirSync(modePath)) cats.add(cat)
-      } catch {}
-    }
-    const isOwner = handler ? this.isOwner(client, handler) : false
-    return [...cats].filter((cat) => {
-      if (cat === 'Owner' && !isOwner) return false
-      if (cat === 'Dev' && !isOwner) return false
-      const cmds = client.commands.filter(
-        (c) => c.category === cat && (handler?.interaction ? c.usingInteraction : true)
-      )
-      if (cat === 'Premium' && !isOwner) {
-        return cmds.some((c) => this.isPremiumVisible(c))
-      }
-      return cmds.size > 0
-    })
   }
 
   private isOwner(client: Manager, handler: CommandHandler): boolean {
@@ -173,31 +159,22 @@ export default class implements Command {
   private homeContainer(client: Manager, handler: CommandHandler, page: number) {
     const L = (key: string, args?: Record<string, string>) =>
       client.i18n.get(handler.language, 'command.info', key, args)
-    const isOwner = this.isOwner(client, handler)
-    const sections: string[] = []
 
-    if (page === 0) {
-      const cmds = client.commands.filter(
-        (c) => c.category === 'Music' && (handler.interaction ? c.usingInteraction : true)
-      )
-      sections.push(`### ${CATEGORY_ICONS['Music'] ?? '•'} Music\n${this.namesLine(cmds)}`)
-    } else {
-      for (const cat of this.getCategories(client, handler)) {
-        if (cat === 'Music') continue
-        let cmds = client.commands.filter(
+    const sections = HOME_PAGES[page]
+      .map(([cat, label]) => {
+        const cmds = client.commands.filter(
           (c) => c.category === cat && (handler.interaction ? c.usingInteraction : true)
         )
-        if (!isOwner && cat === 'Premium') cmds = cmds.filter((c) => this.isPremiumVisible(c))
-        if (!isOwner && cat === 'Dev') cmds = cmds.filter(() => false)
-        if (cmds.size === 0) continue
-        sections.push(`### ${CATEGORY_ICONS[cat] ?? '•'} ${cat}\n${this.namesLine(cmds)}`)
-      }
-    }
+        if (cmds.size === 0) return null
+        return `### ${CATEGORY_ICONS[cat] ?? '•'} ${label}\n${this.namesLine(cmds)}`
+      })
+      .filter((s): s is string => s !== null)
+      .join('\n\n')
 
     const content =
       `${L('help_welcome', { emoji: EMOJI.global.home, username: client.user!.username })}\n` +
       `${L('help_welcome_desc', { username: client.user!.username })}\n\n` +
-      sections.join('\n\n') +
+      sections +
       `\n\n${L('help_footer')}`
 
     return [
