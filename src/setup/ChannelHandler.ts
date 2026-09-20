@@ -40,6 +40,7 @@ export class ChannelHandler {
       return this.filterSelect(interaction)
     }
     if (!interaction.isButton()) return
+    if (!this.client.isDatabaseConnected) return
     const { customId } = interaction
 
     let player = this.client.rainlink.players.get(interaction.guild.id)
@@ -178,6 +179,7 @@ export class ChannelHandler {
 
   async message(message: Message): Promise<any> {
     if (!message.guild || !message.guild.available || !message.channel.isTextBased()) return
+    if (!this.client.isDatabaseConnected) return
     let database = await this.client.db.setup.get(`${message.guild.id}`)
     let player = this.client.rainlink.players.get(`${message.guild.id}`)
 
