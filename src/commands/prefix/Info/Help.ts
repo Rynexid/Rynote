@@ -28,6 +28,10 @@ const HOME_PAGES: [string, string][][] = [
   [
     ['Info', 'Info'],
     ['Utils', 'Utils'],
+    ['Profile', 'Profile'],
+    ['Premium', 'Premium'],
+    ['Dev', 'Dev'],
+    ['Owner', 'Owner'],
   ],
 ]
 
@@ -201,9 +205,13 @@ export default class implements Command {
 
     const sections = HOME_PAGES[page - 1]
       .map(([cat, label]) => {
-        const cmds = client.commands.filter(
+        if ((cat === 'Owner' || cat === 'Dev') && !this.isOwner(client, handler)) return null
+        let cmds = client.commands.filter(
           (c) => c.category === cat && (handler.interaction ? c.usingInteraction : true)
         )
+        if (cat === 'Premium' && !this.isOwner(client, handler)) {
+          cmds = cmds.filter((c) => this.isPremiumVisible(c))
+        }
         if (cmds.size === 0) return null
         return `### ${CATEGORY_ICONS[cat] ?? '•'} ${label}\n${this.namesLine(cmds)}`
       })
