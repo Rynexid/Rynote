@@ -34,8 +34,6 @@ const HOME_PAGES: [string, string][][] = [
   [['Owner', 'Owner']],
 ]
 
-const TOTAL_PAGES = HOME_PAGES.length + 1
-
 export default class implements Command {
   public name = ['help']
   public description = 'Displays all commands that the bot has.'
@@ -82,10 +80,18 @@ export default class implements Command {
     return c.description || client.i18n.get(handler.language, 'command.info', 'ce_finder_des_no')
   }
 
+  private getPages(client: Manager, handler: CommandHandler): [string, string][][] {
+    const pages = HOME_PAGES.map((p) => p)
+    if (!this.isOwner(client, handler)) pages.pop()
+    return pages
+  }
+
   private async replyHome(client: Manager, handler: CommandHandler) {
+    const pages = this.getPages(client, handler)
+    const total = pages.length + 1
     const components = [
-      ...this.homeContainer(client, handler, 0),
-      ...this.navComponents(client, handler, 0),
+      ...this.homeContainer(client, handler, 0, pages),
+      ...this.navComponents(client, handler, 0, total),
     ]
     let msg = await handler.replyV2(components)
 
@@ -103,13 +109,13 @@ export default class implements Command {
         await i.deferUpdate()
 
         if (i.customId === HOME_BTN) page = 0
-        else if (i.customId === NEXT_BTN) page = Math.min(page + 1, TOTAL_PAGES - 1)
+        else if (i.customId === NEXT_BTN) page = Math.min(page + 1, total - 1)
         else if (i.customId === PREV_BTN) page = Math.max(page - 1, 0)
         else return
 
         msg = await this.updateMenu(client, handler, msg, [
-          ...this.homeContainer(client, handler, page),
-          ...this.navComponents(client, handler, page),
+          ...this.homeContainer(client, handler, page, pages),
+          ...this.navComponents(client, handler, page, total),
         ])
       } catch (err) {
         client.logger.error('HelpCollector', err)
@@ -133,7 +139,7 @@ export default class implements Command {
     return oldMsg
   }
 
-  private navComponents(client: Manager, handler: CommandHandler, page: number) {
+  private navComponents(client: Manager, handler: CommandHandler, page: number, total: number) {
     return [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
@@ -153,7 +159,7 @@ export default class implements Command {
           .setLabel(
             client.i18n.get(handler.language, 'command.info', 'page_label_numbers', {
               page: String(page + 1),
-              total: String(TOTAL_PAGES),
+              total: String(total),
             })
           )
           .setStyle(ButtonStyle.Secondary)
@@ -163,12 +169,17 @@ export default class implements Command {
           .setLabel(client.i18n.get(handler.language, 'command.info', 'menu_next'))
           .setStyle(ButtonStyle.Secondary)
           .setEmoji(EMOJI.global.arrow_next)
-          .setDisabled(page >= TOTAL_PAGES - 1)
+          .setDisabled(page >= total - 1)
       ),
     ]
   }
 
-  private homeContainer(client: Manager, handler: CommandHandler, page: number) {
+  private homeContainer(
+    client: Manager,
+    handler: CommandHandler,
+    page: number,
+    pages: [string, string][][]
+  ) {
     const L = (key: string, args?: Record<string, string>) =>
       client.i18n.get(handler.language, 'command.info', key, args)
 
@@ -202,7 +213,7 @@ export default class implements Command {
       ]
     }
 
-    const sections = HOME_PAGES[page - 1]
+    const sections = pages[page - 1]
       .map(([cat, label]) => {
         const isOwner = this.isOwner(client, handler)
         if (cat === 'Owner' && !isOwner) return null
