@@ -12,6 +12,16 @@ export function createAuth(client: Manager) {
   if (!oauth.discord.clientId || !oauth.discord.clientSecret)
     throw new Error('Discord OAuth credentials are missing in app.yml')
 
+  // better-auth-mongoose relies on the global mongoose connection, but the bot's
+  // quick.db MongoDriver opens its own connection. Establish the global one here.
+  const dbConfig = client.config.utilities.DATABASE
+  if (dbConfig.driver === 'mongodb' && mongoose.connection.readyState !== 1) {
+    const uri = (dbConfig.config as { uri?: string }).uri
+    if (uri) {
+      mongoose.connect(uri).catch((err) => client.logger.error('AuthService', String(err)))
+    }
+  }
+
   const baseURL = new URL(oauth.redirectURI).origin
 
   // Use existing mongoose connection (mongoose.connect should have been called elsewhere)
