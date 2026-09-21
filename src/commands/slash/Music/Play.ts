@@ -212,7 +212,7 @@ export default class implements Command {
     player: RainlinkPlayer,
     track: RainlinkTrack,
     Thumbnail: string
-  ): any {
+  ): any[] {
     const position = player.playing ? player.position : 0
     const duration = track.duration > 0 ? track.duration : 1
     const part = Math.max(0, Math.min(30, Math.floor((position / duration) * 30)))
@@ -226,26 +226,28 @@ export default class implements Command {
       `- **${client.i18n.get(handler.language, 'command.music', 'np_current_duration', {
         current_duration: formatDuration(position),
         total_duration: formatDuration(track.duration),
-      })}**\n` +
+      })}^**\n` +
       `\`\`\`🔴 | ${'─'.repeat(part) + '🎶' + '─'.repeat(30 - part)}\`\`\``
 
     const mediaItems = Thumbnail
       ? [{ type: 12, items: [{ media: { url: Thumbnail }, description: track.title }] }]
       : []
 
-    return {
-      type: 17,
-      accent_color: client.color,
-      components: [
-        ...mediaItems,
-        {
-          type: 10,
-          content: `## ${client.i18n.get(handler.language, 'command.music', 'np_title')}`,
-        },
-        { type: 14, divider: true, spacing: 1 },
-        { type: 10, content: info },
-      ],
-    }
+    return [
+      {
+        type: 17,
+        accent_color: client.color,
+        components: [
+          ...mediaItems,
+          {
+            type: 10,
+            content: `## ${client.i18n.get(handler.language, 'command.music', 'np_title')}`,
+          },
+          { type: 14, divider: true, spacing: 1 },
+          { type: 10, content: info },
+        ],
+      },
+    ]
   }
 
   private async searchTrack(
