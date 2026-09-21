@@ -8,7 +8,6 @@ import { RainlinkFilterMode, RainlinkPlayer, RainlinkTrack } from 'rainlink'
 import { getTitle } from '../../utilities/GetTitle.js'
 import { getSourceName } from '../../utilities/SourceName.js'
 import { getArtwork } from '../../utilities/GetArtwork.js'
-import { renderNowPlaying } from '../../utilities/NowPlayingCard.js'
 import { History, HistoryEntry } from '../../database/schema/History.js'
 
 const MAX_HISTORY = 30
@@ -20,6 +19,15 @@ export default class {
         'DatabaseService',
         'The database is not yet connected so this event will temporarily not execute. Please try again later!'
       )
+
+    let renderNowPlaying:
+      (typeof import('../../utilities/NowPlayingCard.js'))['renderNowPlaying'] | undefined
+    try {
+      const mod = await import('../../utilities/NowPlayingCard.js')
+      renderNowPlaying = mod.renderNowPlaying
+    } catch {
+      // canvas not available, skip now-playing card
+    }
 
     const guild = await client.guilds.fetch(player.guildId).catch(() => undefined)
     client.logger.info('TrackStart', `Track Started in @ ${guild!.name} / ${player.guildId}`)
@@ -114,14 +122,16 @@ export default class {
 
     const artworkUrl = await getArtwork(track)
 
-    const nowPlayingBuffer = await renderNowPlaying({
-      title: track.title,
-      author: track.author,
-      artworkUrl,
-      duration: track.duration,
-      position: Math.floor(player.position),
-      sourceName: getSourceName(client, track, language),
-    })
+    const nowPlayingBuffer = renderNowPlaying
+      ? await renderNowPlaying({
+          title: track.title,
+          author: track.author,
+          artworkUrl,
+          duration: track.duration,
+          position: Math.floor(player.position),
+          sourceName: getSourceName(client, track, language),
+        })
+      : null
 
     const trackFile = nowPlayingBuffer
       ? new AttachmentBuilder(nowPlayingBuffer, { name: 'nowplaying.png' })

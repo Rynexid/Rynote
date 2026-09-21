@@ -11,7 +11,6 @@ import { CommandHandler, ParseMentionEnum } from '../../../structures/CommandHan
 import { buildV2 } from '../../../utilities/V2.js'
 import { EMOJI } from '../../../utilities/Emoji.js'
 import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
-import { buildProfileCard } from '../../../utilities/ProfileCard.js'
 import { Premium } from '../../../database/schema/Premium.js'
 import { SpotifyUser } from '../../../database/schema/SpotifyUser.js'
 import { History } from '../../../database/schema/History.js'
@@ -55,6 +54,15 @@ export default class implements Command {
 
   public async execute(client: Manager, handler: CommandHandler) {
     await handler.deferReply()
+
+    let buildProfileCard:
+      (typeof import('../../../utilities/ProfileCard.js'))['buildProfileCard'] | undefined
+    try {
+      const mod = await import('../../../utilities/ProfileCard.js')
+      buildProfileCard = mod.buildProfileCard
+    } catch {
+      // canvas not available, skip profile card
+    }
 
     let target: User | null = handler.user ?? null
     const data = handler.args[0]
@@ -118,7 +126,9 @@ export default class implements Command {
     const [avatarBuffer, coverBuffer] = await Promise.all([toBuffer(avatarUrl), toBuffer(coverUrl)])
 
     const cardBuffer =
-      avatarBuffer && (await buildProfileCard({ cover: coverBuffer, avatar: avatarBuffer }))
+      avatarBuffer && buildProfileCard
+        ? await buildProfileCard({ cover: coverBuffer, avatar: avatarBuffer })
+        : null
 
     const files: AttachmentBuilder[] = []
     let cardAttachmentUrl: string | null = null
