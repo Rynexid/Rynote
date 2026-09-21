@@ -58,8 +58,18 @@ export default class implements Command {
     let buildProfileCard:
       (typeof import('../../../utilities/ProfileCard.js'))['buildProfileCard'] | undefined
     try {
-      const mod = await import('../../../utilities/ProfileCard.js')
-      buildProfileCard = mod.buildProfileCard
+      const fs = await import('fs')
+      const path = await import('path')
+      const canvasBinding = path.join(
+        process.cwd(),
+        'node_modules/canvas/build/Release/canvas.node'
+      )
+      if (!fs.existsSync(canvasBinding)) {
+        client.logger.warn('Profile', 'Canvas native binary not found, skipping profile card')
+      } else {
+        const mod = await import('../../../utilities/ProfileCard.js')
+        buildProfileCard = mod.buildProfileCard
+      }
     } catch {
       // canvas not available, skip profile card
     }
