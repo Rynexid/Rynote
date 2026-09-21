@@ -25,12 +25,12 @@ redeem_already_guild: '`⚠️` | Server ini sudah memiliki **Premium**!'
 ### Perintah Remove!
 remove_desc: '`✅` | Berhasil menghapus premium dari %{user}!'
 remove_already: '`⚠️` | %{user} sudah tanpa premium!'
-remove_no_params: "`⚠️` | Mohon sebutkan **nama user** atau **ID user** untuk menghapus premium!"
+remove_no_params: '`⚠️` | Mohon sebutkan **nama user** atau **ID user** untuk menghapus premium!'
 remove_404: '`⚠️` | %{userid} bukan **anggota premium**!'
 
 ### Perintah Guild Remove!
 guild_remove_desc: '`✅` | Berhasil menghapus premium dari server %{user}!'
-guild_remove_already: "`⚠️` | Server %{user} sudah tanpa premium!"
+guild_remove_already: '`⚠️` | Server %{user} sudah tanpa premium!'
 guild_remove_no_params: '`⚠️` | Mohon sebutkan **ID server** untuk menghapus premium!'
 guild_remove_404: '`⚠️` | Server %{userid} bukan **server premium**!'
 
@@ -43,3 +43,19 @@ guild_list_page_notfound: '`⚠️` | Hanya ada **%{page} halaman**!'
 list_title: '💫 Daftar Pengguna Premium'
 list_notnumber: '`⚠️` | Hanya angka yang diperbolehkan untuk halaman!'
 list_page_notfound: '`⚠️` | Hanya ada **%{page} halaman**!'
+
+### Field Bersama!
+premium_field_user: 'User'
+premium_field_server: 'Server'
+premium_field_plan: 'Paket'
+premium_field_expires: 'Kedaluwarsa Pada'
+premium_field_redeemed_at: 'Ditebus Pada'
+premium_field_amount: 'Jumlah'
+premium_field_status: 'Status'
+premium_lifetime: 'Selamanya'
+premium_active: 'Aktif'
+premium_status_owner: 'Owner'
+premium_status_admin: 'Admin'
+premium_get_btn: 'Dapatkan Premium'
+redeem_success_user: 'Premium diaktifkan untuk <@%{user}>!'
+redeem_success_guild: 'Premium diaktifkan untuk **%{guild}**!'
