@@ -1,9 +1,17 @@
-import { stripIndents } from 'common-tags'
 import { Manager } from '../../manager.js'
-import { EmbedBuilder, Guild } from 'discord.js'
+import { Guild, MessageFlags, EmbedBuilder } from 'discord.js'
 import { BlacklistService } from '../../services/BlacklistService.js'
+import { RYNOTE_BANNER_URL } from '../../utilities/Links.js'
 
 export default class {
+  private formatUptime(ms: number): string {
+    const days = Math.floor(ms / 86400000)
+    const hours = Math.floor(ms / 3600000) % 24
+    const minutes = Math.floor(ms / 60000) % 60
+    const seconds = Math.floor(ms / 1000) % 60
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`
+  }
+
   async execute(client: Manager, guild: Guild) {
     const blacklistService = new BlacklistService(client)
     if (await blacklistService.checkGuild(guild.id)) {
@@ -19,50 +27,63 @@ export default class {
     const language = client.config.bot.LANGUAGE
 
     client.guilds.cache.set(`${guild!.id}`, guild)
-    let PREFIX = client.prefix
 
+    const L = (key: string, args?: Record<string, string>) =>
+      client.i18n.get(language, 'command.info', key, args)
+
+    let PREFIX = client.prefix
     const GuildPrefix = await client.db.prefix.get(`${guild!.id}`)
     if (GuildPrefix) PREFIX = GuildPrefix
 
+    const uptime = this.formatUptime(client.uptime || 0)
+    const memory = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)
+    const users = client.guilds.cache.reduce((a, b) => a + (b.memberCount || 0), 0)
+
+    const thanks = client.i18n.get(language, 'event.guild', 'join_dm_thanks', {
+      username: client.user!.username,
+    })
+    const welcome = client.i18n.get(language, 'event.guild', 'join_dm_welcome', {
+      username: client.user!.username,
+    })
+
+    const info =
+      `- ${L('botinfo_prefix')} \`${PREFIX}\` or \`/\`\n` +
+      `- ${L('info_codename')} ${client.manifest.metadata.bot.codename}\n` +
+      `- ${L('info_version')} ${client.manifest.metadata.bot.version}\n` +
+      `- ${L('botinfo_type')} ${L('botinfo_type_val')}\n` +
+      `- ${L('botinfo_lib')} Discord.js ${client.manifest.package.discordjs}\n` +
+      `- ${L('info_rainlink')} ${client.manifest.package.rainlink}\n` +
+      `- ${L('botinfo_autofix')} ${client.manifest.metadata.autofix.version}\n` +
+      `- ${L('botinfo_powered')} [Rynex](https://rynexdev.vercel.app?ref=discord)\n` +
+      `- ${L('botinfo_partnered')} 1sT - Services\n\n` +
+      `${L('botinfo_stats')}\n` +
+      `- ${L('botinfo_uptime')} ${uptime}\n` +
+      `- ${L('info_guilds')} ${client.guilds.cache.size}\n` +
+      `- ${L('info_users')} ${users}\n` +
+      `- ${L('botinfo_channels')} ${client.channels.cache.size}\n` +
+      `- ${L('info_commands')} ${client.commands.size + client.prefixCommands.size}\n` +
+      `- ${L('botinfo_memory')} ${memory} MB`
+
+    const content = `# ${thanks}\n\n${welcome}\n\n${info}`
+
+    const container = {
+      type: 17,
+      accent_color: client.color,
+      components: [
+        {
+          type: 12,
+          items: [{ media: { url: RYNOTE_BANNER_URL }, description: client.user!.username }],
+        },
+        { type: 10, content },
+      ],
+    }
+
     const userDm = await owner.createDM(true).catch(() => null)
-    const dmEmbed = new EmbedBuilder()
-      .setTitle(
-        `${client.i18n.get(language, 'event.guild', 'join_dm_title', {
-          username: String(client.user?.username),
-        })}`
-      )
-      .setDescription(
-        stripIndents`
-          ${client.i18n.get(language, 'event.message', 'intro1', {
-            bot: String(client.user?.displayName),
-          })}
-          ${client.i18n.get(language, 'event.message', 'intro2')}
-          ${client.i18n.get(language, 'event.message', 'intro3')}
-          ${client.i18n.get(language, 'event.message', 'prefix', {
-            prefix: `\`${PREFIX}\` or \`/\``,
-          })}
-          ${client.i18n.get(language, 'event.message', 'help1', {
-            help: `\`${PREFIX}help\` or \`/help\``,
-          })}
-          ${client.i18n.get(language, 'event.message', 'help2', {
-            botinfo: `\`${PREFIX}status\` or \`/status\``,
-          })}
-          ${client.i18n.get(language, 'event.message', 'ver', {
-            botver: client.manifest.metadata.bot.version,
-          })}
-          ${client.i18n.get(language, 'event.message', 'djs', {
-            djsver: client.manifest.package.discordjs,
-          })}
-          ${client.i18n.get(language, 'event.message', 'lavalink', {
-            aver: client.manifest.metadata.autofix.version,
-          })}
-          ${client.i18n.get(language, 'event.message', 'codename', {
-            codename: client.manifest.metadata.bot.codename,
-          })}
-        `
-      )
-      .setColor(client.color)
-    if (userDm) userDm.send({ embeds: [dmEmbed] }).catch(() => {})
+    if (userDm) {
+      userDm
+        .send({ flags: MessageFlags.IsComponentsV2, components: [container] } as any)
+        .catch(() => {})
+    }
 
     if (!client.config.utilities.GUILD_LOG_CHANNEL) return
     const eventChannel = await client.channels

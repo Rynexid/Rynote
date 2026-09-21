@@ -19,7 +19,7 @@ import { RateLimitManager } from '@sapphire/ratelimits'
 import { TopggServiceEnum } from '../../services/TopggService.js'
 import { AutoReconnectBuilderService } from '../../services/AutoReconnectBuilderService.js'
 import { BlacklistService } from '../../services/BlacklistService.js'
-import { RYNOTE_BANNER_URL, RYNOTE_INVITE, RYNOTE_SUPPORT } from '../../utilities/Links.js'
+import { RYNOTE_BANNER_URL, RYNOTE_BOT_INVITE, RYNOTE_SUPPORT } from '../../utilities/Links.js'
 const commandRateLimitManager = new RateLimitManager(1000)
 
 export default class {
@@ -127,7 +127,7 @@ export default class {
                 type: 2,
                 style: 5,
                 label: client.i18n.get(lang, 'command.info', 'btn_invite'),
-                url: client.config.bot.INVITE || RYNOTE_INVITE,
+                url: client.config.bot.INVITE || RYNOTE_BOT_INVITE,
               },
             ],
           },
