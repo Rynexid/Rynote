@@ -29,7 +29,7 @@ Advanced Discord music bot with filters, playlists, lyrics, autoplay & multi-lan
 ## Links
 
 - [Invite Bot](https://discord.com/oauth2/authorize?client_id=1496804643530080376&scope=bot%20applications.commands&permissions=274877991936)
-- [Support Server](https://discord.gg/CJJ7KEJMbg)
+- [Support Server](https://discord.gg/J8MJBPBupy)
 - [Top.gg](https://top.gg/bot/1496804643530080376)
 
 ## Tech Stack

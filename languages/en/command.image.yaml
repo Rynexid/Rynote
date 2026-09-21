@@ -3,14 +3,6 @@ banner_title: "%{username}'s Banner"
 servericon_title: "%{guild}'s Icon"
 download: 'Download'
 
-### Search photo (Openverse)!
-search_no_result: '`⚠️` | No results found for **%{query}**.'
-search_failed: '`⚠️` | Failed to search images. Please try again.'
-search_shuffle: 'Shuffle'
-search_credit: 'By %{creator} · %{license} · %{provider}'
-image_prev: 'Prev'
-image_next: 'Next'
-
 ### Anime (NekosAPI)!
 anime_title: 'Anime Art'
 anime_random: 'Random'

@@ -82,7 +82,7 @@ export default class implements Command {
 
     const category = submission.fields.getTextInputValue(CATEGORY_INPUT).trim()
     const message = submission.fields.getTextInputValue(MESSAGE_INPUT).trim()
-    const support = client.config.bot.SUPPORT || 'https://discord.gg/MsxdNeExdg'
+    const support = client.config.bot.SUPPORT || 'https://discord.gg/J8MJBPBupy'
 
     const embed = {
       color: typeof client.color === 'number' ? client.color : undefined,

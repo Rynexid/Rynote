@@ -99,7 +99,7 @@ export class ConfigDataService {
         LANGUAGE: 'en',
         DEBUG_MODE: false,
         ADMIN: [],
-        SUPPORT: 'https://discord.gg/MsxdNeExdg',
+        SUPPORT: 'https://discord.gg/J8MJBPBupy',
         INVITE: '',
       },
       player: {
