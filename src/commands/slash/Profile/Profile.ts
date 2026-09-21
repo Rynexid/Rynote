@@ -11,6 +11,7 @@ import { CommandHandler, ParseMentionEnum } from '../../../structures/CommandHan
 import { buildV2 } from '../../../utilities/V2.js'
 import { EMOJI } from '../../../utilities/Emoji.js'
 import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
+import { buildProfileCard } from '../../../utilities/ProfileCard.js'
 import { Premium } from '../../../database/schema/Premium.js'
 import { SpotifyUser } from '../../../database/schema/SpotifyUser.js'
 import { History } from '../../../database/schema/History.js'
@@ -98,18 +99,6 @@ export default class implements Command {
         }?size=512`
       : fresh.defaultAvatarURL
 
-    const [avatarBuffer] = await Promise.all([toBuffer(avatarUrl)])
-
-    const files: AttachmentBuilder[] = []
-    let avatarAttachmentUrl: string | null = null
-
-    if (avatarBuffer) {
-      const ext = avatarUrl.endsWith('.gif') ? 'gif' : 'png'
-      const attachment = new AttachmentBuilder(avatarBuffer, { name: `avatar.${ext}` })
-      files.push(attachment)
-      avatarAttachmentUrl = `attachment://avatar.${ext}`
-    }
-
     const [premium, spotify, history, cover] = await Promise.all([
       client.db.premium.get(fresh.id),
       client.db.spotifyUser.get(fresh.id),
@@ -126,6 +115,20 @@ export default class implements Command {
 
     const coverUrl = premiumData?.isPremium && coverData?.url ? coverData.url : RYNOTE_BANNER_URL
 
+    const [avatarBuffer, coverBuffer] = await Promise.all([toBuffer(avatarUrl), toBuffer(coverUrl)])
+
+    const cardBuffer =
+      avatarBuffer && (await buildProfileCard({ cover: coverBuffer, avatar: avatarBuffer }))
+
+    const files: AttachmentBuilder[] = []
+    let cardAttachmentUrl: string | null = null
+
+    if (cardBuffer) {
+      const attachment = new AttachmentBuilder(cardBuffer, { name: 'profile.png' })
+      files.push(attachment)
+      cardAttachmentUrl = `attachment://profile.png`
+    }
+
     const historyText =
       historyData.length === 0
         ? client.i18n.get(handler.language, 'command.profile', 'profile_history_empty')
@@ -138,29 +141,15 @@ export default class implements Command {
             .join('\n')
 
     const mediaItems: any[] = []
-    if (coverUrl) {
+    if (cardAttachmentUrl) {
       mediaItems.push({
         type: 12,
-        items: [
-          { media: { url: coverUrl }, description: fresh.displayName },
-          ...(avatarAttachmentUrl
-            ? [
-                {
-                  media: { url: avatarAttachmentUrl },
-                  description: client.i18n.get(
-                    handler.language,
-                    'command.profile',
-                    'profile_avatar_footer'
-                  ),
-                },
-              ]
-            : []),
-        ],
+        items: [{ media: { url: cardAttachmentUrl }, description: fresh.displayName }],
       })
-    } else if (avatarAttachmentUrl) {
+    } else if (coverUrl) {
       mediaItems.push({
         type: 12,
-        items: [{ media: { url: avatarAttachmentUrl }, description: fresh.displayName }],
+        items: [{ media: { url: coverUrl }, description: fresh.displayName }],
       })
     }
 
