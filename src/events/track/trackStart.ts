@@ -1,5 +1,5 @@
 import { Manager } from '../../manager.js'
-import { ComponentType, TextChannel, MessageFlags } from 'discord.js'
+import { ComponentType, TextChannel, MessageFlags, AttachmentBuilder } from 'discord.js'
 import { formatDuration } from '../../utilities/FormatDuration.js'
 import { filterSelect, playerRowOne, playerRowTwo } from '../../utilities/PlayerControlButton.js'
 import { AutoReconnectBuilderService } from '../../services/AutoReconnectBuilderService.js'
@@ -8,6 +8,7 @@ import { RainlinkFilterMode, RainlinkPlayer, RainlinkTrack } from 'rainlink'
 import { getTitle } from '../../utilities/GetTitle.js'
 import { getSourceName } from '../../utilities/SourceName.js'
 import { getArtwork } from '../../utilities/GetArtwork.js'
+import { renderNowPlaying } from '../../utilities/NowPlayingCard.js'
 import { History, HistoryEntry } from '../../database/schema/History.js'
 
 const MAX_HISTORY = 30
@@ -113,14 +114,41 @@ export default class {
 
     const artworkUrl = await getArtwork(track)
 
-    const mediaItems = artworkUrl
+    const nowPlayingBuffer = await renderNowPlaying({
+      title: track.title,
+      author: track.author,
+      artworkUrl,
+      duration: track.duration,
+      position: Math.floor(player.position),
+      sourceName: getSourceName(client, track, language),
+    })
+
+    const trackFile = nowPlayingBuffer
+      ? new AttachmentBuilder(nowPlayingBuffer, { name: 'nowplaying.png' })
+      : null
+
+    const mediaItems = trackFile
       ? [
           {
             type: 12,
-            items: [{ media: { url: artworkUrl }, description: getTitle(client, track, language) }],
+            items: [
+              {
+                media: { url: 'attachment://nowplaying.png' },
+                description: getTitle(client, track, language),
+              },
+            ],
           },
         ]
-      : []
+      : artworkUrl
+        ? [
+            {
+              type: 12,
+              items: [
+                { media: { url: artworkUrl }, description: getTitle(client, track, language) },
+              ],
+            },
+          ]
+        : []
 
     const componentsV2 = [
       {
@@ -156,7 +184,7 @@ export default class {
       ? await playing_channel.send({
           flags: MessageFlags.IsComponentsV2,
           components: componentsV2,
-          // files: client.config.bot.SAFE_PLAYER_MODE ? [] : [attachment],
+          files: trackFile ? [trackFile] : [],
         })
       : undefined
 
