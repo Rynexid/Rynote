@@ -180,13 +180,21 @@ export default class {
       .fetch(player.textId)
       .catch(() => undefined)) as TextChannel
 
-    const nplaying = playing_channel
-      ? await playing_channel.send({
+    let nplaying: any = undefined
+    if (playing_channel) {
+      try {
+        nplaying = await playing_channel.send({
           flags: MessageFlags.IsComponentsV2,
           components: componentsV2,
           files: trackFile ? [trackFile] : [],
         })
-      : undefined
+      } catch (err) {
+        client.logger.error(
+          'TrackStart',
+          `Failed to send now-playing message: ${(err as Error).message}`
+        )
+      }
+    }
 
     if (!nplaying) return
 

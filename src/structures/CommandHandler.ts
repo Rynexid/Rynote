@@ -126,11 +126,13 @@ export class CommandHandler {
     } else {
       try {
         return await this.message?.reply(data)
-      } catch {
+      } catch (err1) {
         try {
           return await (this.message?.channel as any).send(data)
-        } catch {
-          throw new Error('Failed to send message')
+        } catch (err2) {
+          throw new Error(
+            `Failed to send message | reply: ${(err1 as Error)?.message} | channel.send: ${(err2 as Error)?.message}`
+          )
         }
       }
     }
@@ -142,11 +144,13 @@ export class CommandHandler {
     } else {
       try {
         return await this.message?.reply(data)
-      } catch {
+      } catch (err1) {
         try {
           return await (this.message?.channel as any).send(data)
-        } catch {
-          throw new Error('Failed to send follow-up message')
+        } catch (err2) {
+          throw new Error(
+            `Failed to send followUp | reply: ${(err1 as Error)?.message} | channel.send: ${(err2 as Error)?.message}`
+          )
         }
       }
     }
