@@ -4,6 +4,10 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { Manager } from '../../../manager.js'
 import { buildV2 } from '../../../utilities/V2.js'
+import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
+
+const GREEN = 0x57f287
+const RED = 0xed4245
 
 export default class implements Command {
   public name = ['pmgenerate']
@@ -55,6 +59,9 @@ export default class implements Command {
   ]
 
   public async execute(client: Manager, handler: CommandHandler) {
+    const L = (key: string, args?: Record<string, string>) =>
+      client.i18n.get(handler.language, 'command.premium', key, args)
+
     const plans = this.options[0].choices!.map((data) => data.value)
     const name = handler.args[0]
     const camount = Number(handler.args[1])
@@ -62,7 +69,7 @@ export default class implements Command {
     if (!name || !plans.includes(name))
       return handler.replyV2(
         buildV2({
-          color: client.color as number,
+          color: RED,
           description: `${client.i18n.get(handler.language, 'error', 'arg_error', {
             text: '**daily**, **weekly**, **monthly**, **yearly**, **lifetime**!',
           })}`,
@@ -71,14 +78,14 @@ export default class implements Command {
     if (!camount)
       return handler.replyV2(
         buildV2({
-          color: client.color as number,
+          color: RED,
           description: `${client.i18n.get(handler.language, 'error', 'arg_error', {
             text: '**Number**!',
           })}`,
         })
       )
 
-    let codes = []
+    const codes = []
 
     const plan = name
 
@@ -104,7 +111,7 @@ export default class implements Command {
     let amount = camount
     if (!amount) amount = 1
 
-    for (var i = 0; i < amount; i++) {
+    for (let i = 0; i < amount; i++) {
       const codePremium = voucher_codes.generate({
         pattern: '#############-#########-######',
       })
@@ -122,34 +129,47 @@ export default class implements Command {
       }
     }
 
-    const embedData = {
-      color: client.color as number,
-      title: `${client.i18n.get(handler.language, 'command.premium', 'gen_author')}`,
-      description: `${client.i18n.get(handler.language, 'command.premium', 'gen_desc', {
-        codes_length: String(codes.length),
-        codes: codes.join('\n'),
-        plan: String(plan),
-        expires: time == 'lifetime' ? 'lifetime' : `<t:${(time / 1000).toFixed()}:F>`,
-      })}`,
-      footer: `${client.i18n.get(handler.language, 'command.premium', 'gen_footer', {
-        prefix: '/',
-      })}`,
+    const expires = time == 'lifetime' ? L('premium_lifetime') : `<t:${(time / 1000).toFixed()}:F>`
+
+    const container = {
+      type: 17,
+      accent_color: typeof client.color === 'number' ? client.color : undefined,
+      components: [
+        { type: 10, content: `# 🔑 ${L('gen_author')}` },
+        {
+          type: 12,
+          items: [{ media: { url: RYNOTE_BANNER_URL }, description: client.user!.username }],
+        },
+        { type: 14, divider: true, spacing: 1 },
+        {
+          type: 10,
+          content:
+            `- **${L('premium_field_amount')}:** \`${codes.length}\`\n` +
+            `- **${L('premium_field_plan')}:** \`${plan}\`\n` +
+            `- **${L('premium_field_expires')}:** ${expires}`,
+        },
+        { type: 14, divider: true, spacing: 1 },
+        {
+          type: 10,
+          content: '```' + codes.join('\n') + '```',
+        },
+        {
+          type: 10,
+          content: `*${L('gen_footer', { prefix: '/' })}*`,
+        },
+      ],
     }
 
-    const embedMes = (pass) =>
+    const embedMes = (pass: boolean) =>
       buildV2({
-        color: client.color as number,
-        description: `${client.i18n.get(
-          handler.language,
-          'command.premium',
-          pass ? 'gen_success' : 'gen_failed'
-        )}`,
+        color: pass ? GREEN : RED,
+        description: L(pass ? 'gen_success' : 'gen_failed'),
       })
 
     const getDM = await handler.user.createDM(true)
     if (!getDM) return handler.replyV2(embedMes(false))
     if (!getDM.isDMBased()) return handler.replyV2(embedMes(false))
-    await getDM.send({ flags: 32768, components: buildV2(embedData) })
+    await getDM.send({ flags: 32768, components: [container] } as any)
     await handler.replyV2(embedMes(true))
   }
 }

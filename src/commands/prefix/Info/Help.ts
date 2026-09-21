@@ -29,8 +29,10 @@ const HOME_PAGES: [string, string][][] = [
     ['Info', 'Info'],
     ['Utils', 'Utils'],
   ],
-  [['Premium', 'Premium']],
-  [['Profile', 'Profile']],
+  [
+    ['Profile', 'Profile'],
+    ['Premium', 'Premium'],
+  ],
   [['Owner', 'Owner']],
 ]
 
@@ -69,7 +71,7 @@ export default class implements Command {
   }
 
   private isPremiumVisible(command: Command): boolean {
-    const visibleCommands = ['pmlist', 'pmglist', 'pmprofile', 'pmgprofile']
+    const visibleCommands = ['pmprofile', 'pmgprofile']
     return visibleCommands.includes(command.name[0])
   }
 

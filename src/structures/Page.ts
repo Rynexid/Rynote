@@ -13,12 +13,14 @@ export class Page {
   pages: any[][]
   timeout: number
   language: string
+  initialPage: number
 
-  constructor(client: Manager, pages: any[][], timeout: number, language: string) {
+  constructor(client: Manager, pages: any[][], timeout: number, language: string, initialPage = 0) {
     this.client = client
     this.pages = pages
     this.timeout = timeout
     this.language = language
+    this.initialPage = Math.min(Math.max(0, initialPage), Math.max(pages.length - 1, 0))
   }
 
   async slashPage(interaction: CommandInteraction) {
@@ -37,7 +39,7 @@ export class Page {
       .setStyle(ButtonStyle.Secondary)
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(row1, row2)
 
-    let page = 0
+    let page = this.initialPage
     const curPage = await interaction.editReply({
       flags: 32768,
       components: [...this.pages[page], row.toJSON()],
@@ -98,7 +100,7 @@ export class Page {
       .setStyle(ButtonStyle.Secondary)
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(row1, row2)
 
-    let page = 0
+    let page = this.initialPage
     const curPage = await message.reply({
       flags: 32768,
       components: [...this.pages[page], row.toJSON()],
