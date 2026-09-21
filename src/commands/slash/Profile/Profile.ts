@@ -10,9 +10,11 @@ import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler, ParseMentionEnum } from '../../../structures/CommandHandler.js'
 import { buildV2 } from '../../../utilities/V2.js'
 import { EMOJI } from '../../../utilities/Emoji.js'
+import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
 import { Premium } from '../../../database/schema/Premium.js'
 import { SpotifyUser } from '../../../database/schema/SpotifyUser.js'
 import { History } from '../../../database/schema/History.js'
+import { Cover } from '../../../database/schema/Cover.js'
 
 const UNLINK_BTN = 'profile:unlink-spotify'
 const CONFIRM_BTN = 'profile:unlink-confirm'
@@ -96,16 +98,10 @@ export default class implements Command {
         }?size=512`
       : fresh.defaultAvatarURL
 
-    const bannerUrl = fresh.bannerURL({ size: 1024 })
-
-    const [avatarBuffer, bannerBuffer] = await Promise.all([
-      toBuffer(avatarUrl),
-      bannerUrl ? toBuffer(bannerUrl) : Promise.resolve(null),
-    ])
+    const [avatarBuffer] = await Promise.all([toBuffer(avatarUrl)])
 
     const files: AttachmentBuilder[] = []
     let avatarAttachmentUrl: string | null = null
-    let bannerAttachmentUrl: string | null = null
 
     if (avatarBuffer) {
       const ext = avatarUrl.endsWith('.gif') ? 'gif' : 'png'
@@ -114,16 +110,11 @@ export default class implements Command {
       avatarAttachmentUrl = `attachment://avatar.${ext}`
     }
 
-    if (bannerBuffer) {
-      const attachment = new AttachmentBuilder(bannerBuffer, { name: 'banner.png' })
-      files.push(attachment)
-      bannerAttachmentUrl = 'attachment://banner.png'
-    }
-
-    const [premium, spotify, history] = await Promise.all([
+    const [premium, spotify, history, cover] = await Promise.all([
       client.db.premium.get(fresh.id),
       client.db.spotifyUser.get(fresh.id),
       client.db.history.get(fresh.id),
+      client.db.cover.get(fresh.id),
     ])
 
     const premiumData = premium as Premium | null
@@ -131,6 +122,9 @@ export default class implements Command {
     const spotifyData = spotify as SpotifyUser | null
     const spotifyStatus = this.formatSpotify(client, handler, spotifyData)
     const historyData = (history as History | null | undefined) ?? []
+    const coverData = cover as Cover | null
+
+    const coverUrl = premiumData?.isPremium && coverData?.url ? coverData.url : RYNOTE_BANNER_URL
 
     const historyText =
       historyData.length === 0
@@ -144,11 +138,11 @@ export default class implements Command {
             .join('\n')
 
     const mediaItems: any[] = []
-    if (bannerAttachmentUrl) {
+    if (coverUrl) {
       mediaItems.push({
         type: 12,
         items: [
-          { media: { url: bannerAttachmentUrl }, description: fresh.displayName },
+          { media: { url: coverUrl }, description: fresh.displayName },
           ...(avatarAttachmentUrl
             ? [
                 {

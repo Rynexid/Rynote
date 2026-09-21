@@ -1,0 +1,18 @@
+### Perintah Config / Pengaturan!
+title: 'Konfigurasi Bot'
+subtitle: 'Daftar fitur yang bisa kamu set up. `true` = sudah di-setup, `false` = belum.'
+setting_cover: 'Cover'
+setting_premium: 'Premium'
+setting_songnoti: 'Notifikasi Lagu'
+setting_setup: 'Channel Request Lagu'
+setting_language: 'Bahasa'
+setting_maxlength: 'Max Panjang'
+setting_prefix: 'Prefix'
+howto_cover:
+  '**Cara pasang cover (premium):** Jalankan `config cover <link-gambar>` untuk pakai gambar sendiri, atau `config cover-remove` untuk kembali ke banner bawaan.'
+cover_no_value: '`⚠️` | Masukkan link gambar: `config cover <link-gambar>`'
+cover_invalid_url: '`⚠️` | Masukkan link gambar yang valid (harus diawali `http://` atau `https://`).'
+cover_premium_only: '`⚠️` | Cover kustom adalah fitur premium. Redeem premium dulu untuk menggunakannya.'
+cover_set: '`✅` | Cover profile kamu sudah diperbarui!'
+cover_removed: '`✅` | Cover profile kamu sudah dihapus — kembali ke banner bawaan.'
+cover_not_set: '`⚠️` | Kamu belum memasang cover kustom.'

@@ -1,0 +1,18 @@
+### Config / Settings commands!
+title: 'Bot Config'
+subtitle: 'List of features you can set up. `true` = set up, `false` = not set up.'
+setting_cover: 'Cover'
+setting_premium: 'Premium'
+setting_songnoti: 'Song Notification'
+setting_setup: 'Song Request Channel'
+setting_language: 'Language'
+setting_maxlength: 'Max Length'
+setting_prefix: 'Prefix'
+howto_cover:
+  '**How to set a cover (premium):** Run `config cover <image-url>` to use your own image, or `config cover-remove` to reset it back to the default banner.'
+cover_no_value: '`⚠️` | Please provide an image URL: `config cover <image-url>`'
+cover_invalid_url: '`⚠️` | Please provide a valid image URL (must start with `http://` or `https://`).'
+cover_premium_only: '`⚠️` | Custom covers are a premium feature. Redeem premium first to use it.'
+cover_set: '`✅` | Your profile cover has been updated!'
+cover_removed: '`✅` | Your profile cover has been removed — back to the default banner.'
+cover_not_set: '`⚠️` | You have no custom cover set.'

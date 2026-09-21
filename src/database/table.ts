@@ -12,6 +12,7 @@ import { Prefix } from './schema/Prefix.js'
 import { SongNoti } from './schema/SongNoti.js'
 import { SpotifyUser } from './schema/SpotifyUser.js'
 import { History } from './schema/History.js'
+import { Cover } from './schema/Cover.js'
 import { QuickDatabasePlus } from '../structures/QuickDatabasePlus.js'
 import Blacklist from '../commands/slash/Owner/Blacklist.js'
 import MaxLength from '../commands/slash/Utils/MaxLength.js'
@@ -55,6 +56,7 @@ export class TableSetup {
       maxlength: await baseDB.table<MaxLength>('maxlength'),
       spotifyUser: await baseDB.table<SpotifyUser>('spotifyUser'),
       history: await baseDB.table<History>('history'),
+      cover: await baseDB.table<Cover>('cover'),
     }
 
     this.client.isDatabaseConnected = true
