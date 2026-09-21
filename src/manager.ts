@@ -30,6 +30,7 @@ import { PlayerButton } from './@types/Button.js'
 import { GlobalMsg } from './structures/CommandHandler.js'
 import { RainlinkFilterData, RainlinkPlayer } from 'rainlink'
 import { TopggService } from './services/TopggService.js'
+import { LiveActivityService } from './services/LiveActivityService.js'
 import { Collection } from './structures/Collection.js'
 import { Localization } from './structures/Localization.js'
 import { ClusterManager } from './cluster/core.js'
@@ -77,6 +78,7 @@ export class Manager extends Client {
   public UpdateMusic!: (player: RainlinkPlayer) => Promise<void | Message<true>>
   public UpdateQueueMsg!: (player: RainlinkPlayer) => Promise<void | Message<true>>
   public topgg?: TopggService
+  public liveActivity?: LiveActivityService
   public icons: Emojis
   public REGEX: RegExp[]
   public selectMenuOptions: StringSelectMenuOptionBuilder[] = []

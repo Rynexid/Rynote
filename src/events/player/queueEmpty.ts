@@ -89,5 +89,7 @@ export default class {
       return new ClearMessageService(client, channel, player)
 
     if (player.state !== RainlinkPlayerState.DESTROYED) await player.destroy().catch(() => {})
+
+    client.liveActivity?.refresh()
   }
 }

@@ -1,19 +1,14 @@
 import { Manager } from '../../manager.js'
 import { TopggService } from '../../services/TopggService.js'
+import { LiveActivityService } from '../../services/LiveActivityService.js'
 
 export default class {
   async execute(client: Manager) {
     client.logger.info('ClientReady', `Logged in ${client.user!.tag}`)
 
-    client.user!.setPresence({
-      activities: [
-        {
-          name: `Spotify | /play`,
-          type: 2,
-        },
-      ],
-      status: 'online',
-    })
+    const liveActivity = new LiveActivityService(client)
+    client.liveActivity = liveActivity
+    liveActivity.start()
 
     if (client.config.utilities.TOPGG_TOKEN && client.config.utilities.TOPGG_TOKEN.length !== 0) {
       const topgg = new TopggService(client)

@@ -63,6 +63,8 @@ export default class {
 
     client.emit('trackStart', player)
 
+    client.liveActivity?.refresh()
+
     if (client.config.utilities.AUTO_RESUME) {
       const autoreconnect = new AutoReconnectBuilderService(client, player)
       const getData = await autoreconnect.get(player.guildId)
