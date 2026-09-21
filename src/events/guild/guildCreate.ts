@@ -4,14 +4,6 @@ import { BlacklistService } from '../../services/BlacklistService.js'
 import { RYNOTE_BANNER_URL } from '../../utilities/Links.js'
 
 export default class {
-  private formatUptime(ms: number): string {
-    const days = Math.floor(ms / 86400000)
-    const hours = Math.floor(ms / 3600000) % 24
-    const minutes = Math.floor(ms / 60000) % 60
-    const seconds = Math.floor(ms / 1000) % 60
-    return `${days}d ${hours}h ${minutes}m ${seconds}s`
-  }
-
   async execute(client: Manager, guild: Guild) {
     const blacklistService = new BlacklistService(client)
     if (await blacklistService.checkGuild(guild.id)) {
@@ -35,15 +27,15 @@ export default class {
     const GuildPrefix = await client.db.prefix.get(`${guild!.id}`)
     if (GuildPrefix) PREFIX = GuildPrefix
 
-    const uptime = this.formatUptime(client.uptime || 0)
-    const memory = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)
-    const users = client.guilds.cache.reduce((a, b) => a + (b.memberCount || 0), 0)
-
     const thanks = client.i18n.get(language, 'event.guild', 'join_dm_thanks', {
       username: client.user!.username,
     })
     const welcome = client.i18n.get(language, 'event.guild', 'join_dm_welcome', {
       username: client.user!.username,
+    })
+    const footer = client.i18n.get(language, 'event.guild', 'join_dm_footer', {
+      help: `\`${PREFIX}help\` or \`/help\``,
+      helpdetail: `\`${PREFIX}help <command>\` or \`/help <command>\``,
     })
 
     const info =
@@ -55,16 +47,9 @@ export default class {
       `- ${L('info_rainlink')} ${client.manifest.package.rainlink}\n` +
       `- ${L('botinfo_autofix')} ${client.manifest.metadata.autofix.version}\n` +
       `- ${L('botinfo_powered')} [Rynex](https://rynexdev.vercel.app?ref=discord)\n` +
-      `- ${L('botinfo_partnered')} 1sT - Services\n\n` +
-      `${L('botinfo_stats')}\n` +
-      `- ${L('botinfo_uptime')} ${uptime}\n` +
-      `- ${L('info_guilds')} ${client.guilds.cache.size}\n` +
-      `- ${L('info_users')} ${users}\n` +
-      `- ${L('botinfo_channels')} ${client.channels.cache.size}\n` +
-      `- ${L('info_commands')} ${client.commands.size + client.prefixCommands.size}\n` +
-      `- ${L('botinfo_memory')} ${memory} MB`
+      `- ${L('botinfo_partnered')} 1sT - Services`
 
-    const content = `# ${thanks}\n\n${welcome}\n\n${info}`
+    const content = `# ${thanks}\n\n${welcome}\n\n${info}\n\n${footer}`
 
     const container = {
       type: 17,
