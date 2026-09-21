@@ -392,7 +392,9 @@ export default class {
         })`
       )
 
-      command.execute(client, handler)
+      command.execute(client, handler).catch((error) => {
+        client.logger.error('CommandManager | Interaction', error)
+      })
     } catch (error) {
       client.logger.error('CommandManager | Interaction', error)
       interaction.reply({

@@ -428,7 +428,20 @@ export default class {
         })`
       )
 
-      command.execute(client, handler)
+      command.execute(client, handler).catch((error) => {
+        client.logger.error('CommandManager | Message', error)
+        message
+          .reply({
+            embeds: [
+              new EmbedBuilder()
+                .setDescription(
+                  `${client.i18n.get(language, 'error', 'unexpected_error')}\n ${error}`
+                )
+                .setColor(client.color),
+            ],
+          })
+          .catch(() => null)
+      })
     } catch (error) {
       client.logger.error('CommandManager | Message', error)
       message.reply({
