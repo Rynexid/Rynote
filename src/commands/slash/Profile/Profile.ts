@@ -122,11 +122,16 @@ export default class implements Command {
 
     const files: AttachmentBuilder[] = []
     let cardAttachmentUrl: string | null = null
+    let avatarAttachmentUrl: string | null = null
 
     if (cardBuffer) {
       const attachment = new AttachmentBuilder(cardBuffer, { name: 'profile.png' })
       files.push(attachment)
       cardAttachmentUrl = `attachment://profile.png`
+    } else if (avatarBuffer) {
+      const ext = avatarUrl.endsWith('.gif') ? 'gif' : 'png'
+      files.push(new AttachmentBuilder(avatarBuffer, { name: `avatar.${ext}` }))
+      avatarAttachmentUrl = `attachment://avatar.${ext}`
     }
 
     const historyText =
@@ -149,7 +154,26 @@ export default class implements Command {
     } else if (coverUrl) {
       mediaItems.push({
         type: 12,
-        items: [{ media: { url: coverUrl }, description: fresh.displayName }],
+        items: [
+          { media: { url: coverUrl }, description: fresh.displayName },
+          ...(avatarAttachmentUrl
+            ? [
+                {
+                  media: { url: avatarAttachmentUrl },
+                  description: client.i18n.get(
+                    handler.language,
+                    'command.profile',
+                    'profile_avatar_footer'
+                  ),
+                },
+              ]
+            : []),
+        ],
+      })
+    } else if (avatarAttachmentUrl) {
+      mediaItems.push({
+        type: 12,
+        items: [{ media: { url: avatarAttachmentUrl }, description: fresh.displayName }],
       })
     }
 

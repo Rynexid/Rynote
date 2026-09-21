@@ -16,7 +16,9 @@ function svgCircle(size: number, strokeWidth = 0): Buffer {
   )
 }
 
-function fallbackCover(): Promise<Buffer> {
+type Sharp = (typeof import('sharp'))['default']
+
+function fallbackCover(sharp: Sharp): Promise<Buffer> {
   const svg = Buffer.from(
     `<svg xmlns='http://www.w3.org/2000/svg' width='800' height='320'>` +
       `<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>` +
@@ -34,12 +36,13 @@ export interface CardInput {
 /**
  * Composite the user's avatar (circular, ringed) floating at the bottom-left
  * over their cover banner, mimicking the Discord profile popout layout.
- * Returns a PNG buffer, or null when the avatar buffer is unusable.
+ * Returns a PNG buffer, or null when sharp is unavailable or inputs are unusable.
  */
 export async function buildProfileCard({ cover, avatar }: CardInput): Promise<Buffer | null> {
   try {
     if (!avatar) return null
-    const coverBuf = cover ?? (await fallbackCover())
+    const sharp = ((await import('sharp')).default ?? (await import('sharp'))) as Sharp
+    const coverBuf = cover ?? (await fallbackCover(sharp))
 
     const mask = svgCircle(AV_SIZE)
     const cirSvg = svgCircle(AV_SIZE + RING * 2, RING)
