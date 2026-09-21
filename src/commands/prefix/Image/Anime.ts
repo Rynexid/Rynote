@@ -54,7 +54,7 @@ export default class implements Command {
     let current: NekoImage | null = null
 
     const fetchOne = async (): Promise<string | null> => {
-      let url = 'https://api.nekosapi.com/v4/images/random?limit=1&is_nsfw=false'
+      let url = 'https://api.nekosapi.com/v4/images/random?limit=1&rating=safe'
       if (query) url += `&tags=${encodeURIComponent(query)}`
       try {
         const res = await fetch(url, {
