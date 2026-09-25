@@ -1,5 +1,5 @@
 import { Manager } from '../manager.js'
-import { EmbedBuilder, TextChannel } from 'discord.js'
+import { TextChannel } from 'discord.js'
 import { formatDuration } from '../utilities/FormatDuration.js'
 import { RainlinkPlayer } from 'rainlink'
 import { getTitle } from '../utilities/GetTitle.js'
@@ -33,7 +33,6 @@ export class ChannelUpdater {
 
       const language = guildModel
 
-      const songStrings = []
       const queuedSongs = player.queue.map(
         (song, i) =>
           `${client.i18n.get(language, 'event.setup', 'setup_content_queue', {
@@ -44,44 +43,65 @@ export class ChannelUpdater {
           })}`
       )
 
-      songStrings.push(...queuedSongs)
-
-      const Str = songStrings.slice(0, 10).join('\n')
+      const Str = queuedSongs.slice(0, 10).join('\n')
 
       const TotalDuration = player.queue.duration
 
       let cSong = player.queue.current
       let qDuration = `${formatDuration(TotalDuration + Number(player.queue.current?.duration))}`
 
-      let embed = new EmbedBuilder()
-        .setAuthor({
-          name: `${client.i18n.get(language, 'event.setup', 'setup_author')}`,
-          iconURL: `${client.i18n.get(language, 'event.setup', 'setup_author_icon')}`,
-        })
-        .setDescription(
-          `${client.i18n.get(language, 'event.setup', 'setup_desc', {
-            title: getTitle(client, cSong!, language),
-            duration: formatDuration(cSong!.duration),
-            request: `${cSong!.requester}`,
-          })}`
-        ) // [${cSong.title}](${cSong.uri}) \`[${formatDuration(cSong.duration)}]\` • ${cSong.requester}
-        .setColor(client.color)
-        .setImage(cSong!.artworkUrl ? cSong!.artworkUrl : RYNOTE_BANNER_URL)
-        .setFooter({
-          text: `${client.i18n.get(language, 'event.setup', 'setup_footer', {
-            volume: `${player.volume}`,
-            duration: qDuration,
-          })}`,
-        }) //Volume • ${player.volume}% | Total Duration • ${qDuration}
+      const mediaItems = [
+        {
+          type: 12,
+          items: [
+            {
+              media: { url: cSong!.artworkUrl ? cSong!.artworkUrl : RYNOTE_BANNER_URL },
+              description: getTitle(client, cSong!, language),
+            },
+          ],
+        },
+      ]
 
-      const queueString = `${client.i18n.get(language, 'event.setup', 'setup_content')}\n${
-        Str == '' ? ' ' : '\n' + Str
+      const queueBody = `${client.i18n.get(language, 'event.setup', 'setup_content')}${
+        Str == ''
+          ? `${client.i18n.get(language, 'event.setup', 'setup_content_empty')}`
+          : '\n' + Str
       }`
 
       return await playMsg
         .edit({
-          content: player.queue.current && player.queue.size == 0 ? ' ' : queueString,
-          embeds: [embed],
+          flags: 32768,
+          content: ' ',
+          components: [
+            {
+              type: 17,
+              accent_color: client.color,
+              components: [
+                ...mediaItems,
+                {
+                  type: 10,
+                  content: `## ${client.i18n.get(language, 'event.setup', 'setup_author')}`,
+                },
+                {
+                  type: 10,
+                  content: client.i18n.get(language, 'event.setup', 'setup_desc', {
+                    title: getTitle(client, cSong!, language),
+                    duration: formatDuration(cSong!.duration),
+                    request: `${cSong!.requester}`,
+                  }),
+                },
+                {
+                  type: 10,
+                  content: `*${client.i18n.get(language, 'event.setup', 'setup_footer', {
+                    volume: `${player.volume}`,
+                    duration: qDuration,
+                  })}*`,
+                },
+                { type: 14, divider: true, spacing: 1 },
+                { type: 10, content: `💤 ${queueBody}` },
+              ],
+            },
+          ],
         })
         .catch(() => {})
     }
@@ -112,17 +132,36 @@ export class ChannelUpdater {
 
       const queueMsg = `${client.i18n.get(language, 'event.setup', 'setup_queuemsg')}`
 
-      const playEmbed = new EmbedBuilder()
-        .setColor(client.color)
-        .setAuthor({
-          name: `${client.i18n.get(language, 'event.setup', 'setup_playembed_author')}`,
-        })
-        .setImage(RYNOTE_BANNER_URL)
-
       return await playMsg
         .edit({
-          content: `${queueMsg}`,
-          embeds: [playEmbed],
+          flags: 32768,
+          content: ' ',
+          components: [
+            {
+              type: 17,
+              accent_color: client.color,
+              components: [
+                {
+                  type: 12,
+                  items: [
+                    {
+                      media: { url: RYNOTE_BANNER_URL },
+                      description: client.i18n.get(
+                        language,
+                        'event.setup',
+                        'setup_playembed_author'
+                      ),
+                    },
+                  ],
+                },
+                {
+                  type: 10,
+                  content: `## ${client.i18n.get(language, 'event.setup', 'setup_playembed_author')}`,
+                },
+                { type: 10, content: queueMsg },
+              ],
+            },
+          ],
         })
         .catch(() => {})
     }

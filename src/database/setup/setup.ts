@@ -1,7 +1,7 @@
 import { Manager } from '../../manager.js'
 import { RYNOTE_BANNER_URL } from '../../utilities/Links.js'
 import { Setup } from '../schema/Setup.js'
-import { EmbedBuilder, TextChannel } from 'discord.js'
+import { TextChannel } from 'discord.js'
 
 export class SongRequesterCleanSetup {
   client: Manager
@@ -41,19 +41,27 @@ export class SongRequesterCleanSetup {
 
     const language = guildModel
 
-    const queueMsg = `${this.client.i18n.get(language, 'setup', 'setup_queuemsg')}`
-
-    const playEmbed = new EmbedBuilder()
-      .setColor(this.client.color)
-      .setAuthor({
-        name: `${this.client.i18n.get(language, 'setup', 'setup_playembed_author')}`,
-      })
-      .setImage(RYNOTE_BANNER_URL)
+    const queueMsg = `${this.client.i18n.get(language, 'event.setup', 'setup_queuemsg')}`
+    const playAuthor = `${this.client.i18n.get(language, 'event.setup', 'setup_playembed_author')}`
 
     return await playMsg
       .edit({
-        content: `${queueMsg}`,
-        embeds: [playEmbed],
+        flags: 32768,
+        content: ' ',
+        components: [
+          {
+            type: 17,
+            accent_color: this.client.color,
+            components: [
+              {
+                type: 12,
+                items: [{ media: { url: RYNOTE_BANNER_URL }, description: playAuthor }],
+              },
+              { type: 10, content: `## ${playAuthor}` },
+              { type: 10, content: queueMsg },
+            ],
+          },
+        ],
       })
       .catch((e) => {})
   }

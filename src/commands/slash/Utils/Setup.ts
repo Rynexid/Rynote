@@ -77,12 +77,16 @@ export default class implements Command {
         parent: parent.id,
       })
       const queueMsg = `${client.i18n.get(handler.language, 'event.setup', 'setup_queuemsg')}`
+      const playAuthor = `${client.i18n.get(
+        handler.language,
+        'event.setup',
+        'setup_playembed_author'
+      )}`
 
       const playContainer = {
         type: 17,
         accent_color: client.color,
         components: [
-          { type: 10, content: queueMsg },
           {
             type: 12,
             items: [
@@ -90,14 +94,12 @@ export default class implements Command {
                 media: {
                   url: RYNOTE_BANNER_URL,
                 },
-                description: client.i18n.get(
-                  handler.language,
-                  'event.setup',
-                  'setup_playembed_author'
-                ),
+                description: playAuthor,
               },
             ],
           },
+          { type: 10, content: `## ${playAuthor}` },
+          { type: 10, content: queueMsg },
         ],
       }
 

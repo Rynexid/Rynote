@@ -28,6 +28,7 @@ export class RainlinkInit {
       resume: true,
       resumeTimeout: 600,
       defaultSearchEngine: 'youtube',
+      voiceConnectionTimeout: 30000,
       structures: {
         player: ExtendedPlayer,
       },
