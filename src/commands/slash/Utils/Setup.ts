@@ -101,7 +101,7 @@ export default class implements Command {
           },
           { type: 10, content: `## ${playAuthor}` },
           { type: 10, content: queueMsg },
-          setupPlayerButtons(client),
+          ...setupPlayerButtons(client),
         ],
       }
 

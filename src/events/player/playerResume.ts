@@ -1,6 +1,6 @@
 import { filterSelect, playerRowOne, playerRowTwo } from '../../utilities/PlayerControlButton.js'
 import { Manager } from '../../manager.js'
-import { TextChannel } from 'discord.js'
+import { MessageFlags, TextChannel } from 'discord.js'
 import { RainlinkPlayer } from 'rainlink'
 
 export default class {
@@ -37,6 +37,7 @@ export default class {
         .fetch(setup.playmsg)
         .catch(() => undefined)
       if (!msg) return
+      if (msg.flags.has(MessageFlags.IsComponentsV2)) return
       msg
         .edit({
           components: [

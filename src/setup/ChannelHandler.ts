@@ -105,6 +105,7 @@ export class ChannelHandler {
       try {
         await interaction.deferUpdate().catch(() => null)
         await button.run(this.client, interaction, String(language), player, playMsg)
+        await this.client.UpdateQueueMsg(player)
       } catch (err) {
         this.client.logger.error('ButtonError', err)
       }

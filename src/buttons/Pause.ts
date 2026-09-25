@@ -1,4 +1,10 @@
-import { ButtonInteraction, CacheType, InteractionCollector, Message } from 'discord.js'
+import {
+  ButtonInteraction,
+  CacheType,
+  InteractionCollector,
+  Message,
+  MessageFlags,
+} from 'discord.js'
 import { PlayerButton } from '../@types/Button.js'
 import { Manager } from '../manager.js'
 import {
@@ -28,25 +34,27 @@ export default class implements PlayerButton {
 
     const newPlayer = await player.setPause(!player.paused)
 
-    newPlayer.paused
-      ? nplaying
-          .edit({
-            components: [
-              filterSelect(client, false, language),
-              playerRowOneEdited(client, false),
-              playerRowTwo(client, false),
-            ],
-          })
-          .catch(() => null)
-      : nplaying
-          .edit({
-            components: [
-              filterSelect(client, false, language),
-              playerRowOne(client, false),
-              playerRowTwo(client, false),
-            ],
-          })
-          .catch(() => null)
+    if (!nplaying.flags.has(MessageFlags.IsComponentsV2)) {
+      newPlayer.paused
+        ? nplaying
+            .edit({
+              components: [
+                filterSelect(client, false, language),
+                playerRowOneEdited(client, false),
+                playerRowTwo(client, false),
+              ],
+            })
+            .catch(() => null)
+        : nplaying
+            .edit({
+              components: [
+                filterSelect(client, false, language),
+                playerRowOne(client, false),
+                playerRowTwo(client, false),
+              ],
+            })
+            .catch(() => null)
+    }
 
     new ReplyInteractionService(
       client,

@@ -60,7 +60,7 @@ export class SongRequesterCleanSetup {
               },
               { type: 10, content: `## ${playAuthor}` },
               { type: 10, content: queueMsg },
-              setupPlayerButtons(this.client),
+              ...setupPlayerButtons(this.client),
             ],
           },
         ],

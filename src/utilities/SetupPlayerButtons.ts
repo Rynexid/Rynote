@@ -10,32 +10,51 @@ const parseEmoji = (emoji: string): Record<string, string> => {
   return { name: emoji }
 }
 
-export const setupPlayerButtons = (client: Manager) => ({
-  type: 1,
-  components: [
-    {
-      type: 2,
-      style: 2,
-      custom_id: 'replay',
-      emoji: parseEmoji(client.config.emojis.PLAYER.previous),
-    },
-    {
-      type: 2,
-      style: 2,
-      custom_id: 'volup',
-      emoji: parseEmoji(client.config.emojis.PLAYER.volup),
-    },
-    {
-      type: 2,
-      style: 2,
-      custom_id: 'clear',
-      emoji: parseEmoji(client.config.emojis.PLAYER.delete),
-    },
-    {
-      type: 2,
-      style: 2,
-      custom_id: 'skip',
-      emoji: parseEmoji(client.config.emojis.PLAYER.skip),
-    },
-  ],
-})
+export const setupPlayerButtons = (client: Manager) => [
+  {
+    type: 1,
+    components: [
+      {
+        type: 2,
+        style: 2,
+        custom_id: 'replay',
+        emoji: parseEmoji(client.config.emojis.PLAYER.previous),
+      },
+      {
+        type: 2,
+        style: 2,
+        custom_id: 'volup',
+        emoji: parseEmoji(client.config.emojis.PLAYER.volup),
+      },
+      {
+        type: 2,
+        style: 2,
+        custom_id: 'pause',
+        emoji: parseEmoji(client.config.emojis.PLAYER.pause),
+      },
+    ],
+  },
+  {
+    type: 1,
+    components: [
+      {
+        type: 2,
+        style: 2,
+        custom_id: 'voldown',
+        emoji: parseEmoji(client.config.emojis.PLAYER.voldown),
+      },
+      {
+        type: 2,
+        style: 2,
+        custom_id: 'skip',
+        emoji: parseEmoji(client.config.emojis.PLAYER.skip),
+      },
+      {
+        type: 2,
+        style: 2,
+        custom_id: 'clear',
+        emoji: parseEmoji(client.config.emojis.PLAYER.delete),
+      },
+    ],
+  },
+]
