@@ -1,5 +1,6 @@
 import { Manager } from '../../manager.js'
 import { RYNOTE_BANNER_URL } from '../../utilities/Links.js'
+import { setupPlayerButtons } from '../../utilities/SetupPlayerButtons.js'
 import { Setup } from '../schema/Setup.js'
 import { TextChannel } from 'discord.js'
 
@@ -59,6 +60,7 @@ export class SongRequesterCleanSetup {
               },
               { type: 10, content: `## ${playAuthor}` },
               { type: 10, content: queueMsg },
+              setupPlayerButtons(this.client),
             ],
           },
         ],

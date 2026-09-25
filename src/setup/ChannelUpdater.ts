@@ -4,6 +4,7 @@ import { formatDuration } from '../utilities/FormatDuration.js'
 import { RainlinkPlayer } from 'rainlink'
 import { getTitle } from '../utilities/GetTitle.js'
 import { RYNOTE_BANNER_URL } from '../utilities/Links.js'
+import { setupPlayerButtons } from '../utilities/SetupPlayerButtons.js'
 
 export class ChannelUpdater {
   client: Manager
@@ -99,6 +100,7 @@ export class ChannelUpdater {
                 },
                 { type: 14, divider: true, spacing: 1 },
                 { type: 10, content: `💤 ${queueBody}` },
+                setupPlayerButtons(client),
               ],
             },
           ],
@@ -159,6 +161,7 @@ export class ChannelUpdater {
                   content: `## ${client.i18n.get(language, 'event.setup', 'setup_playembed_author')}`,
                 },
                 { type: 10, content: queueMsg },
+                setupPlayerButtons(client),
               ],
             },
           ],

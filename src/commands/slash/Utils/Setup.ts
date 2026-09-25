@@ -3,6 +3,7 @@ import { Manager } from '../../../manager.js'
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
+import { setupPlayerButtons } from '../../../utilities/SetupPlayerButtons.js'
 import { buildV2 } from '../../../utilities/V2.js'
 
 export default class implements Command {
@@ -100,6 +101,7 @@ export default class implements Command {
           },
           { type: 10, content: `## ${playAuthor}` },
           { type: 10, content: queueMsg },
+          setupPlayerButtons(client),
         ],
       }
 

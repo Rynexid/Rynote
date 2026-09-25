@@ -283,6 +283,26 @@ export class ChannelHandler {
       return
     }
 
+    const maxLength = await this.client.db.maxlength.get(message.author.id)
+
+    const result = await this.client.rainlink.search(song, { requester: message.author })
+    const tracks = result.tracks.filter((e) => (maxLength ? e.duration > maxLength : e))
+
+    if (!result.tracks.length) {
+      msg
+        ?.edit({
+          content: `${this.client.i18n.get(language, 'event.setup', 'setup_content')}\n${`${this.client.i18n.get(
+            language,
+            'event.setup',
+            'setup_content_empty'
+          )}`}`,
+        })
+        .catch(() => null)
+      return
+    }
+
+    player = this.client.rainlink.players.get(`${message.guild.id}`)
+
     if (!player)
       player = await this.client.rainlink.create({
         guildId: message.guild.id,
@@ -305,23 +325,6 @@ export class ChannelHandler {
       }
     }
 
-    const maxLength = await this.client.db.maxlength.get(message.author.id)
-
-    const result = await player.search(song, { requester: message.author })
-    const tracks = result.tracks.filter((e) => (maxLength ? e.duration > maxLength : e))
-
-    if (!result.tracks.length) {
-      msg
-        ?.edit({
-          content: `${this.client.i18n.get(language, 'event.setup', 'setup_content')}\n${`${this.client.i18n.get(
-            language,
-            'event.setup',
-            'setup_content_empty'
-          )}`}`,
-        })
-        .catch(() => null)
-      return
-    }
     if (result.type === 'PLAYLIST') for (let track of tracks) player.queue.add(track)
     else if (player.playing && result.type === 'SEARCH') player.queue.add(tracks[0])
     else if (player.playing && result.type !== 'SEARCH')
