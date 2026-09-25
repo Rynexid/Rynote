@@ -106,9 +106,9 @@ export default class implements Command {
         flags: 32768,
         components: [
           playContainer,
-          filterSelect(client, true, handler.language),
-          playerRowOne(client, true),
-          playerRowTwo(client, true),
+          filterSelect(client, false, handler.language),
+          playerRowOne(client, false),
+          playerRowTwo(client, false),
         ] as any,
       })
 

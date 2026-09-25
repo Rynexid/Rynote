@@ -1,4 +1,5 @@
 import { Manager } from '../../manager.js'
+import { RYNOTE_BANNER_URL } from '../../utilities/Links.js'
 import { filterSelect, playerRowOne, playerRowTwo } from '../../utilities/PlayerControlButton.js'
 import { Setup } from '../schema/Setup.js'
 import { EmbedBuilder, TextChannel } from 'discord.js'
@@ -48,9 +49,7 @@ export class SongRequesterCleanSetup {
       .setAuthor({
         name: `${this.client.i18n.get(language, 'setup', 'setup_playembed_author')}`,
       })
-      .setImage(
-        `https://cdn.discordapp.com/avatars/${this.client.user!.id}/${this.client.user!.avatar}.jpeg?size=300`
-      )
+      .setImage(RYNOTE_BANNER_URL)
 
     return await playMsg
       .edit({

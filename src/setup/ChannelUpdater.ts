@@ -3,6 +3,7 @@ import { EmbedBuilder, TextChannel } from 'discord.js'
 import { formatDuration } from '../utilities/FormatDuration.js'
 import { RainlinkPlayer } from 'rainlink'
 import { getTitle } from '../utilities/GetTitle.js'
+import { RYNOTE_BANNER_URL } from '../utilities/Links.js'
 import { filterSelect, playerRowOne, playerRowTwo } from '../utilities/PlayerControlButton.js'
 
 export class ChannelUpdater {
@@ -66,13 +67,7 @@ export class ChannelUpdater {
           })}`
         ) // [${cSong.title}](${cSong.uri}) \`[${formatDuration(cSong.duration)}]\` • ${cSong.requester}
         .setColor(client.color)
-        .setImage(
-          `${
-            cSong!.artworkUrl
-              ? cSong!.artworkUrl
-              : `https://cdn.discordapp.com/avatars/${client.user!.id}/${client.user!.avatar}.jpeg?size=300`
-          }`
-        )
+        .setImage(cSong!.artworkUrl ? cSong!.artworkUrl : RYNOTE_BANNER_URL)
         .setFooter({
           text: `${client.i18n.get(language, 'event.setup', 'setup_footer', {
             volume: `${player.volume}`,
@@ -128,9 +123,7 @@ export class ChannelUpdater {
         .setAuthor({
           name: `${client.i18n.get(language, 'event.setup', 'setup_playembed_author')}`,
         })
-        .setImage(
-          `https://cdn.discordapp.com/avatars/${client.user!.id}/${client.user!.avatar}.jpeg?size=300`
-        )
+        .setImage(RYNOTE_BANNER_URL)
 
       return await playMsg
         .edit({

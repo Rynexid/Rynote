@@ -63,7 +63,7 @@ export class RainlinkInit {
     if (this.client.config.player.AVOID_SUSPEND)
       defaultPlugins.push(
         new YTConverterPlugin({
-          sources: ['scsearch'],
+          sources: ['ytsearch'],
         })
       )
 
