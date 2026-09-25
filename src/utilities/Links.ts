@@ -7,4 +7,4 @@ export const RYNOTE_LOGIN =
 export const RYNOTE_SUPPORT = 'https://discord.gg/J8MJBPBupy'
 export const RYNOTE_GITHUB = 'https://github.com/Rynexid'
 export const RYNOTE_WEBSITE = 'https://rynote.vercel.app'
-export const RYNOTE_BANNER_URL = 'https://files.catbox.moe/djnqd8.webp'
+export const RYNOTE_BANNER_URL = 'https://s6.imgcdn.dev/YpDEzi.png'
