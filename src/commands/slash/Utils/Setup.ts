@@ -3,6 +3,7 @@ import { Manager } from '../../../manager.js'
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
 import { filterSelect, playerRowOne, playerRowTwo } from '../../../utilities/PlayerControlButton.js'
+import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
 import { buildV2 } from '../../../utilities/V2.js'
 
 export default class implements Command {
@@ -88,7 +89,7 @@ export default class implements Command {
             items: [
               {
                 media: {
-                  url: `https://cdn.discordapp.com/avatars/${client.user!.id}/${client.user!.avatar}.jpeg?size=300`,
+                  url: RYNOTE_BANNER_URL,
                 },
                 description: client.i18n.get(
                   handler.language,
