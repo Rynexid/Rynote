@@ -126,13 +126,13 @@ export class CommandHandler {
     } else {
       try {
         return await this.message?.reply(data)
-      } catch (err1) {
+      } catch (replyErr) {
         try {
           return await (this.message?.channel as any).send(data)
-        } catch (err2) {
-          throw new Error(
-            `Failed to send message | reply: ${(err1 as Error)?.message} | channel.send: ${(err2 as Error)?.message}`
-          )
+        } catch (sendErr) {
+          const cause =
+            (replyErr as Error)?.message ?? (sendErr as Error)?.message ?? 'unknown cause'
+          throw new Error(`Failed to send message: ${cause}`)
         }
       }
     }
@@ -144,13 +144,13 @@ export class CommandHandler {
     } else {
       try {
         return await this.message?.reply(data)
-      } catch (err1) {
+      } catch (replyErr) {
         try {
           return await (this.message?.channel as any).send(data)
-        } catch (err2) {
-          throw new Error(
-            `Failed to send followUp | reply: ${(err1 as Error)?.message} | channel.send: ${(err2 as Error)?.message}`
-          )
+        } catch (sendErr) {
+          const cause =
+            (replyErr as Error)?.message ?? (sendErr as Error)?.message ?? 'unknown cause'
+          throw new Error(`Failed to send follow-up message: ${cause}`)
         }
       }
     }

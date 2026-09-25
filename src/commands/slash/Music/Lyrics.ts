@@ -6,7 +6,11 @@ import { buildV2 } from '../../../utilities/V2.js'
 import { formatDuration } from '../../../utilities/FormatDuration.js'
 import { getArtwork } from '../../../utilities/GetArtwork.js'
 import { RainlinkPlayer } from 'rainlink'
-import Genius from 'genius-lyrics'
+import { parse } from 'node-html-parser'
+
+const GENIUS_API_URL = 'https://api.genius.com'
+const GENIUS_UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36'
 
 export default class implements Command {
   public name = ['lyrics']
@@ -61,8 +65,6 @@ export default class implements Command {
       )
     }
 
-    const genius = new Genius.Client(token)
-
     let query = handler.args.join(' ').trim()
     const candidates: string[] = []
     if (!query && track) {
@@ -91,11 +93,11 @@ export default class implements Command {
     }
 
     try {
-      let results: any[] = []
+      let results: { title: string; url: string }[] = []
       for (const q of [query, ...candidates.slice(1)]) {
         const qT = q.trim()
         if (!qT) continue
-        const r = await genius.songs.search(qT)
+        const r = await this.searchGenius(token, qT)
         if (r.length) {
           results = r
           break
@@ -111,7 +113,7 @@ export default class implements Command {
       }
 
       const song = results[0]
-      const lyrics = await song.lyrics()
+      const lyrics = await this.fetchGeniusLyrics(song.url)
       if (!lyrics) {
         return handler.replyV2(
           buildV2({
@@ -312,6 +314,52 @@ export default class implements Command {
       client.logger.error('Lyrics', err)
       return null
     }
+  }
+
+  private async searchGenius(
+    token: string,
+    query: string
+  ): Promise<{ title: string; url: string }[]> {
+    const clean = query
+      .toLowerCase()
+      .replace(/ *\([^)]*\) */g, '')
+      .replace(/ *\[[^\]]*]/g, '')
+      .replace(/feat\.|ft\./g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+    const res = await fetch(`${GENIUS_API_URL}/search?q=${encodeURIComponent(clean)}`, {
+      headers: { Authorization: `Bearer ${token}`, 'User-Agent': GENIUS_UA },
+      signal: AbortSignal.timeout(15000),
+    })
+    if (!res.ok) return []
+    const data = await res.json()
+    const hits = data?.response?.hits ?? []
+    return hits
+      .filter((s: any) => s.type === 'song' && s.result?.url)
+      .map((s: any) => ({ title: s.result.title ?? s.result.full_title ?? '', url: s.result.url }))
+      .filter((s: { title: string }) => s.title)
+  }
+
+  private async fetchGeniusLyrics(url: string): Promise<string | null> {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': GENIUS_UA },
+      signal: AbortSignal.timeout(15000),
+    })
+    if (!res.ok) return null
+    const body = await res.text()
+    const document = parse(body)
+    const lyricsRoot = document.getElementById('lyrics-root')
+    const lyrics = lyricsRoot
+      ?.querySelectorAll("[data-lyrics-container='true']")
+      .map((x) => {
+        x.querySelectorAll('br').forEach((y) => {
+          y.replaceWith(new parse.TextNode('\n'))
+        })
+        return x.text
+      })
+      .join('\n')
+      .trim()
+    return lyrics?.length ? lyrics : null
   }
 
   private formatTime(ms: number) {

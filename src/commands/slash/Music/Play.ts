@@ -4,11 +4,9 @@ import {
   ChatInputCommandInteraction,
 } from 'discord.js'
 import { convertTime } from '../../../utilities/ConvertTime.js'
-import { formatDuration } from '../../../utilities/FormatDuration.js'
 import { Manager } from '../../../manager.js'
 import { Accessableby, Command } from '../../../structures/Command.js'
-import { AutocompleteInteractionChoices, GlobalInteraction } from '../../../@types/Interaction.js'
-import { CommandHandler, GlobalMsg } from '../../../structures/CommandHandler.js'
+import { CommandHandler } from '../../../structures/CommandHandler.js'
 import {
   RainlinkPlayer,
   RainlinkSearchResult,
@@ -18,7 +16,6 @@ import {
 import { buildV2 } from '../../../utilities/V2.js'
 import { getTitle } from '../../../utilities/GetTitle.js'
 import { getSourceName } from '../../../utilities/SourceName.js'
-import { getArtwork } from '../../../utilities/GetArtwork.js'
 
 export default class implements Command {
   public name = ['play']
@@ -110,8 +107,6 @@ export default class implements Command {
       for (let track of tracks) player.queue.add(track)
     else player.queue.add(tracks[0])
 
-    const wasPlaying = player.playing
-
     const TotalDuration = player.queue.duration
 
     if (handler.message) await handler.message.delete().catch(() => null)
@@ -135,119 +130,22 @@ export default class implements Command {
 
     const track = tracks[0]
 
-    if (wasPlaying) {
-      await handler.replyV2(
-        buildV2({
-          description: `${client.i18n.get(
-            handler.language,
-            'command.music',
-            result.type === 'SEARCH' ? 'play_search' : 'play_track',
-            {
-              title: this.getTitle(client, result, tracks, handler.language),
-              duration: convertTime(track.duration as number),
-              source: getSourceName(client, track, handler.language),
-              request: String(track.requester),
-            }
-          )}`,
-          color: client.color,
-        })
-      )
-      return
-    }
-
-    await this.sendPlayLive(client, handler, player, track)
-  }
-
-  private async sendPlayLive(
-    client: Manager,
-    handler: CommandHandler,
-    player: RainlinkPlayer,
-    track: RainlinkTrack
-  ) {
-    const artworkUrl = await getArtwork(track)
-    const msg: GlobalMsg = await handler.replyV2(
-      this.buildPlayContainer(client, handler, player, track, artworkUrl)
-    )
-
-    const guildId = handler.guild!.id
-    const currentNP = client.nowPlaying.get(guildId)
-    if (currentNP) {
-      clearInterval(currentNP.interval)
-      client.nowPlaying.delete(guildId)
-    }
-
-    const interval = setInterval(() => {
-      const song = player.queue.current
-      if (!song || song.identifier !== track.identifier || !player.playing) {
-        clearInterval(interval)
-        client.nowPlaying.delete(guildId)
-        return
-      }
-
-      const updated = this.buildPlayContainer(client, handler, player, track, artworkUrl)
-
-      if (handler.interaction) {
-        handler.interaction.editReply({ flags: 32768, components: updated } as any).catch(() => {
-          clearInterval(interval)
-          client.nowPlaying.delete(guildId)
-        })
-        return
-      }
-
-      const msgId = (msg as any)?.id
-      if (!msgId) return
-      client.rest
-        .patch(`/channels/${handler.channel!.id}/messages/${msgId}`, {
-          body: { components: updated, flags: 32768 },
-        } as any)
-        .catch(() => null)
-    }, 10000)
-
-    client.nowPlaying.set(guildId, { interval, msg })
-  }
-
-  private buildPlayContainer(
-    client: Manager,
-    handler: CommandHandler,
-    player: RainlinkPlayer,
-    track: RainlinkTrack,
-    Thumbnail: string
-  ): any[] {
-    const position = player.playing ? player.position : 0
-    const duration = track.duration > 0 ? track.duration : 1
-    const part = Math.max(0, Math.min(30, Math.floor((position / duration) * 30)))
-
-    const info =
-      `### ${getTitle(client, track, handler.language)}\n` +
-      `- **${client.i18n.get(handler.language, 'event.player', 'author_title')}:** ${track.author}\n` +
-      `- **${client.i18n.get(handler.language, 'event.player', 'source_title')}:** ${getSourceName(client, track, handler.language)}\n` +
-      `- **${client.i18n.get(handler.language, 'event.player', 'duration_title')}:** ${formatDuration(track.duration)}\n` +
-      `- **${client.i18n.get(handler.language, 'event.player', 'request_title')}:** ${track.requester}\n` +
-      `- **${client.i18n.get(handler.language, 'command.music', 'np_current_duration', {
-        current_duration: formatDuration(position),
-        total_duration: formatDuration(track.duration),
-      })}^**\n` +
-      `\`\`\`🔴 | ${'─'.repeat(part) + '🎶' + '─'.repeat(30 - part)}\`\`\``
-
-    const mediaItems = Thumbnail
-      ? [{ type: 12, items: [{ media: { url: Thumbnail }, description: track.title }] }]
-      : []
-
-    return [
-      {
-        type: 17,
-        accent_color: client.color,
-        components: [
-          ...mediaItems,
+    await handler.replyV2(
+      buildV2({
+        description: `${client.i18n.get(
+          handler.language,
+          'command.music',
+          result.type === 'SEARCH' ? 'play_search' : 'play_track',
           {
-            type: 10,
-            content: `## ${client.i18n.get(handler.language, 'command.music', 'np_title')}`,
-          },
-          { type: 14, divider: true, spacing: 1 },
-          { type: 10, content: info },
-        ],
-      },
-    ]
+            title: this.getTitle(client, result, tracks, handler.language),
+            duration: convertTime(track.duration as number),
+            source: getSourceName(client, track, handler.language),
+            request: String(track.requester),
+          }
+        )}`,
+        color: client.color,
+      })
+    )
   }
 
   private async searchTrack(
