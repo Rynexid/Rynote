@@ -32,11 +32,6 @@ export const setupPlayerButtons = (client: Manager) => [
         custom_id: 'pause',
         emoji: parseEmoji(client.config.emojis.PLAYER.pause),
       },
-    ],
-  },
-  {
-    type: 1,
-    components: [
       {
         type: 2,
         style: 2,
@@ -48,12 +43,6 @@ export const setupPlayerButtons = (client: Manager) => [
         style: 2,
         custom_id: 'skip',
         emoji: parseEmoji(client.config.emojis.PLAYER.skip),
-      },
-      {
-        type: 2,
-        style: 2,
-        custom_id: 'clear',
-        emoji: parseEmoji(client.config.emojis.PLAYER.delete),
       },
     ],
   },
