@@ -4,7 +4,6 @@ import { formatDuration } from '../utilities/FormatDuration.js'
 import { RainlinkPlayer } from 'rainlink'
 import { getTitle } from '../utilities/GetTitle.js'
 import { RYNOTE_BANNER_URL } from '../utilities/Links.js'
-import { filterSelect, playerRowOne, playerRowTwo } from '../utilities/PlayerControlButton.js'
 
 export class ChannelUpdater {
   client: Manager
@@ -83,11 +82,6 @@ export class ChannelUpdater {
         .edit({
           content: player.queue.current && player.queue.size == 0 ? ' ' : queueString,
           embeds: [embed],
-          components: [
-            filterSelect(client, false, language),
-            playerRowOne(client, false),
-            playerRowTwo(client, false),
-          ],
         })
         .catch(() => {})
     }
@@ -129,11 +123,6 @@ export class ChannelUpdater {
         .edit({
           content: `${queueMsg}`,
           embeds: [playEmbed],
-          components: [
-            filterSelect(client, true, language),
-            playerRowOne(client, true),
-            playerRowTwo(client, true),
-          ],
         })
         .catch(() => {})
     }

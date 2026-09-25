@@ -1,6 +1,5 @@
 import { Manager } from '../../manager.js'
 import { RYNOTE_BANNER_URL } from '../../utilities/Links.js'
-import { filterSelect, playerRowOne, playerRowTwo } from '../../utilities/PlayerControlButton.js'
 import { Setup } from '../schema/Setup.js'
 import { EmbedBuilder, TextChannel } from 'discord.js'
 
@@ -55,11 +54,6 @@ export class SongRequesterCleanSetup {
       .edit({
         content: `${queueMsg}`,
         embeds: [playEmbed],
-        components: [
-          filterSelect(this.client, true, language),
-          playerRowOne(this.client, true),
-          playerRowTwo(this.client, true),
-        ],
       })
       .catch((e) => {})
   }

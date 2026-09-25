@@ -2,7 +2,6 @@ import { ApplicationCommandOptionType, ChannelType } from 'discord.js'
 import { Manager } from '../../../manager.js'
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
-import { filterSelect, playerRowOne, playerRowTwo } from '../../../utilities/PlayerControlButton.js'
 import { RYNOTE_BANNER_URL } from '../../../utilities/Links.js'
 import { buildV2 } from '../../../utilities/V2.js'
 
@@ -104,12 +103,7 @@ export default class implements Command {
 
       const channel_msg = await textChannel.send({
         flags: 32768,
-        components: [
-          playContainer,
-          filterSelect(client, false, handler.language),
-          playerRowOne(client, false),
-          playerRowTwo(client, false),
-        ] as any,
+        components: [playContainer] as any,
       })
 
       const voiceChannel = await handler.guild!.channels.create({
