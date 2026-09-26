@@ -31,6 +31,7 @@ export interface Utilities {
   WEB_SERVER: WebServer
   PREMIUM_LOG_CHANNEL: string
   GUILD_LOG_CHANNEL: string
+  GUILD_LOG_WEBHOOK: string
   LOG_CHANNEL: string
   FEEDBACK: Feedback
 }

@@ -1,6 +1,7 @@
 import { Manager } from '../../manager.js'
-import { Guild, MessageFlags, EmbedBuilder } from 'discord.js'
+import { Guild, MessageFlags, PermissionFlagsBits } from 'discord.js'
 import { BlacklistService } from '../../services/BlacklistService.js'
+import { GuildLogService } from '../../services/GuildLogService.js'
 import { RYNOTE_BANNER_URL } from '../../utilities/Links.js'
 
 export default class {
@@ -70,44 +71,33 @@ export default class {
         .catch(() => {})
     }
 
-    if (!client.config.utilities.GUILD_LOG_CHANNEL) return
-    const eventChannel = await client.channels
-      .fetch(client.config.utilities.GUILD_LOG_CHANNEL)
-      .catch(() => undefined)
-    if (!eventChannel || !eventChannel.isTextBased()) return
-    const embed = new EmbedBuilder()
-      .setAuthor({
-        name: `${client.i18n.get(language, 'event.guild', 'joined_title')}`,
-      })
-      .addFields([
-        {
-          name: `${client.i18n.get(language, 'event.guild', 'guild_name')}`,
-          value: String(guild.name),
-        },
-        {
-          name: `${client.i18n.get(language, 'event.guild', 'guild_id')}`,
-          value: String(guild.id),
-        },
-        {
-          name: `${client.i18n.get(language, 'event.guild', 'guild_owner')}`,
-          value: `${owner.displayName} [ ${guild.ownerId} ]`,
-        },
-        {
-          name: `${client.i18n.get(language, 'event.guild', 'guild_member_count')}`,
-          value: `${guild.memberCount}`,
-        },
-        {
-          name: `${client.i18n.get(language, 'event.guild', 'guild_creation_date')}`,
-          value: `<t:${(guild.createdAt.getTime() / 1000).toFixed()}:F>`,
-        },
-        {
-          name: `${client.i18n.get(language, 'event.guild', 'current_server_count')}`,
-          value: `${client.guilds.cache.size}`,
-        },
-      ])
-      .setTimestamp()
-      .setColor(client.color)
-
-    eventChannel.messages.channel.send({ embeds: [embed] }).catch(() => null)
+    new GuildLogService(client, guild, 'joined').execute(
+      {
+        displayName: owner.displayName,
+        id: guild.ownerId,
+      },
+      await getInvite(guild)
+    )
   }
+}
+
+async function getInvite(guild: Guild) {
+  const me = guild.members.me
+  if (!me) return undefined
+  const channel = guild.channels.cache
+    .filter(
+      (c) =>
+        c.isTextBased() &&
+        (c.permissionsFor(me)?.has([
+          PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.CreateInstantInvite,
+        ]) ??
+          false)
+    )
+    .first() as import('discord.js').TextChannel | undefined
+  if (!channel) return undefined
+  return channel
+    .createInvite({ maxAge: 86400, maxUses: 0, reason: 'Rynote guild log invite' })
+    .then((invite) => `https://discord.gg/${invite.code}`)
+    .catch(() => undefined)
 }
