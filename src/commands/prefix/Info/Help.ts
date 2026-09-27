@@ -193,8 +193,7 @@ export default class implements Command {
         `${L('help_welcome', { emoji: EMOJI.global.home, username: client.user!.username })}\n` +
         `${L('help_welcome_desc', { username: client.user!.username })}\n\n` +
         `- ${L('help_total')} ${client.commands.size}\n` +
-        `- ${L('help_cats')} ${cats}\n` +
-        `- ${L('help_owner')} <@${client.owner}>\n\n` +
+        `- ${L('help_cats')} ${cats}\n\n` +
         `${L('help_footer')}`
 
       return [

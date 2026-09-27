@@ -48,3 +48,11 @@ srv_notfound: '`⚠️` | Server not found!'
 srv_nochannel: '`⚠️` | Cannot create an invite for that server!'
 srv_link: '🔗 | Join **%{name}**'
 srv_join: 'Join Server'
+
+### Targeted announcement command!
+ta_empty: '`⚠️` | Empty args! Use: `!ta <guildId | here> [--owner] <message>`'
+ta_notfound: '`⚠️` | Server not found!'
+ta_nochannel: '`⚠️` | No channel available in that server!'
+ta_nodm: '`⚠️` | Cannot send DM to that owner!'
+ta_sent_channel: '`🟢` | **Announcement sent to %{name}**'
+ta_sent_owner: '`🟢` | **Announcement sent to owner of %{name}**'

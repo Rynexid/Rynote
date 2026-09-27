@@ -48,3 +48,11 @@ srv_notfound: '`⚠️` | Server tidak ditemukan!'
 srv_nochannel: '`⚠️` | Tidak dapat membuat undangan untuk server itu!'
 srv_link: '🔗 | Gabung ke **%{name}**'
 srv_join: 'Gabung ke Server'
+
+### Perintah Pengumuman Tertarget!
+ta_empty: '`⚠️` | Argumen kosong! Gunakan: `!ta <guildId | here> [--owner] <pesan>`'
+ta_notfound: '`⚠️` | Server tidak ditemukan!'
+ta_nochannel: '`⚠️` | Tidak ada channel yang tersedia di server itu!'
+ta_nodm: '`⚠️` | Tidak dapat mengirim DM ke owner tersebut!'
+ta_sent_channel: '`🟢` | **Pengumuman terkirim ke %{name}**'
+ta_sent_owner: '`🟢` | **Pengumuman terkirim ke owner dari %{name}**'

@@ -40,6 +40,7 @@ export default class implements Command {
       `- ${L('botinfo_autofix')} ${client.manifest.metadata.autofix.version}\n` +
       `- ${L('botinfo_powered')} [Rynex](https://rynexdev.vercel.app?ref=discord)\n` +
       `- ${L('botinfo_partnered')} 1sT - Services\n\n` +
+      `- ${L('botinfo_owner')} <@${client.owner}>\n\n` +
       `${L('botinfo_stats')}\n` +
       `- ${L('botinfo_uptime')} ${uptime}\n` +
       `- ${L('info_guilds')} ${client.guilds.cache.size}\n` +
