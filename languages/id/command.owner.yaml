@@ -42,3 +42,9 @@ sl_status: 'Status:: %{status}'
 sl_page: '-# Halaman **%{current}** / **%{total}**'
 sl_prev: '◀️'
 sl_next: '▶️'
+
+### Perintah Undangan Server!
+srv_notfound: '`⚠️` | Server tidak ditemukan!'
+srv_nochannel: '`⚠️` | Tidak dapat membuat undangan untuk server itu!'
+srv_link: '🔗 | Gabung ke **%{name}**'
+srv_join: 'Gabung ke Server'
