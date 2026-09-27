@@ -3,6 +3,7 @@ import { TextChannel } from 'discord.js'
 import { formatDuration } from '../utilities/FormatDuration.js'
 import { RainlinkPlayer } from 'rainlink'
 import { getTitle } from '../utilities/GetTitle.js'
+import { getSourceName } from '../utilities/SourceName.js'
 import { RYNOTE_BANNER_URL } from '../utilities/Links.js'
 import { setupPlayerButtons } from '../utilities/SetupPlayerButtons.js'
 
@@ -63,13 +64,47 @@ export class ChannelUpdater {
         },
       ]
 
+      const unknown = client.i18n.get(language, 'command.music', 'unknown')
+
+      const duration = cSong!.duration ?? 0
+      const clamped = Math.max(0, Math.min(1, duration ? player.position / duration : 0))
+      const part = Math.round(clamped * 20)
+      const bar = `▰`.repeat(part) + `▱`.repeat(20 - part)
+
+      const progress = client.i18n.get(language, 'event.setup', 'setup_progress', {
+        bar,
+        current: formatDuration(player.position),
+        total: formatDuration(duration),
+      })
+
+      const metadata =
+        `${progress}\n` +
+        `${client.i18n.get(language, 'event.setup', 'setup_meta_author', {
+          author: cSong!.author ?? unknown,
+        })}\n` +
+        `${client.i18n.get(language, 'event.setup', 'setup_meta_duration', {
+          duration: formatDuration(duration),
+        })}\n` +
+        `${client.i18n.get(language, 'event.setup', 'setup_meta_volume', {
+          volume: `${player.volume}`,
+        })}\n` +
+        `${client.i18n.get(language, 'event.setup', 'setup_meta_queue_count', {
+          count: `${player.queue.length}`,
+        })}\n` +
+        `${client.i18n.get(language, 'event.setup', 'setup_meta_queue_duration', {
+          duration: qDuration,
+        })}\n` +
+        `${client.i18n.get(language, 'event.setup', 'setup_meta_source', {
+          source: getSourceName(client, cSong!, language),
+        })}`
+
       const queueBody = `${client.i18n.get(language, 'event.setup', 'setup_content')}${
         Str == ''
           ? `${client.i18n.get(language, 'event.setup', 'setup_content_empty')}`
           : '\n' + Str
       }`
 
-      return await playMsg
+      await playMsg
         .edit({
           flags: 32768,
           content: ' ',
@@ -81,23 +116,19 @@ export class ChannelUpdater {
                 ...mediaItems,
                 {
                   type: 10,
-                  content: `## ${client.i18n.get(language, 'event.setup', 'setup_author')}`,
+                  content: `## ${client.i18n.get(
+                    language,
+                    'event.setup',
+                    player.paused ? 'setup_author_paused' : 'setup_author'
+                  )}`,
                 },
                 {
                   type: 10,
                   content: client.i18n.get(language, 'event.setup', 'setup_desc', {
                     title: getTitle(client, cSong!, language),
-                    duration: formatDuration(cSong!.duration),
-                    request: `${cSong!.requester}`,
                   }),
                 },
-                {
-                  type: 10,
-                  content: `*${client.i18n.get(language, 'event.setup', 'setup_footer', {
-                    volume: `${player.volume}`,
-                    duration: qDuration,
-                  })}*`,
-                },
+                { type: 10, content: metadata },
                 { type: 14, divider: true, spacing: 1 },
                 { type: 10, content: `💤 ${queueBody}` },
                 ...setupPlayerButtons(client),
@@ -106,6 +137,19 @@ export class ChannelUpdater {
           ],
         })
         .catch(() => {})
+
+      if (!client.interval.get(player.guildId)) {
+        const timer = setInterval(async () => {
+          const p = client.rainlink.players.get(player.guildId)
+          if (!p || !p.queue.current) {
+            clearInterval(timer)
+            client.interval.delete(player.guildId)
+            return
+          }
+          await client.UpdateQueueMsg(p).catch(() => {})
+        }, 5000)
+        client.interval.set(player.guildId, timer)
+      }
     }
 
     /**
@@ -113,6 +157,12 @@ export class ChannelUpdater {
      * @param {Player} player
      */
     client.UpdateMusic = async function (player: RainlinkPlayer) {
+      const stale = client.interval.get(player.guildId)
+      if (stale) {
+        clearInterval(stale as unknown as NodeJS.Timeout)
+        client.interval.delete(player.guildId)
+      }
+
       let data = await client.db.setup.get(`${player.guildId}`)
       if (!data) return
       if (data.enable === false) return
