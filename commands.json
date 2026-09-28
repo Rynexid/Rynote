@@ -1,0 +1,626 @@
+{
+  "generatedAt": "2026-09-27T14:27:37.283Z",
+  "total": 23,
+  "slash": 9,
+  "prefix": 14,
+  "commands": [
+    {
+      "source": "prefix",
+      "name": [
+        "anime"
+      ],
+      "key": "anime",
+      "description": "Get a random SFW anime artwork, or search by tag",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "<tag (optional)>",
+      "aliases": [
+        "waifu"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": [
+        {
+          "name": "tag",
+          "description": "Filter by tag (e.g. neko, catgirl, wallpaper)",
+          "type": "String",
+          "required": false,
+          "autocomplete": false,
+          "choices": []
+        }
+      ]
+    },
+    {
+      "source": "slash",
+      "name": [
+        "announcement"
+      ],
+      "key": "announcement",
+      "description": "Send announcement mesage to all server",
+      "category": "Dev",
+      "accessableby": [
+        "Dev"
+      ],
+      "usage": "<your_message>",
+      "aliases": [
+        "an"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": false,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "avatar"
+      ],
+      "key": "avatar",
+      "description": "Show your or someone else's profile picture",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "<mention>",
+      "aliases": [],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": [
+        {
+          "name": "user",
+          "description": "Type your user here",
+          "type": "User",
+          "required": false,
+          "autocomplete": false,
+          "choices": []
+        }
+      ]
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "banner"
+      ],
+      "key": "banner",
+      "description": "Show your or someone else's banner",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "<mention>",
+      "aliases": [
+        "bnr"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": [
+        {
+          "name": "user",
+          "description": "The user to show the banner of",
+          "type": "User",
+          "required": false,
+          "autocomplete": false,
+          "choices": []
+        }
+      ]
+    },
+    {
+      "source": "slash",
+      "name": [
+        "blacklist"
+      ],
+      "key": "blacklist",
+      "description": "Shuts down the client!",
+      "category": "Owner",
+      "accessableby": [
+        "Owner"
+      ],
+      "usage": "< id > < add / remmove > < user/ guild >",
+      "aliases": [],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": [
+        {
+          "name": "id",
+          "description": "Action for this user or guild",
+          "type": "String",
+          "required": true,
+          "autocomplete": false,
+          "choices": []
+        },
+        {
+          "name": "action",
+          "description": "Action for this user or guild",
+          "type": "String",
+          "required": true,
+          "autocomplete": false,
+          "choices": [
+            {
+              "name": "Add",
+              "value": "add"
+            },
+            {
+              "name": "Remove",
+              "value": "remove"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "description": "User or Guild",
+          "type": "String",
+          "required": true,
+          "autocomplete": false,
+          "choices": [
+            {
+              "name": "User",
+              "value": "user"
+            },
+            {
+              "name": "Guild",
+              "value": "guild"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "botinfo"
+      ],
+      "key": "botinfo",
+      "description": "Shows detailed information about the bot.",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "",
+      "aliases": [
+        "bot",
+        "about",
+        "stats"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "developer"
+      ],
+      "key": "developer",
+      "description": "Shows the developer information of the Bot (Credit)",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "",
+      "aliases": [
+        "dev",
+        "credit",
+        "credits"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "slash",
+      "name": [
+        "feedback"
+      ],
+      "key": "feedback",
+      "description": "Send feedback, suggestions or report a bug to the team",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "",
+      "aliases": [
+        "fb"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "help"
+      ],
+      "key": "help",
+      "description": "Displays all commands that the bot has.",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "<command_name>",
+      "aliases": [
+        "h"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": [
+        {
+          "name": "command",
+          "description": "The command name",
+          "type": "String",
+          "required": false,
+          "autocomplete": false,
+          "choices": []
+        }
+      ]
+    },
+    {
+      "source": "slash",
+      "name": [
+        "host"
+      ],
+      "key": "host",
+      "description": "Show the host infomation/status!",
+      "category": "Owner",
+      "accessableby": [
+        "Owner"
+      ],
+      "usage": "",
+      "aliases": [],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "invite"
+      ],
+      "key": "invite",
+      "description": "Shows the invite information of the Bot",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "",
+      "aliases": [],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "language"
+      ],
+      "key": "language",
+      "description": "Change the language for the bot",
+      "category": "Utils",
+      "accessableby": [
+        "Manager"
+      ],
+      "usage": "<language>",
+      "aliases": [
+        "lang",
+        "language"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": [
+        {
+          "name": "input",
+          "description": "The new language",
+          "type": "String",
+          "required": true,
+          "autocomplete": false,
+          "choices": []
+        }
+      ]
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "ping"
+      ],
+      "key": "ping",
+      "description": "Shows the ping information of the Bot",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "",
+      "aliases": [],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "prefix"
+      ],
+      "key": "prefix",
+      "description": "Change the prefix for the bot",
+      "category": "Utils",
+      "accessableby": [
+        "Manager"
+      ],
+      "usage": "<input>",
+      "aliases": [
+        "setprefix"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": false,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "servericon"
+      ],
+      "key": "servericon",
+      "description": "Show this server's icon",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "",
+      "aliases": [
+        "gicon"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "slash",
+      "name": [
+        "serverinvite"
+      ],
+      "key": "serverinvite",
+      "description": "Generate an invite link to a specific server!",
+      "category": "Owner",
+      "accessableby": [
+        "Owner"
+      ],
+      "usage": "<id>",
+      "aliases": [
+        "srv"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": [
+        {
+          "name": "id",
+          "description": "The ID of the server you want an invite to",
+          "type": "String",
+          "required": false,
+          "autocomplete": false,
+          "choices": []
+        }
+      ]
+    },
+    {
+      "source": "slash",
+      "name": [
+        "serverlist"
+      ],
+      "key": "serverlist",
+      "description": "Show the list of all servers the bot is in!",
+      "category": "Owner",
+      "accessableby": [
+        "Owner"
+      ],
+      "usage": "",
+      "aliases": [
+        "sl"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "slash",
+      "name": [
+        "setup"
+      ],
+      "key": "setup",
+      "description": "Setup channel song request",
+      "category": "Utils",
+      "accessableby": [
+        "Manager"
+      ],
+      "usage": "<create> or <delete>",
+      "aliases": [
+        "setup"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": [
+        {
+          "name": "type",
+          "description": "Type of channel",
+          "type": "String",
+          "required": true,
+          "autocomplete": false,
+          "choices": [
+            {
+              "name": "Create",
+              "value": "create"
+            },
+            {
+              "name": "Delete",
+              "value": "delete"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "slash",
+      "name": [
+        "shutdown"
+      ],
+      "key": "shutdown",
+      "description": "Shuts down the client!",
+      "category": "Owner",
+      "accessableby": [
+        "Owner"
+      ],
+      "usage": "",
+      "aliases": [
+        "shutdown"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "support"
+      ],
+      "key": "support",
+      "description": "Get support and help with the bot.",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "",
+      "aliases": [
+        "help-server",
+        "discord",
+        "server"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "slash",
+      "name": [
+        "targetannouncement"
+      ],
+      "key": "targetannouncement",
+      "description": "Send announcement to a specific server or its owner",
+      "category": "Dev",
+      "accessableby": [
+        "Dev"
+      ],
+      "usage": "<guildId | here> [--owner] <your_message>",
+      "aliases": [
+        "ta"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": false,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "tos"
+      ],
+      "key": "tos",
+      "description": "View the bot's Terms of Service and usage guidelines.",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "",
+      "aliases": [
+        "terms",
+        "termsofservice",
+        "rules"
+      ],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    },
+    {
+      "source": "prefix",
+      "name": [
+        "uptime"
+      ],
+      "key": "uptime",
+      "description": "Shows the uptime information of the Bot",
+      "category": "Info",
+      "accessableby": [
+        "Member"
+      ],
+      "usage": "",
+      "aliases": [],
+      "lavalink": false,
+      "playerCheck": false,
+      "usingInteraction": true,
+      "sameVoiceCheck": false,
+      "permissions": [],
+      "options": []
+    }
+  ]
+}

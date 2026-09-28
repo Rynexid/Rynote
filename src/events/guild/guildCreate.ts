@@ -88,10 +88,9 @@ async function getInvite(guild: Guild) {
     .filter(
       (c) =>
         c.isTextBased() &&
-        (c.permissionsFor(me)?.has([
-          PermissionFlagsBits.ViewChannel,
-          PermissionFlagsBits.CreateInstantInvite,
-        ]) ??
+        (c
+          .permissionsFor(me)
+          ?.has([PermissionFlagsBits.ViewChannel, PermissionFlagsBits.CreateInstantInvite]) ??
           false)
     )
     .first() as import('discord.js').TextChannel | undefined

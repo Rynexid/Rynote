@@ -75,9 +75,7 @@ export class GuildLogService {
   private async sendToChannel(embed: EmbedBuilder, components: ActionRowBuilder<ButtonBuilder>[]) {
     const channelId = this.client.config.utilities.GUILD_LOG_CHANNEL
     if (!channelId || channelId.length == 0) return
-    const eventChannel = await this.client.channels
-      .fetch(channelId)
-      .catch(() => undefined)
+    const eventChannel = await this.client.channels.fetch(channelId).catch(() => undefined)
     if (!eventChannel || !eventChannel.isTextBased()) return
     await eventChannel.messages.channel.send({ embeds: [embed], components })
   }

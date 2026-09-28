@@ -13,9 +13,9 @@ import { SongNoti } from './schema/SongNoti.js'
 import { SpotifyUser } from './schema/SpotifyUser.js'
 import { History } from './schema/History.js'
 import { Cover } from './schema/Cover.js'
+import { MaxLength } from './schema/MaxLength.js'
 import { QuickDatabasePlus } from '../structures/QuickDatabasePlus.js'
 import Blacklist from '../commands/slash/Owner/Blacklist.js'
-import MaxLength from '../commands/slash/Utils/MaxLength.js'
 
 export class TableSetup {
   client: Manager

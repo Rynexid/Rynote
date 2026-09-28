@@ -1,4 +1,5 @@
 import readdirRecursive from 'recursive-readdir'
+import { existsSync } from 'fs'
 import { resolve } from 'path'
 import { join, dirname } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -17,6 +18,7 @@ export class PlayerEventLoader {
   async loader() {
     for (const path of ['player', 'track', 'node']) {
       let eventsPath = resolve(join(__dirname, '..', 'events', path))
+      if (!existsSync(eventsPath)) continue
       let eventsFile = await readdirRecursive(eventsPath)
       await this.registerPath(eventsFile)
     }

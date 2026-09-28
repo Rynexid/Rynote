@@ -9,9 +9,9 @@ export class ExtendedQueue extends RainlinkQueue {
     return this
   }
 
-  public splice(start: number, deleteCount?: number): ExtendedQueue {
-    super.splice(start, deleteCount)
-    this.previousState.splice(start, deleteCount)
+  public splice(start: number, deleteCount?: number, ...items: RainlinkTrack[]): ExtendedQueue {
+    super.splice(start, deleteCount, ...items)
+    this.previousState.splice(start, deleteCount, ...items)
     return this
   }
 

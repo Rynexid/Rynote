@@ -14,6 +14,12 @@ export interface V2Button {
   url?: string
   style?: number
   customId?: string
+  emoji?: string
+}
+
+export interface V2Section {
+  content: string
+  thumbnail?: string
 }
 
 export interface V2Data {
@@ -24,7 +30,16 @@ export interface V2Data {
   footer?: string
   thumbnail?: string
   image?: string
+  sections?: V2Section[]
+  footerButton?: V2Button
   buttons?: V2Button[][]
+}
+
+function emojiToButtonEmoji(raw?: string) {
+  if (!raw) return undefined
+  const match = raw.match(/^<(a)?:([^:>]+):(\d{17,19})>$/)
+  if (match) return { name: match[2], id: match[3], animated: Boolean(match[1]) }
+  return { name: raw, id: null, animated: false }
 }
 
 export function buildV2(data: V2Data): any[] {
@@ -41,7 +56,22 @@ export function buildV2(data: V2Data): any[] {
     })
   }
 
-  if (data.description || (data.fields && data.fields.length)) {
+  if (data.sections && data.sections.length) {
+    for (const section of data.sections) {
+      if (section.thumbnail) {
+        components.push({
+          type: 9,
+          components: [{ type: 10, content: section.content }],
+          accessory: {
+            type: 11,
+            media: { url: section.thumbnail },
+          },
+        })
+      } else {
+        components.push({ type: 10, content: section.content })
+      }
+    }
+  } else if (data.description || (data.fields && data.fields.length)) {
     let body = data.description ?? ''
     if (data.fields && data.fields.length) {
       const grouped = data.fields.map((f) => `### ${f.name}\n${f.value}`).join('\n\n')
@@ -66,6 +96,8 @@ export function buildV2(data: V2Data): any[] {
           }
           if (b.url) btn.url = b.url
           if (b.customId) btn.custom_id = b.customId
+          const buttonEmoji = emojiToButtonEmoji(b.emoji)
+          if (buttonEmoji) btn.emoji = buttonEmoji
           return btn
         }),
       }

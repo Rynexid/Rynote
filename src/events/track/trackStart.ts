@@ -122,73 +122,79 @@ export default class {
 
     const artworkUrl = await getArtwork(track)
 
-    const nowPlayingBuffer = renderNowPlaying
-      ? await renderNowPlaying({
-          title: track.title,
-          author: track.author,
-          artworkUrl,
-          duration: track.duration,
-          position: Math.floor(player.position),
-          sourceName: getSourceName(client, track, language),
-        })
-      : null
+    const buildPanel = async (position: number) => {
+      const nowPlayingBuffer = renderNowPlaying
+        ? await renderNowPlaying({
+            title: track.title,
+            author: track.author,
+            artworkUrl,
+            duration: track.duration,
+            position,
+            sourceName: getSourceName(client, track, language),
+          })
+        : null
 
-    const trackFile = nowPlayingBuffer
-      ? new AttachmentBuilder(nowPlayingBuffer, { name: 'nowplaying.png' })
-      : null
+      const trackFile = nowPlayingBuffer
+        ? new AttachmentBuilder(nowPlayingBuffer, { name: 'nowplaying.png' })
+        : null
 
-    const mediaItems = trackFile
-      ? [
-          {
-            type: 12,
-            items: [
-              {
-                media: { url: 'attachment://nowplaying.png' },
-                description: getTitle(client, track, language),
-              },
-            ],
-          },
-        ]
-      : artworkUrl
+      const mediaItems = trackFile
         ? [
             {
               type: 12,
               items: [
-                { media: { url: artworkUrl }, description: getTitle(client, track, language) },
+                {
+                  media: { url: 'attachment://nowplaying.png' },
+                  description: getTitle(client, track, language),
+                },
               ],
             },
           ]
-        : []
+        : artworkUrl
+          ? [
+              {
+                type: 12,
+                items: [
+                  { media: { url: artworkUrl }, description: getTitle(client, track, language) },
+                ],
+              },
+            ]
+          : []
 
-    const componentsV2 = [
-      {
-        type: 17,
-        accent_color: client.color,
-        components: [
-          ...mediaItems,
-          {
-            type: 10,
-            content: `## ${client.i18n.get(language, 'event.player', 'track_title')}\n### ${getTitle(client, track, language)}`,
-          },
-          { type: 14, divider: true, spacing: 1 },
-          {
-            type: 10,
-            content:
-              `- **${client.i18n.get(language, 'event.player', 'author_title')}:** ${track.author}\n` +
-              `- **${client.i18n.get(language, 'event.player', 'source_title')}:** ${getSourceName(client, track, language)}\n` +
-              `- **${client.i18n.get(language, 'event.player', 'duration_title')}:** ${formatDuration(track.duration)}\n` +
-              `- **${client.i18n.get(language, 'event.player', 'request_title')}:** ${track.requester}`,
-          },
-        ],
-      },
-      filterSelect(client, false, language).toJSON(),
-      playerRowOne(client, false).toJSON(),
-      playerRowTwo(client, false).toJSON(),
-    ]
+      const componentsV2 = [
+        {
+          type: 17,
+          accent_color: client.color,
+          components: [
+            ...mediaItems,
+            {
+              type: 10,
+              content: `## ${client.i18n.get(language, 'event.player', 'track_title')}\n### ${getTitle(client, track, language)}`,
+            },
+            { type: 14, divider: true, spacing: 1 },
+            {
+              type: 10,
+              content:
+                `- **${client.i18n.get(language, 'event.player', 'author_title')}:** ${track.author}\n` +
+                `- **${client.i18n.get(language, 'event.player', 'source_title')}:** ${getSourceName(client, track, language)}\n` +
+                `- **${client.i18n.get(language, 'event.player', 'duration_title')}:** ${formatDuration(track.duration)}\n` +
+                `- **${client.i18n.get(language, 'event.player', 'request_title')}:** ${track.requester}`,
+            },
+          ],
+        },
+        filterSelect(client, false, language).toJSON(),
+        playerRowOne(client, false).toJSON(),
+        playerRowTwo(client, false).toJSON(),
+      ]
+
+      return { componentsV2, trackFile }
+    }
 
     const playing_channel = (await client.channels
       .fetch(player.textId)
       .catch(() => undefined)) as TextChannel
+
+    const { componentsV2, trackFile } = await buildPanel(Math.floor(player.position))
 
     let nplaying: any = undefined
     if (playing_channel) {
@@ -207,6 +213,38 @@ export default class {
     }
 
     if (!nplaying) return
+
+    const npReload = client.nowPlaying.get(`${player.guildId}`)
+    if (npReload) {
+      clearInterval(npReload.interval)
+      client.nowPlaying.delete(`${player.guildId}`)
+    }
+
+    const liveInterval: NodeJS.Timeout = setInterval(async () => {
+      const p = client.rainlink.players.get(player.guildId)
+      if (!p || !p.queue.current || !p.playing) {
+        clearInterval(liveInterval)
+        client.nowPlaying.delete(`${player.guildId}`)
+        return
+      }
+      try {
+        const { componentsV2: comp, trackFile: file } = await buildPanel(Math.floor(p.position))
+        await nplaying
+          .edit({
+            flags: MessageFlags.IsComponentsV2,
+            components: comp,
+            files: file ? [file] : [],
+          })
+          .catch(() => null)
+      } catch {
+        /* ignore transient render/edit errors */
+      }
+    }, 5000)
+
+    client.nowPlaying.set(`${player.guildId}`, {
+      interval: liveInterval,
+      msg: nplaying,
+    })
 
     const collector = nplaying.createMessageComponentCollector({
       componentType: ComponentType.Button,
@@ -345,6 +383,8 @@ export default class {
     collector.on('end', (): void => {
       // @ts-ignore
       collector.removeAllListeners()
+      clearInterval(liveInterval)
+      client.nowPlaying.delete(`${player.guildId}`)
     })
 
     collectorFilter.on('end', (): void => {

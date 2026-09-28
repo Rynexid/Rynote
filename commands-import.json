@@ -1,0 +1,218 @@
+[
+  {
+    "name": "anime",
+    "description": "Get a random SFW anime artwork, or search by tag",
+    "type": 1,
+    "options": [
+      {
+        "type": 3,
+        "name": "tag",
+        "description": "Filter by tag (e.g. neko, catgirl, wallpaper)"
+      }
+    ]
+  },
+  {
+    "name": "announcement",
+    "description": "Send announcement mesage to all server",
+    "type": 1
+  },
+  {
+    "name": "avatar",
+    "description": "Show your or someone else's profile picture",
+    "type": 1,
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "Type your user here"
+      }
+    ]
+  },
+  {
+    "name": "banner",
+    "description": "Show your or someone else's banner",
+    "type": 1,
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user to show the banner of"
+      }
+    ]
+  },
+  {
+    "name": "blacklist",
+    "description": "Shuts down the client!",
+    "type": 1,
+    "options": [
+      {
+        "type": 3,
+        "name": "id",
+        "description": "Action for this user or guild",
+        "required": true
+      },
+      {
+        "type": 3,
+        "name": "action",
+        "description": "Action for this user or guild",
+        "required": true,
+        "choices": [
+          {
+            "name": "Add",
+            "value": "add"
+          },
+          {
+            "name": "Remove",
+            "value": "remove"
+          }
+        ]
+      },
+      {
+        "type": 3,
+        "name": "type",
+        "description": "User or Guild",
+        "required": true,
+        "choices": [
+          {
+            "name": "User",
+            "value": "user"
+          },
+          {
+            "name": "Guild",
+            "value": "guild"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "botinfo",
+    "description": "Shows detailed information about the bot.",
+    "type": 1
+  },
+  {
+    "name": "developer",
+    "description": "Shows the developer information of the Bot (Credit)",
+    "type": 1
+  },
+  {
+    "name": "feedback",
+    "description": "Send feedback, suggestions or report a bug to the team",
+    "type": 1
+  },
+  {
+    "name": "help",
+    "description": "Displays all commands that the bot has.",
+    "type": 1,
+    "options": [
+      {
+        "type": 3,
+        "name": "command",
+        "description": "The command name"
+      }
+    ]
+  },
+  {
+    "name": "host",
+    "description": "Show the host infomation/status!",
+    "type": 1
+  },
+  {
+    "name": "invite",
+    "description": "Shows the invite information of the Bot",
+    "type": 1
+  },
+  {
+    "name": "language",
+    "description": "Change the language for the bot",
+    "type": 1,
+    "options": [
+      {
+        "type": 3,
+        "name": "input",
+        "description": "The new language",
+        "required": true
+      }
+    ]
+  },
+  {
+    "name": "ping",
+    "description": "Shows the ping information of the Bot",
+    "type": 1
+  },
+  {
+    "name": "prefix",
+    "description": "Change the prefix for the bot",
+    "type": 1
+  },
+  {
+    "name": "servericon",
+    "description": "Show this server's icon",
+    "type": 1
+  },
+  {
+    "name": "serverinvite",
+    "description": "Generate an invite link to a specific server!",
+    "type": 1,
+    "options": [
+      {
+        "type": 3,
+        "name": "id",
+        "description": "The ID of the server you want an invite to"
+      }
+    ]
+  },
+  {
+    "name": "serverlist",
+    "description": "Show the list of all servers the bot is in!",
+    "type": 1
+  },
+  {
+    "name": "setup",
+    "description": "Setup channel song request",
+    "type": 1,
+    "options": [
+      {
+        "type": 3,
+        "name": "type",
+        "description": "Type of channel",
+        "required": true,
+        "choices": [
+          {
+            "name": "Create",
+            "value": "create"
+          },
+          {
+            "name": "Delete",
+            "value": "delete"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "shutdown",
+    "description": "Shuts down the client!",
+    "type": 1
+  },
+  {
+    "name": "support",
+    "description": "Get support and help with the bot.",
+    "type": 1
+  },
+  {
+    "name": "targetannouncement",
+    "description": "Send announcement to a specific server or its owner",
+    "type": 1
+  },
+  {
+    "name": "tos",
+    "description": "View the bot's Terms of Service and usage guidelines.",
+    "type": 1
+  },
+  {
+    "name": "uptime",
+    "description": "Shows the uptime information of the Bot",
+    "type": 1
+  }
+]

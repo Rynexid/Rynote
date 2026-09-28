@@ -11,7 +11,7 @@ import { SongNotiEnum } from '../../../database/schema/SongNoti.js'
 export default class implements Command {
   public name = ['config']
   public description = 'Set up bot features for your profile (premium cover, etc.)'
-  public category = 'Profile'
+  public category = 'Utils'
   public accessableby = [Accessableby.Member]
   public usage = '<option> <value>'
   public aliases = ['settings', 'cfg']

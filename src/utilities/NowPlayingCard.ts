@@ -132,7 +132,7 @@ export async function renderNowPlaying(input: NowPlayingInput): Promise<Buffer |
       ctx.fillText(input.author, TX, ART_Y + 150)
     }
 
-    const progy = ART_Y + ART - 34
+    const progy = ART_Y + ART - 62
     const fraction =
       input.duration > 0 ? Math.min(Math.max((input.position ?? 0) / input.duration, 0), 1) : 0
 
