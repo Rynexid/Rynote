@@ -17,6 +17,11 @@ profile_fields_history: 'Riwayat Mendengarkan'
 profile_btn_spotify: 'Profil Spotify'
 profile_btn_premium: 'Premium'
 
+### Perintah Favourite!
+favorite_empty: '`⚠️` | Kamu belum punya lagu favorit!'
+favorite_track: '%{num}. **%{title}** `[%{duration}]` • %{author}'
+favorite_embed_title: 'Favourites %{user}'
+
 ### Perintah Spotify Login!
 spotify_login_title: 'Tautkan Spotify'
 spotify_login_notice: 'Masukkan URL profil atau username Spotify kamu untuk menautkannya ke akun Discord kamu.'

@@ -17,6 +17,11 @@ profile_fields_history: 'Listening History'
 profile_btn_spotify: 'Spotify Profile'
 profile_btn_premium: 'Premium'
 
+### Favourite command!
+favorite_empty: '`⚠️` | You have no favourite tracks yet!'
+favorite_track: '%{num}. **%{title}** `[%{duration}]` • %{author}'
+favorite_embed_title: '%{user} Favourites'
+
 ### Spotify login command!
 spotify_login_title: 'Link Spotify'
 spotify_login_notice: 'Enter your Spotify profile URL or username to link it to your Discord account.'

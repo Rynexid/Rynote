@@ -21,6 +21,7 @@ songnoti_already: '`⚠️` | Song Notifications are already **%{mode}**!'
 247_on: '`✅` | 24/7 mode is now **Enabled**!'
 247_off: '`❌` | 24/7 mode is now **Disabled**!'
 247_already: '`⚠️` | 24/7 mode is already **%{mode}**!'
+247_invalid: '`⚠️` | Invalid mode. Please use **on/off** or **true/false**!'
 
 ### Setup command!
 setup_msg: "**`⚙️` | Created Music System** %{channel}\n```Note: Do not delete any messages sent by me for the Music System to work properly!```"

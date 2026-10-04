@@ -2,6 +2,7 @@
 autoplay_on: '`✅` | Autoplay sekarang **Aktif**!'
 autoplay_off: '`❌` | Autoplay sekarang **Nonaktif**!'
 autoplay_already: '`⚠️` | Autoplay sudah **%{mode}**!'
+autoplay_invalid: '`⚠️` | Mode tidak valid. Gunakan **on/off** atau **true/false**!'
 
 ### Perintah ClearQueue!
 clearqueue_msg: '`🗑️` | Antrian Telah **Dibersihkan**!'

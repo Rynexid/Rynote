@@ -2,6 +2,7 @@
 autoplay_on: '`✅` | Autoplay is now **Enabled**!'
 autoplay_off: '`❌` | Autoplay is now **Disabled**!'
 autoplay_already: '`⚠️` | Autoplay is already **%{mode}**!'
+autoplay_invalid: '`⚠️` | Invalid mode. Please use **on/off** or **true/false**!'
 
 ### ClearQueue command!
 clearqueue_msg: '`🗑️` | Queue has been **Cleared**!'

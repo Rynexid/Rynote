@@ -131,6 +131,7 @@ export interface PlayerEmojis {
   volup: string
   queue: string
   delete: string
+  favourite: string
 }
 
 export interface GlobalEmojis {

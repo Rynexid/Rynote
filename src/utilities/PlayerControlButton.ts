@@ -10,8 +10,8 @@ import { Manager } from '../manager.js'
 const playerRowOne = (client: Manager, disable?: boolean) =>
   new ActionRowBuilder<ButtonBuilder>().addComponents([
     new ButtonBuilder()
-      .setCustomId('stop')
-      .setEmoji(client.config.emojis.PLAYER.stop)
+      .setCustomId('favourite')
+      .setEmoji(client.config.emojis.PLAYER.favourite)
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(disable),
 
@@ -24,7 +24,7 @@ const playerRowOne = (client: Manager, disable?: boolean) =>
     new ButtonBuilder()
       .setCustomId('pause')
       .setEmoji(client.config.emojis.PLAYER.pause)
-      .setStyle(ButtonStyle.Secondary)
+      .setStyle(ButtonStyle.Primary)
       .setDisabled(disable),
 
     new ButtonBuilder()
@@ -57,7 +57,7 @@ const playerRowTwo = (client: Manager, disable?: boolean) =>
     new ButtonBuilder()
       .setCustomId('clear')
       .setEmoji(client.config.emojis.PLAYER.delete)
-      .setStyle(ButtonStyle.Secondary)
+      .setStyle(ButtonStyle.Danger)
       .setDisabled(disable),
 
     new ButtonBuilder()
@@ -76,8 +76,8 @@ const playerRowTwo = (client: Manager, disable?: boolean) =>
 const playerRowOneEdited = (client: Manager, disable?: boolean) =>
   new ActionRowBuilder<ButtonBuilder>().addComponents([
     new ButtonBuilder()
-      .setCustomId('stop')
-      .setEmoji(client.config.emojis.PLAYER.stop)
+      .setCustomId('favourite')
+      .setEmoji(client.config.emojis.PLAYER.favourite)
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(disable),
 
@@ -90,7 +90,7 @@ const playerRowOneEdited = (client: Manager, disable?: boolean) =>
     new ButtonBuilder()
       .setCustomId('pause')
       .setEmoji(client.config.emojis.PLAYER.play)
-      .setStyle(ButtonStyle.Secondary)
+      .setStyle(ButtonStyle.Primary)
       .setDisabled(disable),
 
     new ButtonBuilder()

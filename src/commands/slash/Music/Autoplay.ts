@@ -1,3 +1,4 @@
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from 'discord.js'
 import { Manager } from '../../../manager.js'
 import { Accessableby, Command } from '../../../structures/Command.js'
 import { CommandHandler } from '../../../structures/CommandHandler.js'
@@ -10,10 +11,17 @@ export default class implements Command {
   public description = 'Autoplay music (Random play songs)'
   public category = 'Music'
   public accessableby = [Accessableby.Member]
-  public usage = ''
+  public usage = '<true/false>'
   public aliases = ['ap']
   public lavalink = true
-  public options = []
+  public options = [
+    {
+      name: 'mode',
+      description: 'Turn autoplay on or off',
+      required: true,
+      type: ApplicationCommandOptionType.Boolean,
+    },
+  ]
   public playerCheck = true
   public usingInteraction = true
   public sameVoiceCheck = true
@@ -24,9 +32,39 @@ export default class implements Command {
 
     const player = client.rainlink.players.get(handler.guild!.id) as RainlinkPlayer
 
+    let mode: boolean | null = null
+
+    if (handler.interaction) {
+      mode = (handler.interaction as ChatInputCommandInteraction).options.getBoolean('mode')
+    } else {
+      const arg = handler.args[0]?.toLowerCase()
+      if (['on', 'true', '1', 'yes'].includes(arg)) mode = true
+      else if (['off', 'false', '0', 'no'].includes(arg)) mode = false
+    }
+
+    if (mode == null)
+      return handler.replyV2(
+        buildV2({
+          description: `${client.i18n.get(handler.language, 'command.music', 'autoplay_invalid')}`,
+          color: client.color,
+        })
+      )
+
+    const isEnabled = player.data.get('autoplay') === true
+
+    if (isEnabled === mode)
+      return handler.replyV2(
+        buildV2({
+          description: `${client.i18n.get(handler.language, 'command.music', 'autoplay_already', {
+            mode: mode ? handler.modeLang.enable : handler.modeLang.disable,
+          })}`,
+          color: client.color,
+        })
+      )
+
     let data: { description: string; color: any }
 
-    if (player.data.get('autoplay') === true) {
+    if (!mode) {
       player.data.set('autoplay', false)
       player.data.set('identifier', null)
       player.data.set('requester', null)

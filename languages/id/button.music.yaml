@@ -29,6 +29,12 @@ previous_notfound: '`⚠️` | Tidak ada lagu sebelumnya yang ditemukan!'
 # Shuffle
 shuffle_msg: '🔀 Antrian Diacak'
 
+### Tombol Favourite!
+favourite_added: '`❤️` | **Lagu Saat Ini** Ditambahkan ke **Favourites** kamu!'
+favourite_removed: '`💔` | **Lagu Saat Ini** Dihapus dari **Favourites** kamu!'
+favourite_no_track: '`⚠️` | Tidak ada lagu yang sedang diputar!'
+favourite_description: 'Lagu favorit kamu, ditambahkan lewat tombol Favourite'
+
 ### Semua perintah filter!
 filter_on: '`✅` | Filter %{name} sekarang **aktif**!'
 filter_already: '`⚠️` | Filter %{name} sudah **aktif**!'

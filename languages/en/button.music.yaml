@@ -29,6 +29,12 @@ previous_notfound: '`⚠️` | No Previous song was found!'
 # Shuffle
 shuffle_msg: '🔀 Shuffled the Queue'
 
+### Favourite button!
+favourite_added: '`❤️` | Added the **Current Song** to your **Favourites**!'
+favourite_removed: '`💔` | Removed the **Current Song** from your **Favourites**!'
+favourite_no_track: '`⚠️` | No song is currently playing!'
+favourite_description: 'Your favourite tracks, added via the Favourite button'
+
 ### All filter command!
 filter_on: '`✅` | %{name} filter is now **enable**!'
 filter_already: '`⚠️` | %{name} filter is already **enabled**!'

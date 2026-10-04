@@ -21,6 +21,7 @@ songnoti_already: '`⚠️` | Notifikasi Lagu sudah **%{mode}**!'
 247_on: '`✅` | Mode 24/7 sekarang **Aktif**!'
 247_off: '`❌` | Mode 24/7 sekarang **Nonaktif**!'
 247_already: '`⚠️` | Mode 24/7 sudah **%{mode}**!'
+247_invalid: '`⚠️` | Mode tidak valid. Gunakan **on/off** atau **true/false**!'
 
 ### Perintah Setup!
 setup_msg: "**`⚙️` | Sistem Musik Dibuat** %{channel}\n```Catatan: Jangan hapus pesan apa pun yang saya kirim agar Sistem Musik berfungsi dengan baik!```"
