@@ -171,6 +171,7 @@ export class ConfigDataService {
         GUILD_LOG_CHANNEL: '',
         GUILD_LOG_WEBHOOK: '',
         LOG_CHANNEL: '',
+        LOG_WEBHOOK: '',
         FEEDBACK: {
           webhook: '',
         },

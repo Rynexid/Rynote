@@ -33,6 +33,7 @@ export interface Utilities {
   GUILD_LOG_CHANNEL: string
   GUILD_LOG_WEBHOOK: string
   LOG_CHANNEL: string
+  LOG_WEBHOOK: string
   FEEDBACK: Feedback
 }
 

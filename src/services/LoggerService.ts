@@ -1,5 +1,5 @@
 import { createLogger, transports, format, Logger } from 'winston'
-const { timestamp, prettyPrint, printf } = format
+const { timestamp, printf } = format
 import chalk from 'chalk'
 import util from 'node:util'
 import { Manager } from '../manager.js'
@@ -31,12 +31,6 @@ export class LoggerService {
         new transports.Console({
           level: 'unhandled',
           format: this.consoleFormat,
-        }),
-
-        new transports.File({
-          level: 'unhandled',
-          filename: './logs/rynote.log',
-          format: this.fileFormat,
         }),
       ],
     })
@@ -114,31 +108,29 @@ export class LoggerService {
     )
   }
 
-  private get fileFormat() {
-    return format.combine(timestamp(), prettyPrint())
-  }
-
   private async sendDiscord(type: string, message: string, className: string) {
+    const webhook = this.client.config.utilities.LOG_WEBHOOK
     const channelId = this.client.config.utilities.LOG_CHANNEL
-    if (!channelId || channelId.length == 0) return
+    if ((!webhook || webhook.length == 0) && (!channelId || channelId.length == 0)) return
     try {
+      const embed = new EmbedBuilder()
+        .setColor(this.client.color)
+        .setTitle(`${type} from ${className}`)
+        .setDescription(message.length > 4096 ? 'Logs too long to display!' : message)
+
+      if (webhook && webhook.length > 0) {
+        await fetch(webhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ embeds: [embed.toJSON()] }),
+        })
+        return
+      }
+
       const channel = (await this.client.channels
         .fetch(channelId)
         .catch(() => undefined)) as TextChannel
       if (!channel || !channel.isTextBased()) return
-      let embed = null
-      if (message.length > 4096) {
-        embed = new EmbedBuilder()
-          .setDescription('Logs too long to display! please check your host!')
-          .setTitle(`${type} from ${className}`)
-          .setColor(this.client.color)
-      } else {
-        embed = new EmbedBuilder()
-          .setDescription(message)
-          .setTitle(`${type} from ${className}`)
-          .setColor(this.client.color)
-      }
-
       await channel.messages.channel.send({ embeds: [embed] })
     } catch (err) {}
   }
