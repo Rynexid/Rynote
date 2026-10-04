@@ -114,16 +114,11 @@
     "tsx": "^4.19.0",
     "typescript": "^5.5.4"
   },
-  "optionalDependencies": {
-    "canvas": "^3.2.3"
-  },
+  "optionalDependencies": {},
   "pnpm": {
     "overrides": {
       "marked@<4.0.10": ">=4.0.10",
       "undici@<5.26.2": ">=5.26.2"
     }
-  },
-  "allowScripts": {
-    "canvas@3.2.3": true
   }
 }

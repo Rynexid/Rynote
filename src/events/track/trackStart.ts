@@ -1,5 +1,5 @@
 import { Manager } from '../../manager.js'
-import { ComponentType, TextChannel, MessageFlags, AttachmentBuilder } from 'discord.js'
+import { ComponentType, TextChannel, MessageFlags } from 'discord.js'
 import { formatDuration } from '../../utilities/FormatDuration.js'
 import { filterSelect, playerRowOne, playerRowTwo } from '../../utilities/PlayerControlButton.js'
 import { AutoReconnectBuilderService } from '../../services/AutoReconnectBuilderService.js'
@@ -19,15 +19,6 @@ export default class {
         'DatabaseService',
         'The database is not yet connected so this event will temporarily not execute. Please try again later!'
       )
-
-    let renderNowPlaying:
-      (typeof import('../../utilities/NowPlayingCard.js'))['renderNowPlaying'] | undefined
-    try {
-      const mod = await import('../../utilities/NowPlayingCard.js')
-      renderNowPlaying = mod.renderNowPlaying
-    } catch {
-      // canvas not available, skip now-playing card
-    }
 
     const guild = await client.guilds.fetch(player.guildId).catch(() => undefined)
     client.logger.info('TrackStart', `Track Started in @ ${guild!.name} / ${player.guildId}`)
@@ -123,43 +114,18 @@ export default class {
     const artworkUrl = await getArtwork(track)
 
     const buildPanel = async (position: number) => {
-      const nowPlayingBuffer = renderNowPlaying
-        ? await renderNowPlaying({
-            title: track.title,
-            author: track.author,
-            artworkUrl,
-            duration: track.duration,
-            position,
-            sourceName: getSourceName(client, track, language),
-          })
-        : null
-
-      const trackFile = nowPlayingBuffer
-        ? new AttachmentBuilder(nowPlayingBuffer, { name: 'nowplaying.png' })
-        : null
-
-      const mediaItems = trackFile
+      const mediaItems = artworkUrl
         ? [
             {
               type: 12,
               items: [
-                {
-                  media: { url: 'attachment://nowplaying.png' },
-                  description: getTitle(client, track, language),
-                },
+                { media: { url: artworkUrl }, description: getTitle(client, track, language) },
               ],
             },
           ]
-        : artworkUrl
-          ? [
-              {
-                type: 12,
-                items: [
-                  { media: { url: artworkUrl }, description: getTitle(client, track, language) },
-                ],
-              },
-            ]
-          : []
+        : []
+
+      void position
 
       const componentsV2 = [
         {
@@ -187,14 +153,14 @@ export default class {
         playerRowTwo(client, false).toJSON(),
       ]
 
-      return { componentsV2, trackFile }
+      return { componentsV2 }
     }
 
     const playing_channel = (await client.channels
       .fetch(player.textId)
       .catch(() => undefined)) as TextChannel
 
-    const { componentsV2, trackFile } = await buildPanel(Math.floor(player.position))
+    const { componentsV2 } = await buildPanel(Math.floor(player.position))
 
     let nplaying: any = undefined
     if (playing_channel) {
@@ -202,7 +168,6 @@ export default class {
         nplaying = await playing_channel.send({
           flags: MessageFlags.IsComponentsV2,
           components: componentsV2,
-          files: trackFile ? [trackFile] : [],
         })
       } catch (err) {
         client.logger.error(
@@ -228,12 +193,11 @@ export default class {
         return
       }
       try {
-        const { componentsV2: comp, trackFile: file } = await buildPanel(Math.floor(p.position))
+        const { componentsV2: comp } = await buildPanel(Math.floor(p.position))
         await nplaying
           .edit({
             flags: MessageFlags.IsComponentsV2,
             components: comp,
-            files: file ? [file] : [],
           })
           .catch(() => null)
       } catch {

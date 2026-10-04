@@ -55,25 +55,6 @@ export default class implements Command {
   public async execute(client: Manager, handler: CommandHandler) {
     await handler.deferReply()
 
-    let buildProfileCard:
-      (typeof import('../../../utilities/ProfileCard.js'))['buildProfileCard'] | undefined
-    try {
-      const fs = await import('fs')
-      const path = await import('path')
-      const canvasBinding = path.join(
-        process.cwd(),
-        'node_modules/canvas/build/Release/canvas.node'
-      )
-      if (!fs.existsSync(canvasBinding)) {
-        client.logger.warn('Profile', 'Canvas native binary not found, skipping profile card')
-      } else {
-        const mod = await import('../../../utilities/ProfileCard.js')
-        buildProfileCard = mod.buildProfileCard
-      }
-    } catch {
-      // canvas not available, skip profile card
-    }
-
     let target: User | null = handler.user ?? null
     const data = handler.args[0]
 
@@ -135,20 +116,12 @@ export default class implements Command {
 
     const [avatarBuffer, coverBuffer] = await Promise.all([toBuffer(avatarUrl), toBuffer(coverUrl)])
 
-    const cardBuffer =
-      avatarBuffer && buildProfileCard
-        ? await buildProfileCard({ cover: coverBuffer, avatar: avatarBuffer })
-        : null
+    void coverBuffer
 
     const files: AttachmentBuilder[] = []
-    let cardAttachmentUrl: string | null = null
     let avatarAttachmentUrl: string | null = null
 
-    if (cardBuffer) {
-      const attachment = new AttachmentBuilder(cardBuffer, { name: 'profile.png' })
-      files.push(attachment)
-      cardAttachmentUrl = `attachment://profile.png`
-    } else if (avatarBuffer) {
+    if (avatarBuffer) {
       const ext = avatarUrl.endsWith('.gif') ? 'gif' : 'png'
       files.push(new AttachmentBuilder(avatarBuffer, { name: `avatar.${ext}` }))
       avatarAttachmentUrl = `attachment://avatar.${ext}`
@@ -166,12 +139,7 @@ export default class implements Command {
             .join('\n')
 
     const mediaItems: any[] = []
-    if (cardAttachmentUrl) {
-      mediaItems.push({
-        type: 12,
-        items: [{ media: { url: cardAttachmentUrl }, description: fresh.displayName }],
-      })
-    } else if (coverUrl) {
+    if (coverUrl) {
       mediaItems.push({
         type: 12,
         items: [
