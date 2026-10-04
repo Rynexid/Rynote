@@ -143,11 +143,11 @@ export default class implements Command {
         .setCustomId(`track_pick_${handler.guild!.id}_${handler.user.id}`)
         .setPlaceholder(client.i18n.get(handler.language, 'command.music', 'play_source_choose'))
         .addOptions(
-          tracks.slice(0, 10).map((track) =>
+          tracks.slice(0, 10).map((track, index) =>
             new StringSelectMenuOptionBuilder()
               .setLabel(`${track.title} - ${track.author}`.substring(0, 100))
               .setDescription(this.formatDuration(track.duration as number))
-              .setValue(track.uri ?? track.title)
+              .setValue(`${index}`)
           )
         )
 
@@ -409,8 +409,8 @@ export default class implements Command {
       try {
         await interaction.deferUpdate()
 
-        const uri = interaction.values[0]
-        const track = tracks.find((t) => t.uri === uri || t.title === uri)
+        const index = Number(interaction.values[0])
+        const track = tracks[index]
         if (!track) return
 
         await this.editV2(client, handler, message, {

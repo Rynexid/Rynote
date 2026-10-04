@@ -1,13 +1,13 @@
 {
   "name": "rynote",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Rynote - a versatile and powerful music bot for Discord that brings rhythm and melody to your server.",
   "exports": "./dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "rynote": {
     "autofix": {
-      "version": "1.0.1",
+"version": "1.0.2",
       "codename": "Kairo"
     },
     "codename": "rynote"
