@@ -74,4 +74,6 @@ ANNOUNCEMENT.md
 
 # Internal files
 AGENTS.md
-scripts/
+scripts/*
+!scripts/patches/
+!scripts/patches/rainlink-websocket-reassemble.sh
