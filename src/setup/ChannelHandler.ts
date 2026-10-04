@@ -100,6 +100,7 @@ export class ChannelHandler {
       .catch(() => undefined)
 
     if (!playMsg) return
+    if (interaction.message.id !== playMsg.id) return
 
     if (button) {
       try {
@@ -120,6 +121,19 @@ export class ChannelHandler {
 
     const playChannel = await this.client.channels.fetch(player.textId).catch(() => undefined)
     if (!playChannel) return
+
+    const data = await this.client.db.setup.get(`${interaction.guild.id}`)
+    if (!data || data.enable === false) return
+
+    const setupChannel = await this.client.channels.fetch(data.channel).catch(() => undefined)
+    if (!setupChannel) return
+    if (interaction.message.channelId !== data.channel) return
+
+    const setupMsg = await (setupChannel as TextChannel)!.messages
+      .fetch(data.playmsg)
+      .catch(() => undefined)
+    if (!setupMsg) return
+    if (interaction.message.id !== setupMsg.id) return
 
     let guildModel = await this.client.db.language.get(`${player.guildId}`)
     if (!guildModel) {

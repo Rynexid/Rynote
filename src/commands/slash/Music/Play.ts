@@ -1,10 +1,13 @@
 import {
+  ActionRowBuilder,
   ApplicationCommandOptionType,
   AutocompleteInteraction,
-  ButtonInteraction,
   ChatInputCommandInteraction,
+  ComponentType,
   Message,
   MessageFlags,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
 } from 'discord.js'
 import { convertTime } from '../../../utilities/ConvertTime.js'
 import { Manager } from '../../../manager.js'
@@ -63,19 +66,6 @@ export default class implements Command {
       autocomplete: true,
     },
     {
-      name: 'source',
-      description: 'Music source to search from',
-      type: ApplicationCommandOptionType.String,
-      required: false,
-      choices: [
-        { name: 'Spotify', value: 'spotify' },
-        { name: 'YouTube', value: 'youtube' },
-        { name: 'Apple Music', value: 'apple' },
-        { name: 'SoundCloud', value: 'soundcloud' },
-        { name: 'Deezer', value: 'deezer' },
-      ],
-    },
-    {
       name: 'position',
       description: 'Position in queue to add the song (1 = next)',
       type: ApplicationCommandOptionType.Integer,
@@ -126,52 +116,73 @@ export default class implements Command {
 
     const isUrl = this.isUrl(query)
 
-    if (!isUrl && !source) {
+    if (!isUrl && !source && this.isPrefixOnly(handler)) {
       const replyMsg = (await handler.replyV2(
         this.buildLoadingCard(client, handler, query)
       )) as Message
 
-      const results = await this.searchBothSources(client, query, handler.user)
+      const searchResult = await client.rainlink
+        .search(query, { requester: handler.user, engine: 'youtube' })
+        .catch(() => null)
+
+      const tracks = searchResult?.tracks ?? []
+
+      if (!tracks.length) {
+        await this.editV2(client, handler, replyMsg, {
+          description: `${emoji.get('cross')} ${client.i18n.get(
+            handler.language,
+            'command.music',
+            'play_match'
+          )}`,
+          color: client.color,
+        })
+        return
+      }
+
+      const select = new StringSelectMenuBuilder()
+        .setCustomId(`track_pick_${handler.guild!.id}_${handler.user.id}`)
+        .setPlaceholder(client.i18n.get(handler.language, 'command.music', 'play_source_choose'))
+        .addOptions(
+          tracks.slice(0, 10).map((track) =>
+            new StringSelectMenuOptionBuilder()
+              .setLabel(`${track.title} - ${track.author}`.substring(0, 100))
+              .setDescription(this.formatDuration(track.duration as number))
+              .setValue(track.uri ?? track.title)
+          )
+        )
+
+      const selectRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)
+
+      const card = buildV2({
+        title: `${emoji.get('music')} ${client.i18n.get(
+          handler.language,
+          'command.music',
+          'play_source_title'
+        )}`,
+        color: client.color,
+        sections: [
+          {
+            content: `${emoji.get('info')} ${client.i18n.get(
+              handler.language,
+              'command.music',
+              'play_source_query',
+              { query: this.truncate(query) }
+            )}\n\n*${client.i18n.get(handler.language, 'command.music', 'play_source_hint')}*`,
+          },
+        ],
+      })[0]
+      card.components.push(selectRow.toJSON())
 
       await replyMsg.edit({
         flags: MessageFlags.IsComponentsV2,
-        components: buildV2({
-          title: `${emoji.get('music')} ${client.i18n.get(
-            handler.language,
-            'command.music',
-            'play_source_title'
-          )}`,
-          color: client.color,
-          sections: [
-            {
-              content: this.buildSourceSelection(client, handler, query, results),
-              thumbnail: results.spotify?.artworkUrl || results.youtube?.artworkUrl || undefined,
-            },
-          ],
-          buttons: [
-            [
-              {
-                label: 'YouTube',
-                style: 4,
-                customId: `source_yt_${handler.guild!.id}_${handler.user.id}`,
-                emoji: emoji.get('youtube'),
-              },
-              {
-                label: 'Spotify',
-                style: 3,
-                customId: `source_sp_${handler.guild!.id}_${handler.user.id}`,
-                emoji: emoji.get('spotify'),
-              },
-            ],
-          ],
-        }),
+        components: [card],
       } as any)
 
-      this.setupSourceSelectionCollector({
+      this.setupTrackPickCollector({
         client,
         handler,
         message: replyMsg,
-        results,
+        tracks,
         position,
       })
       return
@@ -241,7 +252,14 @@ export default class implements Command {
       return
     }
 
-    const results = await this.searchBothSources(client, value, (interaction as any).user)
+    const [ytResult, spResult] = await Promise.allSettled([
+      client.rainlink.search(value, { requester: (interaction as any).user, engine: 'youtube' }),
+      client.rainlink.search(value, { requester: (interaction as any).user, engine: 'spotify' }),
+    ])
+    const results = {
+      youtube: ytResult.status === 'fulfilled' ? ytResult.value.tracks[0] : undefined,
+      spotify: spResult.status === 'fulfilled' ? spResult.value.tracks[0] : undefined,
+    }
 
     if (!results.youtube && !results.spotify) {
       choice.push({ name: `❌ No results found for "${value}"`, value })
@@ -266,6 +284,10 @@ export default class implements Command {
     await (interaction as AutocompleteInteraction).respond(choice.slice(0, 25)).catch(() => {})
   }
 
+  private isPrefixOnly(handler: CommandHandler) {
+    return !handler.interaction
+  }
+
   private resolveInput(
     interact: ChatInputCommandInteraction | null,
     args: string[],
@@ -273,9 +295,11 @@ export default class implements Command {
     language: string
   ) {
     if (interact) {
+      const query = interact.options.getString('search') ?? ''
+      const isUrl = this.isUrl(query)
       return {
-        query: interact.options.getString('search') ?? '',
-        source: interact.options.getString('source') ?? null,
+        query,
+        source: isUrl ? null : Math.random() < 0.5 ? 'youtube' : 'spotify',
         position: interact.options.getInteger('position') ?? null,
       }
     }
@@ -354,77 +378,28 @@ export default class implements Command {
       description:
         `${L('play_loading_searching')}\n\n` +
         `${emoji.get('music')} **${L('play_query_label')}:** ${this.truncate(query)}\n` +
-        `${emoji.get('folder')} **${L('play_sources_label')}:** Spotify, YouTube\n` +
+        `${emoji.get('folder')} **${L('play_sources_label')}:** ${SOURCE_LABELS.youtube}\n` +
         `${emoji.get('info')} **${L('play_status_label')}:** ${L('play_loading_processing')}\n\n` +
         `*${L('play_loading_wait')}*`,
     })
   }
 
-  private async searchBothSources(client: Manager, query: string, requester: any) {
-    const results: { youtube?: RainlinkTrack; spotify?: RainlinkTrack } = {}
-
-    const [ytResult, spResult] = await Promise.allSettled([
-      client.rainlink.search(query, { requester, engine: 'youtube' }),
-      client.rainlink.search(query, { requester, engine: 'spotify' }),
-    ])
-
-    if (ytResult.status === 'fulfilled' && ytResult.value.tracks.length)
-      results.youtube = ytResult.value.tracks[0]
-    if (spResult.status === 'fulfilled' && spResult.value.tracks.length)
-      results.spotify = spResult.value.tracks[0]
-
-    if (!results.youtube) {
-      const yt = await client.rainlink
-        .search(`directSearch=ytsearch:${query}`, { requester })
-        .catch(() => ({ tracks: [] }))
-      if (yt.tracks?.length) results.youtube = yt.tracks[0]
-    }
-
-    return results
-  }
-
-  private buildSourceSelection(
-    client: Manager,
-    handler: CommandHandler,
-    query: string,
-    results: { youtube?: RainlinkTrack; spotify?: RainlinkTrack }
-  ) {
-    const L = (key: string, args?: Record<string, string>) =>
-      client.i18n.get(handler.language, 'command.music', key, args)
-
-    const yt = results.youtube
-      ? `${results.youtube.title}${results.youtube.author ? ` - ${results.youtube.author}` : ''}`
-      : L('play_source_no_result')
-    const sp = results.spotify
-      ? `${results.spotify.title}${results.spotify.author ? ` - ${results.spotify.author}` : ''}`
-      : L('play_source_no_result')
-
-    return (
-      `**${L('play_source_choose')}**\n\n` +
-      `${emoji.get('info')} ${L('play_source_query', { query: this.truncate(query) })}\n\n` +
-      `${emoji.get('youtube')} ${L('play_source_yt', { result: this.truncate(yt) })}\n\n` +
-      `${emoji.get('spotify')} ${L('play_source_sp', { result: this.truncate(sp) })}\n\n` +
-      `*${L('play_source_hint')}*`
-    )
-  }
-
-  private setupSourceSelectionCollector(options: {
+  private setupTrackPickCollector(options: {
     client: Manager
     handler: CommandHandler
     message: Message
-    results: { youtube?: RainlinkTrack; spotify?: RainlinkTrack }
+    tracks: RainlinkTrack[]
     position: number | null
   }) {
-    const { client, handler, message, results, position } = options
+    const { client, handler, message, tracks, position } = options
     const userId = handler.user.id
     const guildId = handler.guild!.id
 
-    const filter = (i: ButtonInteraction) =>
-      i.user.id === userId &&
-      (i.customId === `source_yt_${guildId}_${userId}` ||
-        i.customId === `source_sp_${guildId}_${userId}`)
+    const filter = (i: any) =>
+      i.user.id === userId && i.customId === `track_pick_${guildId}_${userId}`
 
     const collector = message.createMessageComponentCollector({
+      componentType: ComponentType.StringSelect,
       filter,
       time: 60_000,
       max: 1,
@@ -434,34 +409,16 @@ export default class implements Command {
       try {
         await interaction.deferUpdate()
 
-        const picked = results[interaction.customId.includes('yt') ? 'youtube' : 'spotify']
-        if (!picked) {
-          await this.editV2(client, handler, message, {
-            description: `${emoji.get('cross')} ${client.i18n.get(
-              handler.language,
-              'command.music',
-              'play_match'
-            )}`,
-            color: client.color,
-          })
-          return
-        }
-
-        const maxLength = await client.db.maxlength.get(handler.user.id)
-        if (this.exceedsMaxLength(picked.duration as number, maxLength)) {
-          await this.editV2(client, handler, message, {
-            description: `${emoji.get('cross')} ${client.i18n.get(
-              handler.language,
-              'command.music',
-              'play_match'
-            )}`,
-            color: client.color,
-          })
-          return
-        }
+        const uri = interaction.values[0]
+        const track = tracks.find((t) => t.uri === uri || t.title === uri)
+        if (!track) return
 
         await this.editV2(client, handler, message, {
-          title: `${emoji.get('loading')} ${picked.title}`,
+          title: `${emoji.get('loading')} ${client.i18n.get(
+            handler.language,
+            'command.music',
+            'play_loading_title'
+          )}`,
           color: client.color,
           description: `*${client.i18n.get(handler.language, 'command.music', 'play_loading_wait')}*`,
         })
@@ -478,46 +435,25 @@ export default class implements Command {
           })
 
         player.textId = handler.channel!.id
-        const isNew = !player.playing && player.queue.isEmpty
-
-        this.addToQueue(player, picked, position)
-
-        if (!player.playing) player.play()
 
         if (handler.message) await handler.message.delete().catch(() => null)
 
-        await this.editV2(client, handler, message, {
-          title: `${emoji.get('music')} ${
-            isNew
-              ? client.i18n.get(handler.language, 'command.music', 'play_now_playing')
-              : client.i18n.get(handler.language, 'command.music', 'play_added_to_queue')
-          }`,
-          color: client.color,
-          sections: [
-            {
-              content:
-                `**${client.i18n.get(handler.language, 'command.music', 'play_track_header')}**\n\n` +
-                `├─ **${emoji.get('check')} ${client.i18n.get(handler.language, 'command.music', 'play_track_label')}:** ${picked.title}\n` +
-                `├─ **${emoji.get('folder')} ${client.i18n.get(handler.language, 'command.music', 'play_artist_label')}:** ${picked.author || 'Unknown'}\n` +
-                `├─ **${emoji.get('info')} ${client.i18n.get(handler.language, 'command.music', 'play_duration_label')}:** ${convertTime(picked.duration as number)}\n` +
-                `└─ **${emoji.get('add')} ${client.i18n.get(handler.language, 'command.music', 'play_status_label')}:** ${
-                  isNew
-                    ? client.i18n.get(handler.language, 'command.music', 'play_now_playing')
-                    : client.i18n.get(handler.language, 'command.music', 'play_status_position', {
-                        pos: String(this.queuePosition(player, picked)),
-                      })
-                }\n\n` +
-                `*${
-                  isNew
-                    ? client.i18n.get(handler.language, 'command.music', 'play_footer_playing')
-                    : client.i18n.get(handler.language, 'command.music', 'play_footer_queued')
-                }*`,
-              thumbnail: picked.artworkUrl || undefined,
-            },
-          ],
-        })
+        const maxLength = await client.db.maxlength.get(handler.user.id)
+        await this.updateLoadingToResult(
+          client,
+          handler,
+          message,
+          player,
+          {
+            playlistName: undefined,
+            tracks: [track],
+            type: RainlinkSearchResultType.SEARCH,
+          },
+          maxLength,
+          position
+        )
       } catch (err) {
-        client.logger.error('PlayCommand', `Source selection error: ${(err as Error).message}`)
+        client.logger.error('PlayCommand', `Track pick error: ${(err as Error).message}`)
       }
     })
 

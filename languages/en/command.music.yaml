@@ -50,12 +50,12 @@ play_search: '`🔍` | Found **%{title}** `%{duration}` • %{source} • %{requ
 play_arg: '`⚠️` | Please provide a valid song name or URL!'
 play_match: '`⚠️` | Song not found!'
 play_emoji: '`⚠️` | You can not play songs using emoji!'
-play_source_title: 'Select Music Source'
-play_source_choose: 'Choose where to play from'
+play_source_title: 'Song Selection'
+play_source_choose: 'Choose a song to play'
 play_source_query: '**Query:** %{query}'
 play_source_yt: "**YouTube:**\n└─ %{result}"
 play_source_sp: "**Spotify:**\n└─ %{result}"
-play_source_hint: 'Select your preferred music source below'
+play_source_hint: 'Select a song from the list below'
 play_source_no_result: 'No results found'
 play_source_timeout: 'Source selection timed out. Please try again!'
 play_loading_title: 'Music Search'

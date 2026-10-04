@@ -134,15 +134,12 @@ export default class implements Command {
     const textChannels = [...guild.channels.cache.values()].filter(
       (channel) =>
         channel.isTextBased() &&
-        (channel as TextChannel).guild.members.me?.permissions.has(
-          PermissionFlagsBits.SendMessages
-        )
+        (channel as TextChannel).guild.members.me?.permissions.has(PermissionFlagsBits.SendMessages)
     ) as TextChannel[]
 
     if (!textChannels.length) return undefined
 
-    const nameMatch = (channel: TextChannel) =>
-      channel.name.toLowerCase().includes(preference)
+    const nameMatch = (channel: TextChannel) => channel.name.toLowerCase().includes(preference)
 
     const parentMatch = (channel: TextChannel) =>
       channel.parent?.name.toLowerCase().includes(preference) ?? false

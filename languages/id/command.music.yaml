@@ -50,12 +50,12 @@ play_search: '`🔍` | **%{title}** `%{duration}` Ditemukan • %{source} • %{
 play_arg: '`⚠️` | Mohon berikan nama lagu atau URL yang valid!'
 play_match: '`⚠️` | Lagu tidak ditemukan!'
 play_emoji: '`⚠️` | Kamu tidak bisa memutar lagu menggunakan emoji!'
-play_source_title: 'Pilih Sumber Musik'
-play_source_choose: 'Pilih dari mana lagu diputar'
+play_source_title: 'Pilih Lagu'
+play_source_choose: 'Pilih lagu untuk diputar'
 play_source_query: '**Query:** %{query}'
 play_source_yt: "**YouTube:**\n└─ %{result}"
 play_source_sp: "**Spotify:**\n└─ %{result}"
-play_source_hint: 'Pilih sumber musik yang Anda sukai di bawah'
+play_source_hint: 'Pilih salah satu lagu dari daftar di bawah'
 play_source_no_result: 'Hasil tidak ditemukan'
 play_source_timeout: 'Pemilihan sumber habis waktu. Silakan coba lagi!'
 play_loading_title: 'Pencarian Musik'
