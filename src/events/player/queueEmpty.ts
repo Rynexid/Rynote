@@ -1,7 +1,6 @@
 import { TextChannel } from 'discord.js'
 import { Manager } from '../../manager.js'
 import { AutoReconnectBuilderService } from '../../services/AutoReconnectBuilderService.js'
-import { ClearMessageService } from '../../services/ClearMessageService.js'
 import { RainlinkPlayer, RainlinkQueue } from 'rainlink'
 import { buildV2 } from '../../utilities/V2.js'
 
@@ -17,46 +16,28 @@ export default class {
 
     void queue
 
-    const clearMessage = async () => {
-      const npReload = client.nowPlaying.get(`${player.guildId}`)
-      if (npReload) {
-        clearInterval(npReload.interval)
-        client.nowPlaying.delete(`${player.guildId}`)
-      }
-
-      const nplayingMsg = client.nplayingMsg.get(player.guildId)
-      if (nplayingMsg) {
-        nplayingMsg.coll.stop()
-        nplayingMsg.filterColl.stop()
-        nplayingMsg.msg.delete().catch(() => null)
-        client.nplayingMsg.delete(player.guildId)
-      }
-    }
-
-    await clearMessage()
-
-    const textChannel = (await client.channels.fetch(player.textId).catch(() => undefined)) as
-      TextChannel | undefined
-
-    const retrying = player.data.get('retrying')
-    if (retrying) return
+    if (player.data.get('retrying')) return
 
     /////////// Autoplay ///////////
     if (player.data.get('autoplay') === true) {
+      // Delete the old now-playing panel first, trackStart sends a fresh one
+      // right after the new track starts.
+      this.clearMessage(client, player)
+
       const played = await this.autoplay(client, player)
 
-      if (played) {
-        if (textChannel) return new ClearMessageService(client, textChannel, player)
-        return
-      }
+      if (played) return
 
       player.data.set('autoplay', false)
 
-      if (textChannel) {
+      const failedChannel = (await client.channels.fetch(player.textId).catch(() => undefined)) as
+        TextChannel | undefined
+
+      if (failedChannel) {
         let language = await client.db.language.get(`${player.guildId}`)
         if (!language) language = client.config.bot.LANGUAGE
 
-        await textChannel
+        await failedChannel
           .send({
             flags: 32768,
             components: buildV2({
@@ -69,17 +50,32 @@ export default class {
     }
     /////////// Autoplay ///////////
 
+    this.clearMessage(client, player)
+
     await client.UpdateMusic(player).catch(() => null)
 
     const data = await new AutoReconnectBuilderService(client, player).get(player.guildId)
-    if (data && data.twentyfourseven) {
-      if (textChannel) return new ClearMessageService(client, textChannel, player)
-      return
-    }
+    if (data && data.twentyfourseven) return
 
     await player.destroy().catch(() => null)
 
     client.liveActivity?.refresh()
+  }
+
+  protected clearMessage(client: Manager, player: RainlinkPlayer) {
+    const npReload = client.nowPlaying.get(`${player.guildId}`)
+    if (npReload) {
+      clearInterval(npReload.interval)
+      client.nowPlaying.delete(`${player.guildId}`)
+    }
+
+    const nplayingMsg = client.nplayingMsg.get(player.guildId)
+    if (nplayingMsg) {
+      nplayingMsg.coll.stop()
+      nplayingMsg.filterColl.stop()
+      nplayingMsg.msg.delete().catch(() => null)
+      client.nplayingMsg.delete(player.guildId)
+    }
   }
 
   protected async autoplay(client: Manager, player: RainlinkPlayer) {
@@ -110,7 +106,7 @@ export default class {
       if (!tracks.length) continue
 
       const pick = tracks[Math.floor(Math.random() * tracks.length)]
-      player.play(pick)
+      await player.play(pick)
       return true
     }
 
