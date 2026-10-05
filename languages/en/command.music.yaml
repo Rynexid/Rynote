@@ -6,6 +6,7 @@ autoplay_invalid: '`⚠️` | Invalid mode. Please use **on/off** or **true/fals
 
 ### ClearQueue command!
 clearqueue_msg: '`🗑️` | Queue has been **Cleared**!'
+clearqueue_nothing: '`⚠️` | There is nothing to clear!'
 
 ### Forward command!
 forward_msg: '`⏩` | Forwarded to `%{duration}`'
@@ -104,6 +105,7 @@ replay_msg: '`🔄` | Replayed the **Song**!'
 
 ### Resume command!
 resume_msg: '`▶️` | Resumed the **Player**!'
+resume_already: '`⚠️` | The player is already **Playing**!'
 
 ### Rewind command!
 rewind_msg: '`⏪` | Rewinded to `%{duration}`'

@@ -6,6 +6,7 @@ autoplay_invalid: '`⚠️` | Mode tidak valid. Gunakan **on/off** atau **true/f
 
 ### Perintah ClearQueue!
 clearqueue_msg: '`🗑️` | Antrian Telah **Dibersihkan**!'
+clearqueue_nothing: '`⚠️` | Tidak ada yang perlu dibersihkan!'
 
 ### Perintah Forward!
 forward_msg: '`⏩` | Dimajukan ke `%{duration}`'
@@ -104,6 +105,7 @@ replay_msg: '`🔄` | **Lagu** Diulang!'
 
 ### Perintah Resume!
 resume_msg: '`▶️` | **Player** Dilanjutkan!'
+resume_already: '`⚠️` | Player sudah **Memutar**!'
 
 ### Perintah Rewind!
 rewind_msg: '`⏪` | Dimundurkan ke `%{duration}`'

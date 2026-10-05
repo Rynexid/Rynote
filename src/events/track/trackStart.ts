@@ -25,6 +25,10 @@ export default class {
 
     player.data.set('retrying', false)
 
+    // Kick off the artwork lookup right away so its network latency overlaps with
+    // the database work below instead of blocking the now-playing message.
+    const artworkPromise = getArtwork(track)
+
     /////////// Refresh autoplay context ///////////
     if (player.data.get('autoplay') === true) {
       player.data.set('identifier', track.identifier ?? null)
@@ -121,7 +125,7 @@ export default class {
 
     if (SongNoti == SongNotiEnum.Disable) return
 
-    const artworkUrl = await getArtwork(track)
+    const artworkUrl = await artworkPromise
 
     const buildPanel = async (position: number) => {
       const mediaItems = artworkUrl

@@ -6,6 +6,7 @@ no_node: '`⚠️` | Tidak ada server Lavalink yang ditemukan. Silakan coba lagi
 
 # Tidak ada lagu yang sedang diputar!
 no_player: '`⚠️` | Tidak ada lagu yang sedang diputar!'
+no_song_in_queue: '`⚠️` | Tidak ada lagu di antrian!'
 
 # Perlu bergabung ke voice & voice yang sama untuk menggunakan perintah!
 no_in_voice: '`⚠️` | Kamu tidak berada di voice channel!'

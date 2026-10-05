@@ -2,12 +2,15 @@ import { RainlinkTrack } from 'rainlink'
 
 const YT_THUMB = 'https://img.youtube.com/vi'
 
-const YT_SIZES = ['maxresdefault', 'sddefault', 'hqdefault'] as const
+// hqdefault exists for nearly every YouTube video, while maxresdefault only
+// exists for 720p+ videos. Trying the most common one first avoids a wasted
+// (slow) 404 round-trip on almost every track.
+const YT_SIZES = ['hqdefault', 'maxresdefault', 'sddefault'] as const
 
 async function pickFirstAvailable(urls: string[]): Promise<string | null> {
   for (const url of urls) {
     try {
-      const res = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(4000) })
+      const res = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(1500) })
       if (res.ok) return url
     } catch {
       // continue to next candidate

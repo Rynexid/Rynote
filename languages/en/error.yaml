@@ -6,6 +6,7 @@ no_node: '`⚠️` | No Lavalink server was found. Please try again after **5 Mi
 
 # No song is currently playing!
 no_player: '`⚠️` | No song is currently playing!'
+no_song_in_queue: '`⚠️` | There are no songs in the queue!'
 
 # Need to join voice & same voice to use command!
 no_in_voice: '`⚠️` | You are not in a voice channel!'
