@@ -25,20 +25,12 @@ bot_user_count: 'Jumlah Pengguna'
 bot_total_packages: 'Total Paket'
 
 ### Perintah Announcement!
-ann_empty: '`⚠️` | Argumen kosong!'
+ann_empty: '`⚠️` | Argumen kosong! Berikan deskripsi.'
 ann_title: '💫 | Pengumuman'
 ann_success: '`🟢` | **Berhasil dikirim ke %{count}**'
 ann_failed: '`🔴` | **Gagal dikirim ke %{count}**'
-ann_choose_title: '🎯 | Pengumuman Changelog'
-ann_choose_desc: 'Kirim changelog ke setiap server publik. Pilih ke mana bot akan mencari channel:'
-ann_choose_placeholder: 'Pilih channel tujuan'
-ann_opt_general: 'General'
-ann_opt_general_desc: 'Kirim ke channel #general (default)'
-ann_opt_announcement: 'Announcement'
-ann_opt_announcement_desc: 'Kirim ke channel bernama announcement'
-ann_opt_changelog: 'Changelog'
-ann_opt_changelog_desc: 'Kirim ke channel bernama changelog'
-ann_cancel: '`🟡` | Pengumuman dibatalkan.'
+ann_done_title: '💫 | Pengumuman Terkirim'
+ann_invalid_color: '`⚠️` | Warna tidak valid. Gunakan hex seperti `#5865F2`.'
 
 ### Perintah Daftar Server!
 sl_empty: '`⚠️` | Rynote belum berada di server mana pun.'

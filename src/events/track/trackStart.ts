@@ -25,6 +25,16 @@ export default class {
 
     player.data.set('retrying', false)
 
+    /////////// Refresh autoplay context ///////////
+    if (player.data.get('autoplay') === true) {
+      player.data.set('identifier', track.identifier ?? null)
+      player.data.set('requester', track.requester ?? null)
+      player.data.set('source', track.source ?? null)
+      player.data.set('author', track.author ?? null)
+      player.data.set('title', track.title ?? null)
+    }
+    /////////// Refresh autoplay context ///////////
+
     /////////// Record history ///////////
     const requester = track.requester as { id?: string } | null | undefined
     if (requester?.id && requester.id !== client.user?.id) {
