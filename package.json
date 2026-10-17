@@ -7,7 +7,7 @@
   "type": "module",
   "rynote": {
     "autofix": {
-"version": "1.0.2",
+      "version": "1.0.2",
       "codename": "Kairo"
     },
     "codename": "rynote"
